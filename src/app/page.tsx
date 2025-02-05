@@ -3,6 +3,7 @@ import Link from "next/link";
 import { api, HydrateClient } from "~/trpc/server";
 import ProgressBar from "./_components/ProgressBar";
 import NavBar from "./_components/NavBar";
+import Stories from "./pages/stories/page";
 
 export default async function Home() {
   const hello = await api.post.hello({ text: "from tRPC" });
@@ -11,7 +12,8 @@ export default async function Home() {
 
   return (
     <div>
-      <NavBar/>
+      <Stories/>
+      {/* <NavBar/> */}
    {/* <ProgressBar/> */}
    </div>
   );
