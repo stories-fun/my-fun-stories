@@ -12,7 +12,7 @@ export default async function Home() {
   return (
     <div>
       <NavBar/>
-   <ProgressBar/>
+   {/* <ProgressBar/> */}
    </div>
   );
 }
