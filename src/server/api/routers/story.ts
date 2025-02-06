@@ -1,7 +1,6 @@
-// server/api/routers/story.ts
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 import { StoryStorage } from "../r2/story";
-import { StorySchema } from "@/server/schemas/story";
+import { StorySchema } from "../../schema/story";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 

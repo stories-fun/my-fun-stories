@@ -1,7 +1,6 @@
-// server/api/routers/user.ts
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 import { UserStorage } from "../r2/user";
-import { UserSchema } from "@/server/schemas/user";
+import { UserSchema } from "../../schema/user";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
