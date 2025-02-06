@@ -46,7 +46,7 @@ export const storyRouter = createTRPCRouter({
             objects.map(async (obj: any) => {
               try {
                 if (!obj.Key) return null;
-                const response = await storyStorage.getStory(obj.Key);
+                const response = await storyStorage.listObjects(obj.Key);
                 return StorySchema.parse(response);
               } catch {
                 return null;
