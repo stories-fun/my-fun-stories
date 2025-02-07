@@ -10,10 +10,10 @@ const WALLET_CONFIG = {
   autoConnect: true,
   env: "devnet" as Cluster,
   metadata: {
-    name: "Zync",
-    description: "Zync",
-    url: "https://zync.vercel.app",
-    iconUrls: ["https://zync.vercel.app/favicon.ico"] as string[],
+    name: "storiesdotfun",
+    description: "Stories Platform",
+    url: "#",
+    iconUrls: ["#"] as string[],
   },
   notificationCallback: WalletNotification,
   theme: "dark" as const,
@@ -24,8 +24,8 @@ export function WalletProvider() {
   return (
     <UnifiedWalletProvider wallets={[]} config={WALLET_CONFIG}>
       <UnifiedWalletButton
-        buttonClassName="!bg-[#c0c0c0] border-2 border-black !p-2 !rounded-sm font-chicago"
-        currentUserClassName="!bg-[#c0c0c0] border-2 border-black !p-2 !rounded-sm font-chicago"
+      // buttonClassName="!bg-[#c0c0c0] border-2 border-black !p-2 !rounded-sm font-chicago"
+      // currentUserClassName="!bg-[#c0c0c0] border-2 border-black !p-2 !rounded-sm font-chicago"
       />
     </UnifiedWalletProvider>
   );
