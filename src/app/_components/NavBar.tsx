@@ -41,7 +41,9 @@ const NavBar = () => {
               height={25}
               alt="img"
             /> */}
-          <WalletProvider></WalletProvider>
+          <div className="hidden sm:block">
+            <WalletProvider></WalletProvider>
+          </div>
           {/* </div> */}
           {/* <div className="text-[#000000]">Connect Wallet</div> */}
 
@@ -65,16 +67,16 @@ const NavBar = () => {
               className="w-[80%] rounded-full border-pink-500 bg-[#F5F5F5] px-4 py-2 text-black focus:outline-none"
               placeholder="Search Stories"
             />
-            <div className="flex w-[80%] items-center justify-center space-x-2 rounded-full bg-[#F5F5F5] px-4 py-2">
-              <Image
+            {/* <div className="flex w-[80%] items-center justify-center space-x-2 rounded-full bg-[#F5F5F5] px-4 py-2"> */}
+            {/* <Image
                 src={"/images/Advertise.png"}
                 width={20}
                 height={20}
                 alt="advertise"
-              />
-              <WalletProvider></WalletProvider>
-              {/* <div className="text-black">Connect Wallet</div> */}
-            </div>
+              /> */}
+            <WalletProvider></WalletProvider>
+            {/* <div className="text-black">Connect Wallet</div> */}
+            {/* </div> */}
             {/* <div className='bg-[#FFE700] rounded-full px-6 py-2 flex items-center w-[80%] justify-center'>
                     <div className='text-black font-bold'>Login</div>
                   </div> */}
