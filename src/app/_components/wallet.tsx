@@ -1,4 +1,5 @@
 "use client";
+
 import {
   UnifiedWalletButton,
   UnifiedWalletProvider,
@@ -24,7 +25,7 @@ export function WalletProvider() {
   return (
     <UnifiedWalletProvider wallets={[]} config={WALLET_CONFIG}>
       <UnifiedWalletButton
-        buttonClassName="!bg-[#FFE700] !text-sm !text-white !p-0"
+        buttonClassName="!bg-[#FFE700] !text-sm !text-white"
         // currentUserClassName="!bg-[#c0c0c0] border-2 border-black !p-2 !rounded-sm font-chicago"
       />
     </UnifiedWalletProvider>

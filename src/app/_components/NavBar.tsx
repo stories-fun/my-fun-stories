@@ -34,15 +34,15 @@ const NavBar = () => {
           />
         </div>
         <div className="flex items-center space-x-4">
-          <div className="flex flex-row items-center justify-center gap-2 rounded-xl bg-[#FFE700] p-2">
+          {/* <div className="flex flex-row items-center justify-center gap-2 rounded-xl bg-[#FFE700] p-2">
             <Image
               src={"/images/Advertise.png"}
               width={25}
               height={25}
               alt="img"
-            />
-            <WalletProvider></WalletProvider>
-          </div>
+            /> */}
+          <WalletProvider></WalletProvider>
+          {/* </div> */}
           {/* <div className="text-[#000000]">Connect Wallet</div> */}
 
           {/* <div className="flex items-center rounded-full bg-[#FFE700] px-6 py-2">
