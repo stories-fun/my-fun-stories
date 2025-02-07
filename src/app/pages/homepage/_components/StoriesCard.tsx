@@ -7,7 +7,7 @@ import ProgressBar from "~/app/_components/ProgressBar";
 const StoriesCard = () => {
   return (
     <div className="flex flex-col gap-4 sm:flex-col md:flex-row">
-      <div className="flex-2 w-full md:w-2/3">
+      <div className="flex-2 w-full md:w-1/2">
         <div className="flex space-x-2">
           <Image
             src={"/images/profile.png"}
@@ -47,7 +47,7 @@ const StoriesCard = () => {
         </div>
       </div>
 
-      <div className="mt-4 w-full flex-1 md:w-1/3">
+      <div className="mt-4 w-full flex-1 md:w-1/2">
         {/* text area */}
         <textarea
           placeholder="write your story..."
