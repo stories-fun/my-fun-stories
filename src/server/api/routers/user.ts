@@ -12,6 +12,8 @@ export const userRouter = createTRPCRouter({
       z.object({
         walletAddress: UserSchema.shape.walletAddress,
         username: UserSchema.shape.username,
+        pfp: UserSchema.shape.pfp.optional(),
+        description: UserSchema.shape.description.optional(),
       }),
     )
     .mutation(async ({ input }) => {

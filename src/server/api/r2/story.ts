@@ -4,8 +4,10 @@ import {
   GetObjectCommand,
   ListObjectsV2Command,
 } from "@aws-sdk/client-s3";
+import { StorySchema } from "~/server/schema/story";
 import { env } from "../../../env";
 import type { HttpRequest } from "@aws-sdk/protocol-http";
+import { Comment } from "~/server/schema/comments";
 
 export class StoryStorage {
   private client: S3Client;
@@ -49,6 +51,45 @@ export class StoryStorage {
         ContentType: "application/json",
       }),
     );
+  }
+
+  async getStory(key: string) {
+    try {
+      const response = await this.client.send(
+        new GetObjectCommand({
+          Bucket: this.bucket,
+          Key: `stories/${key}.json`,
+        }),
+      );
+      const data = JSON.parse(await response.Body!.transformToString());
+      return StorySchema.parse(data);
+    } catch (error) {
+      return null;
+    }
+  }
+
+  async updateStoryComments(
+    key: string,
+    updateFn: (comments: Comment[]) => Comment[],
+  ) {
+    const story = await this.getStory(key);
+    if (!story) return null;
+
+    const updatedComments = updateFn(story.comments);
+    story.comments = updatedComments;
+    await this.saveStory(key, story);
+    return story;
+  }
+
+  findCommentById(comments: Comment[], targetId: string): Comment | null {
+    for (const comment of comments) {
+      if (comment.id === targetId) return comment;
+      if (comment.replies.length > 0) {
+        const found = this.findCommentById(comment.replies, targetId);
+        if (found) return found;
+      }
+    }
+    return null;
   }
 
   async listObjects(prefix: string, continuationToken?: string) {

@@ -42,9 +42,6 @@ const NavBar = () => {
               height={25}
               alt="img"
             /> */}
-          <button className="rounded-xl bg-[#FFE700] p-2">
-            <CircleUserRound size={30} />
-          </button>
           <div className="hidden sm:block">
             <WalletProvider></WalletProvider>
           </div>

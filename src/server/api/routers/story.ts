@@ -3,8 +3,11 @@ import { StoryStorage } from "../r2/story";
 import { StorySchema } from "../../schema/story";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
+import { UserStorage } from "../r2/user";
+import { Comment } from "~/server/schema/comments";
 
 const storyStorage = new StoryStorage();
+const userStorage = new UserStorage();
 
 export const storyRouter = createTRPCRouter({
   submit: publicProcedure
@@ -16,10 +19,21 @@ export const storyRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ input }) => {
+      const user = await userStorage.getUser(input.walletAddress);
+      if (!user) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User not found. Create a profile first.",
+        });
+      }
+
       const key = `${Date.now()}_${input.walletAddress.slice(2, 8)}`;
       const storyData = {
         ...input,
+        username: user.username,
         createdAt: new Date(),
+        likes: [],
+        comments: [],
       };
 
       await storyStorage.saveStory(key, storyData);
@@ -46,8 +60,12 @@ export const storyRouter = createTRPCRouter({
             objects.map(async (obj: any) => {
               try {
                 if (!obj.Key) return null;
-                const response = await storyStorage.listObjects(obj.Key);
-                return StorySchema.parse(response);
+                const key = obj.Key.replace("stories/", "").replace(
+                  ".json",
+                  "",
+                );
+                const story = await storyStorage.getStory(key);
+                return story;
               } catch {
                 return null;
               }
@@ -74,5 +92,121 @@ export const storyRouter = createTRPCRouter({
           message: "Failed to fetch stories",
         });
       }
+    }),
+
+  addComment: publicProcedure
+    .input(
+      z.object({
+        storyKey: z.string(),
+        content: z.string().min(1),
+        walletAddress: z.string(),
+        parentCommentId: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const user = await userStorage.getUser(input.walletAddress);
+      if (!user)
+        throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
+
+      const commentId = `${Date.now()}_${input.walletAddress.slice(2, 8)}`;
+      const newComment = {
+        id: commentId,
+        content: input.content,
+        walletAddress: input.walletAddress,
+        username: user.username,
+        createdAt: new Date(),
+        upvotes: [],
+        downvotes: [],
+        replies: [],
+      };
+
+      const updateFn = (comments: Comment[]) => {
+        if (!input.parentCommentId) return [...comments, newComment];
+
+        const parent = storyStorage.findCommentById(
+          comments,
+          input.parentCommentId,
+        );
+        if (!parent)
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Parent comment not found",
+          });
+
+        parent.replies.push(newComment);
+        return comments;
+      };
+
+      await storyStorage.updateStoryComments(input.storyKey, updateFn);
+      return { success: true, commentId };
+    }),
+
+  voteComment: publicProcedure
+    .input(
+      z.object({
+        storyKey: z.string(),
+        commentId: z.string(),
+        walletAddress: z.string(),
+        voteType: z.enum(["upvote", "downvote", "remove"]),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const updateFn = (comments: Comment[]) => {
+        const comment = storyStorage.findCommentById(comments, input.commentId);
+        if (!comment)
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Comment not found",
+          });
+
+        comment.upvotes = comment.upvotes.filter(
+          (a: string) => a !== input.walletAddress,
+        );
+        comment.downvotes = comment.downvotes.filter(
+          (a: string) => a !== input.walletAddress,
+        );
+
+        if (input.voteType === "upvote") {
+          comment.upvotes.push(input.walletAddress);
+        } else if (input.voteType === "downvote") {
+          comment.downvotes.push(input.walletAddress);
+        }
+
+        return comments;
+      };
+
+      await storyStorage.updateStoryComments(input.storyKey, updateFn);
+      return { success: true };
+    }),
+
+  like: publicProcedure
+    .input(
+      z.object({
+        storyKey: z.string(),
+        walletAddress: z.string(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const { storyKey, walletAddress } = input;
+
+      const story = await storyStorage.getStory(storyKey);
+      if (!story) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Story not found",
+        });
+      }
+
+      if (story.likes.includes(walletAddress)) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "User already liked this story",
+        });
+      }
+
+      story.likes.push(walletAddress);
+      await storyStorage.saveStory(storyKey, story);
+
+      return { success: true, likes: story.likes.length };
     }),
 });
