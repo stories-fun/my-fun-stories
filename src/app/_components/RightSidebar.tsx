@@ -64,7 +64,7 @@ const RightSidebar = () => {
       </div>
 
       {/* data market cap ,volumn and holders */}
-      <div className="flex justify-between p-4">
+      <div className="flex justify-between p-8">
         <div>MarketCap</div>
         <div>Holder</div>
 
