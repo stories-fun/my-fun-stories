@@ -3,6 +3,7 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
+import { CircleUserRound } from "lucide-react";
 import Link from "next/link";
 import { WalletProvider } from "./wallet";
 
@@ -33,7 +34,7 @@ const NavBar = () => {
             placeholder="Search Stories"
           />
         </div>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-2">
           {/* <div className="flex flex-row items-center justify-center gap-2 rounded-xl bg-[#FFE700] p-2">
             <Image
               src={"/images/Advertise.png"}
@@ -41,6 +42,9 @@ const NavBar = () => {
               height={25}
               alt="img"
             /> */}
+          <button className="rounded-xl bg-[#FFE700] p-2">
+            <CircleUserRound size={30} />
+          </button>
           <div className="hidden sm:block">
             <WalletProvider></WalletProvider>
           </div>

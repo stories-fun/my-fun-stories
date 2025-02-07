@@ -4,6 +4,7 @@ import { api, HydrateClient } from "~/trpc/server";
 import ProgressBar from "./_components/ProgressBar";
 import NavBar from "./_components/NavBar";
 import Stories from "./stories/page";
+import { WalletProvider } from "./_components/wallet";
 import HomePage from "./pages/homepage/page";
 
 export default async function Home() {

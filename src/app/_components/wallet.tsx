@@ -25,8 +25,8 @@ export function WalletProvider() {
   return (
     <UnifiedWalletProvider wallets={[]} config={WALLET_CONFIG}>
       <UnifiedWalletButton
-        buttonClassName="!bg-[#FFE700] !text-sm !text-white"
-        // currentUserClassName="!bg-[#c0c0c0] border-2 border-black !p-2 !rounded-sm font-chicago"
+        buttonClassName="!bg-[#FFE700] !text-sm !text-black"
+        currentUserClassName="!bg-[#FFE700] !text-sm !text-black"
       />
     </UnifiedWalletProvider>
   );
