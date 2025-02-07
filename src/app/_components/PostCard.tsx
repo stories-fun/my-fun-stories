@@ -20,8 +20,8 @@ const PostCard = () => {
         {/* rendering image section */}
         <Image
           src={"/images/profile.png"}
-          width={640}
-          height={360}
+          width={969}
+          height={559}
           alt="post"
           className="h-auto w-full rounded-lg object-cover sm:h-[360px] sm:w-[640px]"
         />
