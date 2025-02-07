@@ -1,35 +1,16 @@
 "use client";
-import {
-  UnifiedWalletButton,
-  UnifiedWalletProvider,
-  WalletProvider,
-} from "@jup-ag/wallet-adapter";
+
 import Image from "next/image";
 import React, { useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
-import { WalletNotification } from "./wallet-notification";
-import type { Cluster } from "@solana/web3.js";
 import Link from "next/link";
-
-const WALLET_CONFIG = {
-  autoConnect: true,
-  env: "devnet" as Cluster,
-  metadata: {
-    name: "Zync",
-    description: "Zync",
-    url: "https://zync.vercel.app",
-    iconUrls: ["https://zync.vercel.app/favicon.ico"] as string[],
-  },
-  notificationCallback: WalletNotification,
-  theme: "dark" as const,
-  lang: "en" as const,
-};
+import { WalletProvider } from "./wallet";
 
 const NavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <UnifiedWalletProvider wallets={[]} config={WALLET_CONFIG}>
+    <>
       <div className="container mx-auto flex items-center justify-between border-b-2 p-2">
         <Link href={"/aboutus"}>
           <div className="decoration-skip-ink-none flex items-center space-x-2 text-left font-[Mont] text-[25px] font-bold leading-[25px] text-[#000000]">
@@ -53,25 +34,20 @@ const NavBar = () => {
           />
         </div>
         <div className="flex items-center space-x-4">
-          <div className="hidden space-x-4 sm:flex">
-            <div className="flex items-center space-x-2 rounded-full bg-[#FFE700] px-4 py-2">
-              <Image
-                src={"/images/Advertise.png"}
-                width={25}
-                height={25}
-                alt="img"
-              />
-              <UnifiedWalletButton
-                buttonClassName="!bg-[#FFE700] !p-0 hover:!bg-[#FFE700] !text-[#000000] "
-                currentUserClassName="!bg-[#FFE700] !p-0 hover:!bg-[#FFE700] !text-[#000000]"
-              />
-              {/* <div className="text-[#000000]">Connect Wallet</div> */}
-            </div>
+          <div className="flex flex-row items-center justify-center gap-2 rounded-xl bg-[#FFE700] p-2">
+            <Image
+              src={"/images/Advertise.png"}
+              width={25}
+              height={25}
+              alt="img"
+            />
+            <WalletProvider></WalletProvider>
+          </div>
+          {/* <div className="text-[#000000]">Connect Wallet</div> */}
 
-            {/* <div className="flex items-center rounded-full bg-[#FFE700] px-6 py-2">
+          {/* <div className="flex items-center rounded-full bg-[#FFE700] px-6 py-2">
             <div className="font-bold text-[#000000]">Login</div>
           </div> */}
-          </div>
 
           <button
             onClick={() => setMenuOpen(!menuOpen)}
@@ -96,10 +72,7 @@ const NavBar = () => {
                 height={20}
                 alt="advertise"
               />
-              <UnifiedWalletButton
-                buttonClassName="!bg-[#FFE700] !p-0 hover:!bg-[#FFE700] text-[#000000] "
-                currentUserClassName="!bg-[#FFE700] !p-0 hover:!bg-[#FFE700] text-[#000000] "
-              />
+              <WalletProvider></WalletProvider>
               {/* <div className="text-black">Connect Wallet</div> */}
             </div>
             {/* <div className='bg-[#FFE700] rounded-full px-6 py-2 flex items-center w-[80%] justify-center'>
@@ -108,7 +81,7 @@ const NavBar = () => {
           </div>
         )}
       </div>
-    </UnifiedWalletProvider>
+    </>
   );
 };
 

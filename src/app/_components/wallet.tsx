@@ -6,7 +6,7 @@ import {
 import type { Cluster } from "@solana/web3.js";
 import { WalletNotification } from "./wallet-notification";
 
-const WALLET_CONFIG = {
+export const WALLET_CONFIG = {
   autoConnect: true,
   env: "devnet" as Cluster,
   metadata: {
@@ -24,8 +24,8 @@ export function WalletProvider() {
   return (
     <UnifiedWalletProvider wallets={[]} config={WALLET_CONFIG}>
       <UnifiedWalletButton
-      // buttonClassName="!bg-[#c0c0c0] border-2 border-black !p-2 !rounded-sm font-chicago"
-      // currentUserClassName="!bg-[#c0c0c0] border-2 border-black !p-2 !rounded-sm font-chicago"
+        buttonClassName="!bg-[#FFE700] !text-sm !text-white !p-0"
+        // currentUserClassName="!bg-[#c0c0c0] border-2 border-black !p-2 !rounded-sm font-chicago"
       />
     </UnifiedWalletProvider>
   );
