@@ -2,7 +2,6 @@ import {
   S3Client,
   PutObjectCommand,
   GetObjectCommand,
-  ListObjectsV2Command,
 } from "@aws-sdk/client-s3";
 import { env } from "../../../env";
 import type { HttpRequest } from "@aws-sdk/protocol-http";
