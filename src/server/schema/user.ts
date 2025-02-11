@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const UserSchema = z.object({
   walletAddress: z.string(),
-  username: z.string().min(3),
+  username: z.string().min(3).optional(),
   pfp: z.string().optional(),
   description: z.string().optional(),
   createdAt: z.date(),

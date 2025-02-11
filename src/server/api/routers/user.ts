@@ -33,4 +33,26 @@ export const userRouter = createTRPCRouter({
       await userStorage.saveUser(input.walletAddress, newUser);
       return { success: true, user: newUser };
     }),
+
+  get: publicProcedure
+    .input(
+      z.object({
+        walletAddress: UserSchema.shape.walletAddress,
+      }),
+    )
+    .query(async ({ input }) => {
+      const user = await userStorage.getUser(input.walletAddress);
+      if (!user) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User not found",
+        });
+      }
+      return user;
+    }),
+
+  list: publicProcedure.query(async () => {
+    const users = await userStorage.listUsers();
+    return users;
+  }),
 });

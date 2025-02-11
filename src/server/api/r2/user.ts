@@ -2,6 +2,7 @@ import {
   S3Client,
   PutObjectCommand,
   GetObjectCommand,
+  ListObjectsV2Command,
 } from "@aws-sdk/client-s3";
 import { env } from "../../../env";
 import type { HttpRequest } from "@aws-sdk/protocol-http";
@@ -61,6 +62,32 @@ export class UserStorage {
       return JSON.parse(await response.Body!.transformToString());
     } catch (error) {
       return null;
+    }
+  }
+  async listUsers() {
+    try {
+      const response = await this.client.send(
+        new ListObjectsV2Command({
+          Bucket: this.bucket,
+          Prefix: "users/",
+        }),
+      );
+
+      const users = [];
+      for (const item of response.Contents ?? []) {
+        const key = item.Key;
+        if (key && key.endsWith(".json")) {
+          const walletAddress = key.replace("users/", "").replace(".json", "");
+          const user = await this.getUser(walletAddress);
+          if (user) {
+            users.push(user);
+          }
+        }
+      }
+      return users;
+    } catch (error) {
+      console.error("Error listing users:", error);
+      return [];
     }
   }
 }
