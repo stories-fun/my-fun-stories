@@ -3,14 +3,13 @@ import React from "react";
 const ProgressBar = () => {
   return (
     <div>
-      <div className="mb-1 flex w-[50%] justify-between">
-        <span>$invested raised</span>
-        <span>Goal:$cap</span>
+      <div className="mb-1 font-bold">
+        <span>Participate in presale of this token now!</span>
       </div>
       <div className="w-full">
-        <div className="h-4 rounded-full bg-gray-200">
+        <div className="h-2 rounded-full bg-gray-200">
           <div
-            className="h-4 w-[50%] rounded-full bg-pink-500 transition-all duration-500"
+            className="h-2 w-[50%] rounded-full bg-[#46D160] transition-all duration-500"
             style={{ width: `$88%` }}
           />
         </div>
