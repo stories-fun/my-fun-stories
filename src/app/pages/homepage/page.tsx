@@ -6,11 +6,11 @@ const HomePage = () => {
   return (
     <div className="container mx-auto flex gap-6 p-10">
       {/* main stories  */}
-      <div className="w-full rounded-lg md:w-2/3">
+      <div className="w-full rounded-lg md:w-3/4">
         <StoriesLayout />
       </div>
       {/* rightside section */}
-      <div className="hidden rounded-lg md:block md:w-1/3">
+      <div className="hidden rounded-lg md:block md:w-1/4">
         <RightSection />
       </div>
     </div>
