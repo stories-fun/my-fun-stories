@@ -2,6 +2,8 @@ import Image from "next/image";
 import React from "react";
 import PostActions from "./PostActions";
 import { FaRegComment } from "react-icons/fa";
+import { ImageSlider } from "../pages/homepage/_components/ImageSlider";
+import { ImageSliderForStories } from "./ImageSliderForStories";
 
 const PostCard = () => {
   return (
@@ -18,13 +20,15 @@ const PostCard = () => {
       <div>Title</div>
       <div className="bg-[#F6F7F8]">
         {/* rendering image section */}
-        <Image
+        {/* <Image
           src={"/images/profile.png"}
           width={969}
           height={559}
           alt="post"
           className="h-auto w-full rounded-lg object-cover sm:h-[360px] sm:w-[640px]"
-        />
+        /> */}
+        {/* <ImageSlider /> */}
+        <ImageSliderForStories />
       </div>
 
       <div className="mt-4">

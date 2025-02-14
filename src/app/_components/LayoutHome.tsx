@@ -1,14 +1,14 @@
 import React from "react";
 import PostCard from "./PostCard";
 import RightSidebar from "./RightSidebar";
-import StoriesCard from "../pages/homepage/_components/StoriesCard";
 
 const Layout = () => {
   return (
     <div className="container mx-auto flex gap-6 p-10">
       {/* middle stories */}
       <div className="w-full rounded-lg bg-white p-4 md:w-3/4">
-        <StoriesCard />
+        {/* <StoriesCard /> */}
+        <PostCard />
       </div>
 
       {/* right sidebar */}

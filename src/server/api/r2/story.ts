@@ -54,6 +54,7 @@ export class StoryStorage {
   }
 
   async getStory(key: string) {
+    console.log("key", key);
     try {
       console.log("Getting story with key:", `stories/${key}.json`);
       const response = await this.client.send(
