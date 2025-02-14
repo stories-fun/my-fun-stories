@@ -55,15 +55,30 @@ export class StoryStorage {
 
   async getStory(key: string) {
     try {
+      console.log("Getting story with key:", `stories/${key}.json`);
       const response = await this.client.send(
         new GetObjectCommand({
           Bucket: this.bucket,
           Key: `stories/${key}.json`,
         }),
       );
-      const data = JSON.parse(await response.Body!.transformToString());
+      const rawData = await response.Body!.transformToString();
+      console.log("Raw story data:", rawData);
+      const data = JSON.parse(rawData);
+
+      // If the id is missing, derive it from the key string (e.g., 'stories/1739354908779_pDHykt.json' becomes '1739354908779_pDHykt')
+      if (!data.id && typeof key === "string") {
+        const derivedId = key.split("/").pop()?.replace(".json", "");
+        data.id = derivedId;
+      }
+      // Convert createdAt from string to Date if necessary
+      if (typeof data.createdAt === "string") {
+        data.createdAt = new Date(data.createdAt);
+      }
+
       return StorySchema.parse(data);
     } catch (error) {
+      console.error("Error getting story:", error);
       return null;
     }
   }
@@ -93,6 +108,7 @@ export class StoryStorage {
   }
 
   async listObjects(prefix: string, continuationToken?: string) {
+    console.log("Listing objects with prefix:", prefix);
     const response = await this.client.send(
       new ListObjectsV2Command({
         Bucket: this.bucket,
@@ -100,6 +116,11 @@ export class StoryStorage {
         ContinuationToken: continuationToken,
       }),
     );
+    console.log("List objects response:", {
+      bucket: this.bucket,
+      contents: response.Contents?.map((obj) => obj.Key),
+      count: response.Contents?.length ?? 0,
+    });
 
     return {
       objects: response.Contents ?? [],

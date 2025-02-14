@@ -14,23 +14,22 @@ export const storyRouter = createTRPCRouter({
     .input(
       z.object({
         walletAddress: StorySchema.shape.walletAddress,
+        writerName: z.string(),
         content: StorySchema.shape.content,
         title: StorySchema.shape.title.optional(),
       }),
     )
     .mutation(async ({ input }) => {
-      const user = await userStorage.getUser(input.walletAddress);
-      if (!user) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "User not found. Create a profile first.",
-        });
-      }
+      const username = input.writerName;
 
       const key = `${Date.now()}_${input.walletAddress.slice(2, 8)}`;
       const storyData = {
-        ...input,
-        username: user.username,
+        id: key,
+        walletAddress: input.walletAddress,
+        writerName: input.writerName,
+        username: input.writerName,
+        content: input.content,
+        title: input.title,
         createdAt: new Date(),
         likes: [],
         comments: [],
@@ -50,28 +49,48 @@ export const storyRouter = createTRPCRouter({
     )
     .query(async ({ input }) => {
       try {
+        console.log("List stories input:", input);
         const { objects, nextToken } = await storyStorage.listObjects(
           "stories/",
           input.cursor,
         );
 
+        console.log("Found objects:", objects.length);
+
         const validStories = (
           await Promise.all(
             objects.map(async (obj: any) => {
               try {
-                if (!obj.Key) return null;
-                const key = obj.Key.replace("stories/", "").replace(
-                  ".json",
+                if (!obj.Key) {
+                  console.log("Object has no Key:", obj);
+                  return null;
+                }
+                // Remove both the prefix and the .json extension
+                const key = obj.Key.replace(/^stories\//, "").replace(
+                  /\.json$/,
                   "",
                 );
+                console.log("Processing story with key:", key);
+
                 const story = await storyStorage.getStory(key);
-                return story;
-              } catch {
+                if (!story) {
+                  console.log("No story found for key:", key);
+                  return null;
+                }
+
+                return {
+                  key,
+                  ...story,
+                };
+              } catch (error) {
+                console.error("Error processing story:", error);
                 return null;
               }
             }),
           )
         ).filter(Boolean);
+
+        console.log("Valid stories found:", validStories.length);
 
         const filteredStories = validStories
           .filter((s: any) =>
@@ -82,11 +101,26 @@ export const storyRouter = createTRPCRouter({
           )
           .slice(0, input.limit);
 
+        console.log("Filtered stories:", filteredStories.length);
+
+        const uniqueWallets = Array.from(
+          new Set(filteredStories.map((s: any) => s.walletAddress)),
+        );
+        const users: { [wallet: string]: any } = {};
+        await Promise.all(
+          uniqueWallets.map(async (wallet) => {
+            const user = await userStorage.getUser(wallet);
+            users[wallet] = user; // may be null if user doesn't exist
+          }),
+        );
+
         return {
           stories: filteredStories,
+          users,
           nextCursor: nextToken,
         };
       } catch (error) {
+        console.error("Failed to fetch stories:", error);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to fetch stories",
