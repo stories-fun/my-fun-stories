@@ -54,6 +54,7 @@ export class StoryStorage {
   }
 
   async getStory(key: string) {
+    console.log("key", key);
     try {
       const response = await this.client.send(
         new GetObjectCommand({
