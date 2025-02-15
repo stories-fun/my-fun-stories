@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import NavBar from "~/app/_components/NavBar";
 
@@ -14,7 +15,7 @@ const AboutUs = () => {
         />
       </div>
       <div className="container mx-auto my-6 w-full p-4 md:w-[50%]">
-        <div className="space-y-2">
+        <div className="text-align space-y-2">
           <p>
             Traditional social media is broken. It’s all about followers, fake
             personas, and superficial connections.
@@ -56,6 +57,13 @@ const AboutUs = () => {
           <p> More announcements coming soon.</p>
           <p> Follow us for updates. Let’s make storytelling fun again.</p>
         </div>
+      </div>
+
+      <div className="my-8 flex flex-col items-center justify-center">
+        <h1 className="font-bold">Follow us to stay updated</h1>
+        <Link href="https://x.com/StoriesDotFun">
+          <Image src={"/images/twitter.png"} width={50} height={50} alt="" />
+        </Link>
       </div>
     </div>
   );
