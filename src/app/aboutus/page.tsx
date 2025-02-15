@@ -8,13 +8,12 @@ const AboutUs = () => {
       <NavBar />
       <div>
         <img
-          src={"/images/banner.png"}  
+          src={"/images/aboutus.png"}
           alt="cover image"
           className="h-full w-full"
         />
       </div>
-      {/* <div><Image src={"/images/banner.png"} width={200} height={200} alt="dfkd" /></div> */}
-      <div className="container mx-auto mt-6 w-full p-4 md:w-[50%]">
+      <div className="container mx-auto my-6 w-full p-4 md:w-[50%]">
         <div className="space-y-2">
           <p>
             Traditional social media is broken. It’s all about followers, fake

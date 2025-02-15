@@ -2,13 +2,12 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import PostActions from "~/app/_components/PostActions";
-import { FaRegComment } from "react-icons/fa";
 import ProgressBar from "~/app/_components/ProgressBar";
 import { ImageSlider } from "./ImageSlider";
-import ReactDOM from "react-dom";
 import { EditorState } from "draft-js";
 import "draft-js/dist/Draft.css";
 import dynamic from "next/dynamic";
+import axios from "axios";
 
 const Editor = dynamic(() => import("draft-js").then((mod) => mod.Editor), {
   ssr: false,
@@ -16,6 +15,14 @@ const Editor = dynamic(() => import("draft-js").then((mod) => mod.Editor), {
 
 const StoriesCard = () => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
+
+  useEffect(() => {
+    const stories = async () => {
+      try {
+        const response = await axios.get("/api/trpc/");
+      } catch (error) {}
+    };
+  }, []);
 
   const onEditorStateChange = (state: any) => {
     setEditorState(state);
