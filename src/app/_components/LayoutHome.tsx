@@ -7,8 +7,7 @@ const Layout = () => {
     <div className="container mx-auto flex gap-6 p-10">
       {/* middle stories */}
       <div className="w-full rounded-lg bg-white p-4 md:w-3/4">
-        {/* <StoriesCard /> */}
-        <PostCard />
+        {/* <PostCard /> */}
       </div>
 
       {/* right sidebar */}

@@ -8,7 +8,7 @@ import Image from "next/image";
 
 export const ImageSliderForStories = () => {
   return (
-    <div className="relative w-full max-w-[640px] bg-[#F6F7F8] md:w-3/4">
+    <div className="relative w-full bg-[#F6F7F8]">
       <Swiper
         modules={[Navigation, Pagination]}
         navigation
