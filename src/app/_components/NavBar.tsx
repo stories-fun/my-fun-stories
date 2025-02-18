@@ -16,7 +16,7 @@ const NavBar = () => {
         <Link href={"/aboutus"}>
           <div className="decoration-skip-ink-none flex items-center space-x-2 text-left font-[Mont] text-[25px] font-bold leading-[25px] text-[#000000]">
             <Image src="/images/logo.png" width={50} height={50} alt="logo" />
-            <div>stories.fun</div>
+            <div className="font-[Mont] font-bold">stories.fun</div>
           </div>
         </Link>
 

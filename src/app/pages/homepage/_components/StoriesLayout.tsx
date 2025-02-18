@@ -5,9 +5,9 @@ const StoriesLayout = () => {
   return (
     <div>
       <StoriesCard />
+      {/* <StoriesCard />
       <StoriesCard />
-      <StoriesCard />
-      <StoriesCard />
+      <StoriesCard /> */}
     </div>
   );
 };

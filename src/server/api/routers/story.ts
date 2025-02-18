@@ -243,4 +243,29 @@ export const storyRouter = createTRPCRouter({
 
       return { success: true, likes: story.likes.length };
     }),
+
+  getById: publicProcedure
+    .input(
+      z.object({
+        storyKey: z.string(),
+      }),
+    )
+    .query(async ({ input }) => {
+      try {
+        const story = await storyStorage.getStory(input.storyKey);
+        if (!story) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Story not found",
+          });
+        }
+        return { success: true, story };
+      } catch (error) {
+        console.error("Failed to fetch story by ID:", error);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to fetch story",
+        });
+      }
+    }),
 });
