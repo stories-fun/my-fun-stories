@@ -13,12 +13,18 @@ const NavBar = () => {
   return (
     <>
       <div className="container mx-auto flex items-center justify-between border-b-2 p-2">
-        <Link href={"/aboutus"}>
-          <div className="decoration-skip-ink-none flex items-center space-x-2 text-left font-[Mont] text-[25px] font-bold leading-[25px] text-[#000000]">
-            <Image src="/images/logo.png" width={50} height={50} alt="logo" />
-            <div className="font-[Mont] font-bold">stories.fun</div>
+        <div className="flex flex-row space-x-6">
+          <Link href={"/aboutus"}>
+            <div className="decoration-skip-ink-none flex items-center space-x-2 text-left font-[Mont] text-[25px] font-bold leading-[25px] text-[#000000]">
+              <Image src="/images/logo.png" width={50} height={50} alt="logo" />
+              <div className="font-[Mont] font-bold">stories.fun</div>
+            </div>
+          </Link>
+          <div className="flex items-center space-x-2">
+            <Image src={"/images/home.png"} width={35} height={35} alt="" />
+            <div>Home</div>
           </div>
-        </Link>
+        </div>
 
         <div className="relative hidden sm:flex">
           <Image
