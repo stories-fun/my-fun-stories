@@ -118,7 +118,7 @@ const StoriesCard = () => {
             onChange={onEditorStateChange}
             placeholder="Write your story..."
           /> */}
-                <div>{story.title}</div>
+                <h2 className="font-bold">{story.title}</h2>
                 <div>{story.content}</div>
               </div>
             </div>
