@@ -6,11 +6,12 @@ const RightSection = () => {
     <div className="bg-[#F6F7F8]">
       {/* banner */}
       <div className="">
-        <img
+        {/* <img
           src={"/images/Image.png"}
           alt="cover image"
           className="h-full w-full"
-        />
+        /> */}
+        <Image src={"/images/Image.png"} className="h-full w-full" alt="" />
       </div>
       {/* profile */}
       <div className="border-b-2">

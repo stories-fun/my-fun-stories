@@ -15,7 +15,7 @@ const page = () => {
       <div className="container mx-auto flex gap-6 p-10">
         {/* middle stories */}
         <div className="w-full rounded-lg bg-white p-4 md:w-3/4">
-          <PostCard storyId={id} />
+          <PostCard storyId={id as string} />
         </div>
 
         {/* right sidebar */}

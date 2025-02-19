@@ -7,21 +7,19 @@ import { ImageSlider } from "./ImageSlider";
 import { EditorState } from "draft-js";
 import "draft-js/dist/Draft.css";
 import dynamic from "next/dynamic";
-import axios from "axios";
 import { useStoriesStore } from "~/store/useStoriesStore";
 import { useRouter } from "next/navigation";
 import Comments from "~/app/_components/Comments";
 
-const Editor = dynamic(() => import("draft-js").then((mod) => mod.Editor), {
-  ssr: false,
-});
+// const Editor = dynamic(() => import("draft-js").then((mod) => mod.Editor), {
+//   ssr: false,
+// });
 
 const StoriesCard = () => {
   const router = useRouter();
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  // const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
   const { stories, error, isLoading, getStories } = useStoriesStore();
-  
 
   console.log("Here is stories", stories);
 
@@ -90,7 +88,6 @@ const StoriesCard = () => {
   };
 
   return (
-<<<<<<< HEAD
     <div>
       {stories.length > 0 &&
         stories.map((story) => (
@@ -174,26 +171,21 @@ const StoriesCard = () => {
                 <div>{story.content}</div>
               </div>
             </div>
-=======
-    <div className="container mx-auto w-full rounded-lg">
-      {stories.map((story) => (
-        <div key={story.id} className="mb-8">
-          <h2 className="font-bold">{story.title}</h2>
-          <div className="bg-[#F6F7F8]">
-            <ImageSlider />
->>>>>>> 9ea024e96f5b1fe0561c82e49cfd92da1b15960c
+
+            <div className="mt-4">
+              <PostActions
+                storyKey={story.id}
+                walletAddress={story.walletAddres}
+              />
+            </div>
+            <div className="mt-4">
+              <div>{story.content}</div>
+            </div>
+            <div className="mt-4">
+              <Comments postId={story.id} />
+            </div>
           </div>
-          <div className="mt-4">
-            <PostActions postId={story.id} />
-          </div>
-          <div className="mt-4">
-            <div>{story.content}</div>
-          </div>
-          <div className="mt-4">
-            <Comments postId={story.id} />
-          </div>
-        </div>
-      ))}
+        ))}
     </div>
   );
 };

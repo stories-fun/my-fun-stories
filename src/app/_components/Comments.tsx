@@ -28,16 +28,25 @@ const CommentsInner: React.FC<CommentsProps> = ({ postId }) => {
   console.log("PostId in Comments:", postId); // Debug log
 
   // Get comments only if postId exists
+  // const { data: fetchedComments, refetch: refetchComments } =
+  //   api.story.getComments.useQuery(
+  //     { storyKey: postId },
+  //     {
+  //       enabled: !!postId,
+  //       onSuccess: (data) => {
+  //         setComments(data);
+  //       },
+  //     },
+  //   );
+
   const { data: fetchedComments, refetch: refetchComments } =
-    api.story.getComments.useQuery(
-      { storyKey: postId },
-      {
-        enabled: !!postId, // Only run query if postId exists
-        onSuccess: (data) => {
-          setComments(data);
-        },
-      },
-    );
+    api.story.getComments.useQuery({ storyKey: postId }, { enabled: !!postId });
+
+  useEffect(() => {
+    if (fetchedComments) {
+      setComments(fetchedComments);
+    }
+  }, [fetchedComments]);
 
   // Add comment mutation
   const addCommentMutation = api.story.addComment.useMutation({
@@ -211,9 +220,15 @@ const CommentsInner: React.FC<CommentsProps> = ({ postId }) => {
                   e.stopPropagation();
                   handleSubmitComment();
                 }}
-                disabled={addCommentMutation.isLoading || !walletAddress}
+                // disabled={addCommentMutation.isLoading || !walletAddress}
+                disabled={
+                  addCommentMutation.status === "pending" || !walletAddress
+                }
               >
-                {addCommentMutation.isLoading ? "Posting..." : "Comment"}
+                {/* {addCommentMutation.isLoading ? "Posting..." : "Comment"} */}
+                {addCommentMutation.status === "pending"
+                  ? "Posting..."
+                  : "Comment"}
               </button>
             </div>
           </>

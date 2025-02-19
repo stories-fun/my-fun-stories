@@ -1,14 +1,11 @@
 "use client";
-import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import PostActions from "./PostActions";
-import { FaRegComment } from "react-icons/fa";
-import { ImageSlider } from "../pages/homepage/_components/ImageSlider";
 import { ImageSliderForStories } from "./ImageSliderForStories";
-import { EditorState } from "draft-js";
+// import { EditorState } from "draft-js";
 import "draft-js/dist/Draft.css";
-import dynamic from "next/dynamic";
-import NestedComment from "../comment/_component/nestedComment";
+// import dynamic from "next/dynamic";
+// import NestedComment from "../comment/_component/nestedComment";
 import { useStoriesStore } from "~/store/useStoriesStore";
 import Comments from "../_components/Comments";
 

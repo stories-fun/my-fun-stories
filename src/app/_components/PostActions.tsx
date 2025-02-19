@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { IoFlowerOutline } from "react-icons/io5";
-import { FaRegComment } from "react-icons/fa";
-import { FaRegShareSquare } from "react-icons/fa";
-import { LuWallet } from "react-icons/lu";
+
 import Image from "next/image";
 import Comments from "./Comments";
 import { useStoriesStore } from "~/store/useStoriesStore";
