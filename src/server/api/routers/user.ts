@@ -3,6 +3,9 @@ import { UserStorage } from "../r2/user";
 import { UserSchema } from "../../schema/user";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { nanoid } from "nanoid";
 
 const userStorage = new UserStorage();
 
@@ -49,6 +52,54 @@ export const userRouter = createTRPCRouter({
         });
       }
       return user;
+    }),
+
+  getUploadUrl: publicProcedure
+    .input(
+      z.object({
+        walletAddress: UserSchema.shape.walletAddress,
+        fileType: z.string().regex(/^image\/(jpeg|png|gif|webp)$/),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      try {
+        const fileExtension = input.fileType.split("/")[1];
+        const key = `users/${input.walletAddress}/pfp/${nanoid()}.${fileExtension}`;
+
+        const command = new PutObjectCommand({
+          Bucket: userStorage.getBucketName(),
+          Key: key,
+          ContentType: input.fileType,
+          ACL: "public-read",
+        });
+
+        const url = await getSignedUrl(userStorage.getClient(), command, {
+          expiresIn: 3600,
+        });
+
+        // Get the public URL for the uploaded file
+        const publicUrl = `https://${userStorage.getBucketName()}.r2.cloudflarestorage.com/${key}`;
+
+        console.log("Generated presigned URL:", {
+          bucket: userStorage.getBucketName(),
+          key,
+          url,
+          publicUrl,
+          contentType: input.fileType,
+        });
+
+        return {
+          uploadUrl: url,
+          key: publicUrl, // Return the public URL as the key
+        };
+      } catch (error) {
+        console.error("Error generating upload URL:", error);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to generate upload URL. Please try again.",
+          cause: error,
+        });
+      }
     }),
 
   list: publicProcedure.query(async () => {
