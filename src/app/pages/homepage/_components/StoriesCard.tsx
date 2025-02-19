@@ -20,6 +20,7 @@ const StoriesCard = () => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
   const { stories, error, isLoading, getStories } = useStoriesStore();
+  
 
   console.log("Here is stories", stories);
 
@@ -83,9 +84,6 @@ const StoriesCard = () => {
   if (error) return <p>Error Loading Stories{error}</p>;
   if (!stories.length) return <p>No stories found</p>;
 
-  // Get the first story
-  const story = stories[0];
-
   const handleCardClick = (id: string) => {
     router.push(`/stories/${id}`);
   };
@@ -135,7 +133,10 @@ const StoriesCard = () => {
                 <ImageSlider />
               </div>
               <div className="mt-4">
-                <PostActions />
+                <PostActions
+                  storyKey={story.id}
+                  walletAddress={story.walletAddres}
+                />
               </div>
               {/* presale progress bar */}
               <div className="my-4">

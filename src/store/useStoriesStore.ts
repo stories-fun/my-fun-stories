@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import {
+  createLike,
   getByIdFromServer,
   getMoreStoriesFromServer,
   getStoriesFromServer,
@@ -12,7 +13,7 @@ interface Story {
   content: string;
   title: string;
   createdAt: Date;
-  likes: string[];
+  likeCount: number;
   comments: Comment[];
 }
 interface StoriesSlice {
@@ -20,6 +21,7 @@ interface StoriesSlice {
   isLoading: boolean;
   error: string | null;
   nextCursor: string | undefined;
+  likeCounts: { [key: string]: number };
 }
 interface Comment {
   id: string;
@@ -36,6 +38,7 @@ interface StoriesActions {
   getStories: (walletAddress?: string) => Promise<void>;
   getMoreStories: () => Promise<void>;
   getById: (storyKey: string) => Promise<void>;
+  like: (storyKey: string, walletAddress: string) => Promise<void>;
 }
 
 type StoriesState = StoriesSlice & StoriesActions;
@@ -53,7 +56,7 @@ const transformStory = (story: any): Story => ({
   content: story.content ?? "",
   title: story.title,
   createdAt: toDate(story.createdAt),
-  likes: Array.isArray(story.likes) ? story.likes : [],
+  likeCount: Array.isArray(story.likes) ? story.likes.length : 0,
   comments: Array.isArray(story.comments) ? story.comments : [],
 });
 
@@ -62,6 +65,7 @@ export const useStoriesStore = create<StoriesState>((set, get) => ({
   isLoading: false,
   error: null,
   nextCursor: undefined,
+  likeCounts: {},
 
   getStories: async (walletAddress) => {
     set({ isLoading: true, error: null });
@@ -98,6 +102,27 @@ export const useStoriesStore = create<StoriesState>((set, get) => ({
         isLoading: false,
         error: result?.error,
       });
+    }
+  },
+
+  like: async (storyKey: string, walletAddress: string) => {
+    const result = await createLike(storyKey, walletAddress);
+    // if (result && result.likeCount !== undefined) {
+    //   set((state) => ({
+    //     likeCounts: { ...state.likeCounts, [storyKey]: result.likeCount },
+    //     isLoading: false,
+    //     error: result?.error,
+    //   }));
+    // }
+    if (result && result.likeCount !== undefined) {
+      set((state) => ({
+        stories: state.stories.map((story) =>
+          story.id === storyKey
+            ? { ...story, likeCount: result.likeCount }
+            : story,
+        ),
+        error: null, // Clear errors if the request is successful
+      }));
     }
   },
 }));

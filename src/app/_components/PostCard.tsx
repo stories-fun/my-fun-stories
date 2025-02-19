@@ -71,7 +71,7 @@ const PostCard = ({ storyId }: any) => {
         <ImageSliderForStories />
       </div>
       <div className="mt-4">
-        <PostActions />
+        <PostActions storyKey={""} walletAddress="" />
       </div>
 
       <div className="mt-4">

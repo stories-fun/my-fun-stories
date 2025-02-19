@@ -29,9 +29,10 @@ const commentsData = [
 const page = () => {
   return (
     <div>
-      {commentsData.map((comment: any) => (
+      hi
+      {/* {commentsData.map((comment: any) => (
         <NestedComment key={comment.id} comment={comment} />
-      ))}
+      ))} */}
     </div>
   );
 };

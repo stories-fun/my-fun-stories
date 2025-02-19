@@ -63,3 +63,22 @@ export const getByIdFromServer = async (storyKey: string) => {
     };
   }
 };
+
+export const createLike = async (storyKey: string, walletAddress: string) => {
+  try {
+    const result = await api.story.like({
+      storyKey,
+      walletAddress,
+    });
+    console.log("Here is result from action.ts likes", result.likes);
+    return {
+      likeCount: result.likes,
+      success: result.success,
+    };
+  } catch (error) {
+    return {
+      error:
+        error instanceof Error ? error.message : "Failed to get more stories",
+    };
+  }
+};
