@@ -65,7 +65,7 @@ const PostCard = ({ storyId }: any) => {
 
   return (
     <div className="container mx-auto w-full rounded-lg">
-      <div>{story.title}</div>
+      <h2 className="font-bold">{story.title}</h2>
       <div className="bg-[#F6F7F8]">
         {/* <ImageSlider /> */}
         <ImageSliderForStories />
