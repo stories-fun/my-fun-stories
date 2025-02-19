@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useWallet } from "@jup-ag/wallet-adapter";
 import { api } from "~/trpc/react";
-import { formatDistanceToNow } from "date-fns";
+// import { formatDistanceToNow } from "date-fns";
 
 import { WalletChildrenProvider } from "./wallet";
 import Image from "next/image";
@@ -60,11 +60,11 @@ const CommentComponent: React.FC<{
           <span className="font-semibold">
             {comment.username || `${comment.walletAddress.slice(0, 8)}...`}
           </span>
-          <span className="text-sm text-gray-500">
+          {/* <span className="text-sm text-gray-500">
             {formatDistanceToNow(new Date(comment.createdAt), {
               addSuffix: true,
             })}
-          </span>
+          </span> */}
         </div>
         <p className="mt-2 text-gray-700">{comment.content}</p>
 
