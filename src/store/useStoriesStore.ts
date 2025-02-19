@@ -67,9 +67,9 @@ export const useStoriesStore = create<StoriesState>((set, get) => ({
   nextCursor: undefined,
   likeCounts: {},
 
-  getStories: async (walletAddress) => {
+  getStories: async () => {
     set({ isLoading: true, error: null });
-    const result = await getStoriesFromServer(walletAddress);
+    const result = await getStoriesFromServer();
     const transformStories = (result?.stories ?? []).map(transformStory);
     set({
       stories: transformStories,
@@ -97,8 +97,18 @@ export const useStoriesStore = create<StoriesState>((set, get) => ({
     set({ isLoading: true });
     const result = await getByIdFromServer(storyKey);
     if (result?.story) {
+      // Instead of replacing stories, append or update the specific story
+      const currentStories = get().stories;
+      const storyExists = currentStories.some((s) => s.id === result.story.id);
+
+      const updatedStories = storyExists
+        ? currentStories.map((s) =>
+            s.id === result.story.id ? transformStory(result.story) : s,
+          )
+        : [...currentStories, transformStory(result.story)];
+
       set({
-        stories: [transformStory(result.story)],
+        stories: updatedStories,
         isLoading: false,
         error: result?.error,
       });

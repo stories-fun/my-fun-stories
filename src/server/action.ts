@@ -7,16 +7,9 @@ type StoryResult = {
   debugWalletAddress?: string;
 };
 
-export const getStoriesFromServer = async (
-  walletAddress?: string,
-): Promise<StoryResult> => {
-  if (!walletAddress) {
-    return { stories: [], error: "wallet address not provided" };
-  }
-  console.log("Here is wallet_address", walletAddress);
+export const getStoriesFromServer = async (): Promise<StoryResult> => {
   try {
     const result = await api.story.list({
-      walletAddress,
       limit: 100,
     });
     return {
