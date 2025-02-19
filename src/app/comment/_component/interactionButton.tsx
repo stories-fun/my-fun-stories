@@ -1,7 +1,5 @@
 // InteractionButtons.tsx
 import Image from "next/image";
-import { useState } from "react";
-// import { CiCircleMinus, CiThumbUp, CiThumbDown } from "react-icons/ci";
 
 const InteractionButtons = ({ comment, onReplyClick }: any) => {
   //   const [likes, setLikes] = useState(comment.likes || 0);

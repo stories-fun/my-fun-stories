@@ -8,11 +8,12 @@ const AboutUs = () => {
     <div>
       <NavBar />
       <div>
-        <img
+        {/* <img
           src={"/images/aboutus.png"}
           alt="cover image"
           className="h-full w-full"
-        />
+        /> */}
+        <Image src={"/images/aboutus.png"} className="h-full w-full" alt="" />
       </div>
       <div className="container mx-auto my-6 w-full p-4 md:w-[50%]">
         <div className="text-align space-y-2">

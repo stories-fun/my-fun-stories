@@ -3,7 +3,6 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
-import { CircleUserRound } from "lucide-react";
 import Link from "next/link";
 import { WalletProvider } from "./wallet";
 
