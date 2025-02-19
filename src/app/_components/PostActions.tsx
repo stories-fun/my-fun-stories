@@ -21,6 +21,7 @@ const PostActions: React.FC<PostActionsProps> = ({ postId }) => {
   };
 
   return (
+
     <div className="relative mt-4">
       <div className="flex items-center space-x-6">
         {/* flower button */}
@@ -53,7 +54,6 @@ const PostActions: React.FC<PostActionsProps> = ({ postId }) => {
         <div className="flex items-center space-x-2 rounded-full text-sm font-bold">
           {/* <FaRegShareSquare /> */}
           <Image src={"/images/Share.png"} width={25} height={25} alt="" />
-
           <span>Share</span>
         </div>
       </div>

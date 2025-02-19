@@ -16,7 +16,8 @@ const CommentBase = z.object({
   content: z.string().min(1),
   walletAddress: z.string(),
   username: z.string(),
-  createdAt: z.date(),
+  // createdAt: z.date(),
+  createdAt: z.union([z.string(), z.date()]).transform((val) => new Date(val)),
   upvotes: z.array(z.string()).default([]),
   downvotes: z.array(z.string()).default([]),
 });
