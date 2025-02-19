@@ -10,13 +10,13 @@ const PostActions = () => {
     <div className="flex items-center space-x-6">
       {/* flower button */}
       <div className="flex items-center space-x-2 rounded-full text-sm font-bold">
-        <Image src={"/images/Flower.png"} width={25} height={25} alt="" />
+        <Image src={"/images/Flower.png"} width={20} height={20} alt="" />
         {/* <IoFlowerOutline /> */}
         <span>Likes</span>
       </div>
       <div className="flex items-center space-x-2 rounded-full text-sm font-bold">
         {/* <LuWallet /> */}
-        <Image src={"/images/Advertise.png"} width={25} height={25} alt="" />
+        <Image src={"/images/Advertise.png"} width={20} height={20} alt="" />
         <span>Invest</span>
       </div>
       {/* Comment button */}
