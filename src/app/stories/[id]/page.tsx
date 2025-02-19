@@ -1,13 +1,52 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PostCard from "~/app/_components/PostCard";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import RightSidebar from "~/app/_components/RightSidebar";
 import NavBar from "~/app/_components/NavBar";
+import Comments from "~/app/_components/Comments";
+import { useStoriesStore } from "~/store/useStoriesStore";
 
-const page = () => {
+const Page = () => {
   const { id } = useParams();
-  console.log("here is id", id);
+  const { stories, isLoading } = useStoriesStore();
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  useEffect(() => {
+    if (
+      window.location.hash === "#comments" &&
+      !hasScrolled &&
+      !isLoading &&
+      stories.length > 0
+    ) {
+      const scrollToComments = () => {
+        const commentsSection = document.getElementById("comments");
+        if (commentsSection) {
+          const headerHeight = 80; // Adjust this value based on your header height
+          const elementPosition = commentsSection.getBoundingClientRect().top;
+          const offsetPosition =
+            elementPosition + window.pageYOffset - headerHeight;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth",
+          });
+          setHasScrolled(true);
+        }
+      };
+
+      // Try scrolling multiple times to ensure it works
+      const scrollAttempts = [0, 100, 500, 1000];
+      scrollAttempts.forEach((delay) => {
+        setTimeout(scrollToComments, delay);
+      });
+    }
+  }, [isLoading, stories, hasScrolled]);
+
+  // Reset hasScrolled when navigating to a new story
+  useEffect(() => {
+    setHasScrolled(false);
+  }, [id]);
 
   return (
     <>
@@ -15,7 +54,10 @@ const page = () => {
       <div className="container mx-auto flex gap-6 p-10">
         {/* middle stories */}
         <div className="w-full rounded-lg bg-white p-4 md:w-3/4">
-          <PostCard storyId={id} />
+          <PostCard storyId={id as string} />
+          <div id="comments" className="scroll-mt-20 scroll-smooth">
+            <Comments postId={id as string} />
+          </div>
         </div>
 
         {/* right sidebar */}
@@ -27,4 +69,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { IoFlowerOutline } from "react-icons/io5";
-import { FaRegComment } from "react-icons/fa";
-import { FaRegShareSquare } from "react-icons/fa";
+import { FaRegComment, FaRegHeart, FaRegBookmark } from "react-icons/fa";
 import { LuWallet } from "react-icons/lu";
 import Image from "next/image";
 import Comments from "./Comments";
+import ShareModal from "./ShareModal";
+import { useRouter } from "next/navigation";
 
 interface PostActionsProps {
   postId: string;
@@ -12,16 +13,15 @@ interface PostActionsProps {
 
 const PostActions: React.FC<PostActionsProps> = ({ postId }) => {
   const [showComments, setShowComments] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const router = useRouter();
 
-  const handleCommentClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setShowComments((prev) => !prev);
-    console.log("Comment button clicked, showComments:", !showComments);
+  const handleCommentClick = () => {
+    // Navigate to the story page with comment section focus
+    router.push(`/stories/${postId}#comments`);
   };
 
   return (
-
     <div className="relative mt-4">
       <div className="flex items-center space-x-6">
         {/* flower button */}
@@ -50,15 +50,15 @@ const PostActions: React.FC<PostActionsProps> = ({ postId }) => {
           />
           <span>Comment</span>
         </button>
-        {/* Share button */}
-        <div className="flex items-center space-x-2 rounded-full text-sm font-bold">
-          {/* <FaRegShareSquare /> */}
-          <Image src={"/images/Share.png"} width={25} height={25} alt="" />
-          <span>Share</span>
-        </div>
+        <button onClick={() => setShowShareModal(true)}>
+          <div className="flex items-center space-x-2 rounded-full text-sm font-bold">
+            <Image src={"/images/Share.png"} width={25} height={25} alt="" />
+            <span>Share</span>
+          </div>
+        </button>
       </div>
 
-      {showComments && (
+      {/* {showComments && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
           onClick={(e) => {
@@ -73,7 +73,13 @@ const PostActions: React.FC<PostActionsProps> = ({ postId }) => {
             <Comments postId={postId} />
           </div>
         </div>
-      )}
+      )} */}
+
+      <ShareModal
+        isOpen={showShareModal}
+        onClose={() => setShowShareModal(false)}
+        postId={postId}
+      />
     </div>
   );
 };
