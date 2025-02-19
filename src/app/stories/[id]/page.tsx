@@ -55,12 +55,9 @@ const Page = () => {
         {/* middle stories */}
         <div className="w-full rounded-lg bg-white p-4 md:w-3/4">
           <PostCard storyId={id as string} />
-<<<<<<< HEAD
-=======
           <div id="comments" className="scroll-mt-20 scroll-smooth">
             <Comments postId={id as string} />
           </div>
->>>>>>> main
         </div>
 
         {/* right sidebar */}

@@ -1,17 +1,13 @@
 "use client";
 import React, { useEffect } from "react";
 import PostActions from "./PostActions";
-<<<<<<< HEAD
-import { ImageSliderForStories } from "./ImageSliderForStories";
 // import { EditorState } from "draft-js";
 import "draft-js/dist/Draft.css";
 // import dynamic from "next/dynamic";
 // import NestedComment from "../comment/_component/nestedComment";
-=======
 
 import { ImageSliderForStories } from "./ImageSliderForStories";
 import "draft-js/dist/Draft.css";
->>>>>>> main
 import { useStoriesStore } from "~/store/useStoriesStore";
 
 const PostCard = ({ storyId }: { storyId: string }) => {

@@ -18,11 +18,8 @@ import Loading from "./Loading";
 
 const StoriesCard = () => {
   const router = useRouter();
-<<<<<<< HEAD
   // const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
-=======
->>>>>>> main
   const { stories, error, isLoading, getStories } = useStoriesStore();
 
   useEffect(() => {
@@ -35,7 +32,6 @@ const StoriesCard = () => {
   if (error) return <p>Error Loading Stories{error}</p>;
   if (!stories.length) return <p>No stories found</p>;
 
-<<<<<<< HEAD
   const handleCardClick = (id: string) => {
     router.push(`/stories/${id}`);
   };
@@ -139,32 +135,6 @@ const StoriesCard = () => {
             </div>
           </div>
         ))}
-=======
-  const handleCardClick = (storyId: string) => {
-    console.log("Clicking story with ID:", storyId); // Debug log
-    router.push(`/stories/${storyId}`);
-  };
-
-  return (
-    <div className="container mx-auto w-full rounded-lg">
-      {stories.map((story) => (
-        <div key={story.id} className="mb-8 transition-all hover:bg-gray-50">
-          <h2 className="font-bold">{story.title}</h2>
-          <div
-            className="cursor-pointer bg-[#F6F7F8]"
-            onClick={() => handleCardClick(story.id)}
-          >
-            <ImageSlider />
-          </div>
-          <div className="mt-4">
-            <PostActions postId={story.id} />
-          </div>
-          <div className="mt-4">
-            <div>{story.content}</div>
-          </div>
-        </div>
-      ))}
->>>>>>> main
     </div>
   );
 };
