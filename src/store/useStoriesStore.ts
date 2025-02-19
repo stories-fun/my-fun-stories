@@ -21,6 +21,17 @@ interface StoriesSlice {
   error: string | null;
   nextCursor: string | undefined;
 }
+interface Comment {
+  id: string;
+  content: string;
+  walletAddress: string;
+  username: string;
+  createdAt: Date;
+  upvotes: string[];
+  downvotes: string[];
+  replies: Comment[];
+}
+
 interface StoriesActions {
   getStories: (walletAddress?: string) => Promise<void>;
   getMoreStories: () => Promise<void>;
