@@ -10,6 +10,7 @@ import "draft-js/dist/Draft.css";
 import dynamic from "next/dynamic";
 import NestedComment from "../comment/_component/nestedComment";
 import { useStoriesStore } from "~/store/useStoriesStore";
+import Comments from "../_components/Comments";
 
 const commentsData = [
   {
@@ -41,8 +42,7 @@ const commentsData = [
 //   ssr: false,
 // });
 
-const PostCard = ({ storyId }: any) => {
-  console.log("here is StoryId", storyId);
+const PostCard = ({ storyId }: { storyId: string }) => {
   const { getById, stories, isLoading, error } = useStoriesStore();
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const PostCard = ({ storyId }: any) => {
   }, [storyId, getById]);
 
   const story = stories[0];
-  console.log("here is story", story);
+  console.log("Story in PostCard:", story);
 
   // const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
@@ -71,7 +71,7 @@ const PostCard = ({ storyId }: any) => {
         <ImageSliderForStories />
       </div>
       <div className="mt-4">
-        <PostActions />
+        <PostActions postId={story.id || storyId} />
       </div>
 
       <div className="mt-4">
@@ -88,25 +88,9 @@ const PostCard = ({ storyId }: any) => {
         <div>{story.content}</div>
       </div>
 
-      {/* comment */}
-      <div className="mt-4 flex items-center gap-2 rounded-full bg-gray-100 p-2">
-        {/* Comment Icon */}
-        <Image src="/images/comment.png" width={25} height={25} alt="" />
-        {/* Comment Input */}
-        <textarea
-          placeholder="Add a comment..."
-          className="h-[38px] w-full resize-none bg-transparent text-base placeholder-gray-500 outline-none focus:ring-0"
-          style={{
-            paddingLeft: "10px",
-            lineHeight: "38px",
-          }}
-        />
-      </div>
-      {/* comment thread */}
-      <div>
-        {commentsData.map((comment: any) => (
-          <NestedComment key={comment.id} comment={comment} />
-        ))}
+      {/* Comments Section */}
+      <div className="mt-4">
+        <Comments postId={story.id || storyId} />
       </div>
     </div>
   );

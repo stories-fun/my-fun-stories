@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { api } from "~/trpc/react";
 import { useWallet } from "@jup-ag/wallet-adapter";
-import { WalletProvider } from "./wallet";
+import { WalletChildrenProvider } from "./wallet";
 
 interface Comment {
   id: string;
@@ -22,13 +22,17 @@ interface CommentsProps {
 const CommentsInner: React.FC<CommentsProps> = ({ postId }) => {
   const [newComment, setNewComment] = useState("");
   const [comments, setComments] = useState<Comment[]>([]);
-  const { wallet } = useWallet(); // Get wallet from context
+  const { publicKey } = useWallet();
+  const walletAddress = publicKey?.toBase58();
 
-  // Get comments
+  console.log("PostId in Comments:", postId); // Debug log
+
+  // Get comments only if postId exists
   const { data: fetchedComments, refetch: refetchComments } =
     api.story.getComments.useQuery(
       { storyKey: postId },
       {
+        enabled: !!postId, // Only run query if postId exists
         onSuccess: (data) => {
           setComments(data);
         },
@@ -44,8 +48,12 @@ const CommentsInner: React.FC<CommentsProps> = ({ postId }) => {
 
   const handleSubmitComment = async () => {
     if (!newComment.trim()) return;
-    if (!wallet?.address) {
+    if (!walletAddress) {
       alert("Please connect your wallet first");
+      return;
+    }
+    if (!postId) {
+      alert("Story ID is missing");
       return;
     }
 
@@ -53,7 +61,7 @@ const CommentsInner: React.FC<CommentsProps> = ({ postId }) => {
       await addCommentMutation.mutateAsync({
         storyKey: postId,
         content: newComment,
-        walletAddress: wallet.address,
+        walletAddress: walletAddress,
       });
 
       setNewComment("");
@@ -68,7 +76,7 @@ const CommentsInner: React.FC<CommentsProps> = ({ postId }) => {
     replyText: string,
   ) => {
     if (!replyText.trim()) return;
-    if (!wallet?.address) {
+    if (!walletAddress) {
       alert("Please connect your wallet first");
       return;
     }
@@ -77,7 +85,7 @@ const CommentsInner: React.FC<CommentsProps> = ({ postId }) => {
       await addCommentMutation.mutateAsync({
         storyKey: postId,
         content: replyText,
-        walletAddress: wallet.address,
+        walletAddress: walletAddress,
         parentCommentId,
       });
     } catch (error) {
@@ -182,7 +190,7 @@ const CommentsInner: React.FC<CommentsProps> = ({ postId }) => {
   return (
     <div className="max-h-[500px] overflow-y-auto rounded-lg bg-white p-4 shadow-lg">
       <div className="mb-4">
-        {!wallet?.address ? (
+        {!walletAddress ? (
           <div className="mb-4 text-center text-gray-500">
             Please connect your wallet to comment
           </div>
@@ -203,7 +211,7 @@ const CommentsInner: React.FC<CommentsProps> = ({ postId }) => {
                   e.stopPropagation();
                   handleSubmitComment();
                 }}
-                disabled={addCommentMutation.isLoading || !wallet?.address}
+                disabled={addCommentMutation.isLoading || !walletAddress}
               >
                 {addCommentMutation.isLoading ? "Posting..." : "Comment"}
               </button>
@@ -217,7 +225,7 @@ const CommentsInner: React.FC<CommentsProps> = ({ postId }) => {
           <CommentComponent
             key={comment.id}
             comment={comment}
-            isWalletConnected={!!wallet?.address}
+            isWalletConnected={!!walletAddress}
           />
         ))}
       </div>
@@ -226,10 +234,16 @@ const CommentsInner: React.FC<CommentsProps> = ({ postId }) => {
 };
 
 const Comments: React.FC<CommentsProps> = (props) => {
+  // Add validation for required props
+  if (!props.postId) {
+    console.error("Comments component requires a postId prop");
+    return null;
+  }
+
   return (
-    <WalletProvider>
+    <WalletChildrenProvider>
       <CommentsInner {...props} />
-    </WalletProvider>
+    </WalletChildrenProvider>
   );
 };
 

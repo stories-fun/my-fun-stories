@@ -38,3 +38,20 @@ export function WalletProvider() {
     </UnifiedWalletProvider>
   );
 }
+export function WalletChildrenProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    // <UnifiedWalletProvider wallets={[]} config={WALLET_CONFIG}>
+    //   <UnifiedWalletButton
+    //     buttonClassName="!bg-[#FFE700] !text-sm !text-black"
+    //     currentUserClassName="!bg-[#FFE700] !text-sm !text-black"
+    //   />
+    // </UnifiedWalletProvider>
+    <UnifiedWalletProvider wallets={[]} config={WALLET_CONFIG}>
+      {children}
+    </UnifiedWalletProvider>
+  );
+}
