@@ -40,15 +40,28 @@ export class UserStorage {
     return client;
   }
 
+  getClient() {
+    return this.client;
+  }
+
+  getBucketName() {
+    return this.bucket;
+  }
+
   async saveUser(walletAddress: string, data: unknown) {
-    await this.client.send(
-      new PutObjectCommand({
-        Bucket: this.bucket,
-        Key: `users/${walletAddress}.json`,
-        Body: JSON.stringify(data),
-        ContentType: "application/json",
-      }),
-    );
+    try {
+      await this.client.send(
+        new PutObjectCommand({
+          Bucket: this.bucket,
+          Key: `users/${walletAddress}.json`,
+          Body: JSON.stringify(data),
+          ContentType: "application/json",
+        }),
+      );
+    } catch (error) {
+      console.error("Error saving user:", error);
+      throw error;
+    }
   }
 
   async getUser(walletAddress: string) {
@@ -61,9 +74,14 @@ export class UserStorage {
       );
       return JSON.parse(await response.Body!.transformToString());
     } catch (error) {
-      return null;
+      if ((error as { name?: string })?.name === "NoSuchKey") {
+        return null;
+      }
+      console.error("Error getting user:", error);
+      throw error;
     }
   }
+
   async listUsers() {
     try {
       const response = await this.client.send(
