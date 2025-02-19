@@ -37,104 +37,100 @@ const StoriesCard = () => {
   };
 
   return (
-    <div>
-      {stories.length > 0 &&
-        stories.map((story) => (
-          <div
-            className="mt-4 flex h-[550px] cursor-pointer flex-col gap-4 border-b-2 sm:flex-col md:flex-row"
-            key={story.id}
-          >
-            <div className="flex-2 w-full md:w-2/3">
+    <div className="container mx-auto space-y-6">
+      {stories.map((story) => (
+        <div key={story.id} className="rounded-lg bg-white p-4 shadow">
+          {/* Header with profile and trending tag */}
+          <div className="mb-4 flex items-center space-x-3">
+            <Image
+              src="/images/profile.png"
+              width={40}
+              height={40}
+              alt="profile"
+              className="rounded-full"
+            />
+            <div>
               <div className="flex items-center space-x-2">
+                <span className="font-semibold">{story.username}</span>
                 <Image
-                  src={"/images/profile.png"}
-                  width={30}
-                  height={30}
-                  alt="profile"
-                />
-                <div className="flex flex-col">
-                  <div className="flex items-center space-x-1">
-                    <div className="text-bold text-sm">{story.username}</div>
-                    <Image
-                      src={"/images/verification.png"}
-                      width={25}
-                      height={25}
-                      alt=""
-                    />
-                  </div>
-
-                  <div className="mb-2 flex w-16 items-center justify-center rounded-full bg-[#AF52DE] px-4 py-1 text-xs">
-                    Trending
-                  </div>
-                </div>
-              </div>
-
-              <div className="">
-                {/* rendering image section */}
-                {/* <Image
-             src={"/images/profile.png"}
-             width={640}
-             height={360}
-             alt="post"
-             className="h-auto w-full rounded-lg object-cover sm:h-[360px] sm:w-[640px]"
-           /> */}
-                <ImageSlider />
-              </div>
-              <div className="mt-4">
-                <PostActions
-                  storyKey={story.id}
-                  walletAddress={story.walletAddres}
+                  src="/images/verification.png"
+                  width={20}
+                  height={20}
+                  alt="verified"
                 />
               </div>
-              {/* presale progress bar */}
-              <div className="my-4">
-                <ProgressBar />
+              <div className="flex space-x-2">
+                <span className="rounded-full bg-purple-500 px-3 py-0.5 text-xs text-white">
+                  Trending
+                </span>
+                <span className="rounded-full bg-red-500 px-3 py-0.5 text-xs text-white">
+                  Live Now
+                </span>
               </div>
-
-              {/* <div className="mt-4 flex items-center gap-2 rounded-lg bg-gray-100 p-3">
-           <FaRegComment className="mb-3 text-gray-500" />
- 
-           <textarea
-             placeholder="Add a comment..."
-             className="h-[38px] w-full resize-none bg-transparent text-base placeholder-gray-500 outline-none focus:ring-2 focus:ring-blue-300"
-           />
-         </div> */}
-            </div>
-
-            <div
-              className="flex w-full flex-col justify-start md:w-1/3"
-              onClick={() => handleCardClick(story.id)}
-            >
-              {/* text area */}
-              {/* <textarea
-          placeholder="write your story..."
-          className="h-auto w-full resize-none rounded-lg bg-transparent p-3 text-lg outline-none focus:ring-2 focus:ring-blue-500"
-        /> */}
-              <div className="max-h-[400px] overflow-y-auto p-4">
-                {/* <Editor
-            editorState={editorState}
-            onChange={onEditorStateChange}
-            placeholder="Write your story..."
-          /> */}
-                <h2 className="font-bold">{story.title}</h2>
-                <div>{story.content}</div>
-              </div>
-            </div>
-
-            <div className="mt-4">
-              <PostActions
-                storyKey={story.id}
-                walletAddress={story.walletAddres}
-              />
-            </div>
-            <div className="mt-4">
-              <div>{story.content}</div>
-            </div>
-            <div className="mt-4">
-              <Comments postId={story.id} />
             </div>
           </div>
-        ))}
+
+          {/* Story content */}
+          <div
+            className="cursor-pointer"
+            onClick={() => handleCardClick(story.id)}
+          >
+            <h2 className="mb-2 text-xl font-bold">{story.title}</h2>
+            <p className="mb-4 text-gray-700">{story.content}</p>
+          </div>
+
+          {/* Image slider */}
+          <div className="mb-4">
+            <ImageSlider />
+          </div>
+
+          {/* Action buttons */}
+          <div className="flex items-center space-x-6">
+            <button className="flex items-center space-x-2">
+              <Image
+                src="/images/Flower.png"
+                width={24}
+                height={24}
+                alt="like"
+              />
+              <span>{story.likeCount} Likes</span>
+            </button>
+            <button className="flex items-center space-x-2">
+              <Image
+                src="/images/Advertise.png"
+                width={24}
+                height={24}
+                alt="invest"
+              />
+              <span>Invest</span>
+            </button>
+            <button className="flex items-center space-x-2">
+              <Image
+                src="/images/comment.png"
+                width={24}
+                height={24}
+                alt="comment"
+              />
+              <span>29 Comments</span>
+            </button>
+            <button className="flex items-center space-x-2">
+              <Image
+                src="/images/Share.png"
+                width={24}
+                height={24}
+                alt="share"
+              />
+              <span>Share</span>
+            </button>
+          </div>
+
+          {/* Participation message */}
+          <div className="mt-4 text-sm text-gray-600">
+            Participate in the Presale of this token now.
+          </div>
+          {/* Progress bar could go here */}
+        </div>
+      ))}
     </div>
   );
 };

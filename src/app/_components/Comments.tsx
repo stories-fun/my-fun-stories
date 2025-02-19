@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useWallet } from "@jup-ag/wallet-adapter";
 import { api } from "~/trpc/react";
-// import { formatDistanceToNow } from "date-fns";
-
+import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 import { WalletChildrenProvider } from "./wallet";
 import Image from "next/image";
 import ShareModal from "./ShareModal";
@@ -36,8 +35,8 @@ const CommentComponent: React.FC<{
   const utils = api.useUtils();
 
   const addCommentMutation = api.story.addComment.useMutation({
-    onSuccess: () => {
-      utils.story.getComments.invalidate({ storyKey: postId });
+    onSuccess: async () => {
+      await utils.story.getComments.invalidate({ storyKey: postId });
       setReplyContent("");
       setShowReplyInput(false);
     },
@@ -58,13 +57,13 @@ const CommentComponent: React.FC<{
       <div className="rounded-lg bg-gray-50 p-4">
         <div className="flex justify-between">
           <span className="font-semibold">
-            {comment.username || `${comment.walletAddress.slice(0, 8)}...`}
+            {comment.username ?? `${comment.walletAddress.slice(0, 8)}...`}
           </span>
-          {/* <span className="text-sm text-gray-500">
+          <span className="text-sm text-gray-500">
             {formatDistanceToNow(new Date(comment.createdAt), {
               addSuffix: true,
             })}
-          </span> */}
+          </span>
         </div>
         <p className="mt-2 text-gray-700">{comment.content}</p>
 
@@ -73,7 +72,7 @@ const CommentComponent: React.FC<{
           {/* Flower (Like) */}
           <button className="flex items-center gap-1 text-sm text-gray-600 hover:text-blue-500">
             <Image src="/images/Flower.png" width={20} height={20} alt="like" />
-            <span>{comment.likes?.length || 0}</span>
+            <span>{comment.likes?.length ?? 0}</span>
           </button>
 
           {/* Dislike */}
@@ -84,7 +83,7 @@ const CommentComponent: React.FC<{
               height={20}
               alt="dislike"
             />
-            <span>{comment.dislikes?.length || 0}</span>
+            <span>{comment.dislikes?.length ?? 0}</span>
           </button>
 
           {/* Reply */}
@@ -129,15 +128,9 @@ const CommentComponent: React.FC<{
               <button
                 onClick={handleReply}
                 className="rounded bg-blue-500 px-3 py-1 text-sm text-white hover:bg-blue-600"
-                // disabled={addCommentMutation.isLoading}
-                disabled={
-                  addCommentMutation.status === "pending" || !walletAddress
-                }
+                disabled={addCommentMutation.isPending}
               >
-                {/* {addCommentMutation.isLoading ? "Replying..." : "Reply"} */}
-                {addCommentMutation.status === "pending"
-                  ? "Posting..."
-                  : "Comment"}
+                {addCommentMutation.isPending ? "Replying..." : "Reply"}
               </button>
             </div>
           </div>
@@ -219,15 +212,9 @@ const CommentsInner: React.FC<CommentsProps> = ({ postId }) => {
               <button
                 className="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:opacity-50"
                 onClick={handleSubmitComment}
-                // disabled={addCommentMutation.isLoading}
-                disabled={
-                  addCommentMutation.status === "pending" || !walletAddress
-                }
+                disabled={addCommentMutation.isPending}
               >
-                {/* {addCommentMutation.isLoading ? "Posting..." : "Comment"} */}
-                {addCommentMutation.status === "pending"
-                  ? "Posting..."
-                  : "Comment"}
+                {addCommentMutation.isPending ? "Posting..." : "Comment"}
               </button>
             </div>
           </>

@@ -1,184 +1,122 @@
 import Image from "next/image";
 import React from "react";
 
+interface CreatorProps {
+  name: string;
+  hasVerification?: boolean;
+}
+
+const CreatorCard: React.FC<CreatorProps> = ({
+  name,
+  hasVerification = true,
+}) => (
+  <div className="flex items-center justify-between py-2">
+    <div className="flex items-center space-x-2">
+      <div className="h-8 w-8 overflow-hidden rounded-full">
+        <Image
+          src="/images/profile.png"
+          width={32}
+          height={32}
+          alt={`${name}'s profile`}
+          className="h-full w-full object-cover"
+        />
+      </div>
+      <span className="text-sm font-medium">{name}</span>
+      {hasVerification && (
+        <Image
+          src="/images/verification.png"
+          width={16}
+          height={16}
+          alt="verified"
+          className="h-4 w-4"
+        />
+      )}
+    </div>
+    <button className="rounded-full bg-[#0079D3] px-6 py-1.5 text-sm font-medium text-white transition hover:bg-[#0069BD]">
+      Follow
+    </button>
+  </div>
+);
+
 const RightSection = () => {
   return (
-    <div className="bg-[#F6F7F8]">
-      {/* banner */}
-      <div className="">
-        <img
-          src={"/images/Image.png"}
-          alt="cover image"
+    <div className="h-full w-full bg-[#F6F7F8]">
+      {/* Banner Image */}
+      <div className="relative h-32 w-full overflow-hidden">
+        <Image
+          src="/images/Image.png"
+          alt="Cover image"
+          layout="fill"
+          objectFit="cover"
           className="h-full w-full"
         />
-        {/* <Image src={"/images/Image.png"} className="h-full w-full" alt="" /> */}
       </div>
-      {/* profile */}
-      <div className="border-b-2">
-        <div className="flex items-center justify-between p-2">
-          <div className="flex items-center space-x-2">
-            <div>
-              <Image
-                src={"/images/profile.png"}
-                width={25}
-                height={25}
-                alt="profile"
-              />
-            </div>
-            <div>Name</div>
-            <div>
-              <Image
-                src={"/images/verification.png"}
-                width={25}
-                height={25}
-                alt="verified badge"
-              />
-            </div>
-          </div>
-          <div className="cursor-pointer rounded-full bg-[#0079D3] px-4 py-1">
-            <h2 className="text-white">Follow</h2>
-          </div>
-        </div>
 
+      {/* Investor Profile Section */}
+      <div className="border-b border-gray-200">
         <div className="p-4">
-          <p>
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aliquid
-            itaque quod eum ad recusandae earum mollitia qui fugit accusamus.
-            Fugiat rerum quam minima, est rem maxime quaerat totam
-            necessitatibus asperiores!
+          <div className="mb-4 flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <div className="h-10 w-10 overflow-hidden rounded-full">
+                <Image
+                  src="/images/profile.png"
+                  width={40}
+                  height={40}
+                  alt="Investor profile"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <span className="text-lg font-medium">Investor Name</span>
+            </div>
+          </div>
+
+          <p className="text-sm text-gray-600">
+            Your personal frontpage, a short description to understand you.
           </p>
-        </div>
-        <div className="flex items-center justify-center">
-          <button className="p-4 text-[#878A8C]">Show more</button>
+
+          <button className="mt-4 w-full text-center text-sm text-gray-500 hover:text-gray-700">
+            Show more
+          </button>
         </div>
       </div>
 
-      {/* Invest Now */}
-      <div className="space-y-4 p-4">
-        <div className="flex items-center justify-center rounded-full bg-[#0079D3] p-4 font-bold text-white">
-          <button>Invest Now</button>
+      {/* Action Buttons */}
+      <div className="space-y-3 p-4">
+        <button className="w-full rounded-full bg-[#0079D3] py-3 text-center font-semibold text-white transition hover:bg-[#0069BD]">
+          Invest Now
+        </button>
+        <button className="w-full rounded-full border border-[#0079D3] bg-white py-3 text-center font-semibold text-[#0079D3] transition hover:bg-gray-50">
+          Chat
+        </button>
+      </div>
+
+      {/* Stats Section */}
+      <div className="grid grid-cols-3 gap-4 border-b border-t border-gray-200 px-6 py-4">
+        <div className="text-center">
+          <div className="text-sm font-semibold">MarketCap</div>
+          <div className="text-xs text-gray-500">$1.2M</div>
         </div>
-        {/* Chat with Creator */}
-        <div className="flex items-center justify-center rounded-full bg-white p-4 text-[#0079D3]">
-          <button>Chat with Creator</button>
+        <div className="text-center">
+          <div className="text-sm font-semibold">Holder</div>
+          <div className="text-xs text-gray-500">2.5K</div>
+        </div>
+        <div className="text-center">
+          <div className="text-sm font-semibold">Volume</div>
+          <div className="text-xs text-gray-500">$50K</div>
         </div>
       </div>
 
-      {/* data market cap ,volumn and holders */}
-      <div className="flex justify-between p-8">
-        <div>MarketCap</div>
-        <div>Holder</div>
-
-        <div>Volumn</div>
-      </div>
-      {/* follow other creators */}
-      <div className="flex flex-col p-4">
-        <div>
-          <div className="flex items-center justify-between p-2">
-            <div className="flex items-center space-x-2">
-              <div>
-                <Image
-                  src={"/images/profile.png"}
-                  width={25}
-                  height={25}
-                  alt="profile"
-                />
-              </div>
-              <div>Name</div>
-              <div>
-                <Image
-                  src={"/images/verification.png"}
-                  width={25}
-                  height={25}
-                  alt="verified badge"
-                />
-              </div>
-            </div>
-            <div className="cursor-pointer rounded-full bg-[#0079D3] px-4 py-1">
-              <h2 className="text-white">Follow</h2>
-            </div>
-          </div>
-        </div>
-        {/* second */}
-        <div>
-          <div className="flex items-center justify-between p-2">
-            <div className="flex items-center space-x-2">
-              <div>
-                <Image
-                  src={"/images/profile.png"}
-                  width={25}
-                  height={25}
-                  alt="profile"
-                />
-              </div>
-              <div>Name</div>
-              <div>
-                <Image
-                  src={"/images/verification.png"}
-                  width={25}
-                  height={25}
-                  alt="verified badge"
-                />
-              </div>
-            </div>
-            <div className="cursor-pointer rounded-full bg-[#0079D3] px-4 py-1">
-              <h2 className="text-white">Follow</h2>
-            </div>
-          </div>
-        </div>
-        {/* third */}
-        <div>
-          <div className="flex items-center justify-between p-2">
-            <div className="flex items-center space-x-2">
-              <div>
-                <Image
-                  src={"/images/profile.png"}
-                  width={25}
-                  height={25}
-                  alt="profile"
-                />
-              </div>
-              <div>Name</div>
-              <div>
-                <Image
-                  src={"/images/verification.png"}
-                  width={25}
-                  height={25}
-                  alt="verified badge"
-                />
-              </div>
-            </div>
-            <div className="cursor-pointer rounded-full bg-[#0079D3] px-4 py-1">
-              <h2 className="text-white">Follow</h2>
-            </div>
-          </div>
-        </div>
-        {/* fourth */}
-        <div>
-          <div className="flex items-center justify-between p-2">
-            <div className="flex items-center space-x-2">
-              <div>
-                <Image
-                  src={"/images/profile.png"}
-                  width={25}
-                  height={25}
-                  alt="profile"
-                />
-              </div>
-              <div>Name</div>
-              <div>
-                <Image
-                  src={"/images/verification.png"}
-                  width={25}
-                  height={25}
-                  alt="verified badge"
-                />
-              </div>
-            </div>
-            <div className="cursor-pointer rounded-full bg-[#0079D3] px-4 py-1">
-              <h2 className="text-white">Follow</h2>
-            </div>
-          </div>
+      {/* Suggested Creators */}
+      <div className="p-4">
+        <h3 className="mb-4 text-sm font-semibold text-gray-900">
+          STORIES YOU MIGHT WANT TO FOLLOW
+        </h3>
+        <div className="space-y-2">
+          <CreatorCard name="Name" />
+          <CreatorCard name="Name" />
+          <CreatorCard name="Name" />
+          <CreatorCard name="Name" />
+          <CreatorCard name="Name" />
         </div>
       </div>
     </div>
