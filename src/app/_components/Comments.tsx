@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useWallet } from "@jup-ag/wallet-adapter";
 import { api } from "~/trpc/react";
 import { formatDistanceToNow } from "date-fns";
+
 import { WalletChildrenProvider } from "./wallet";
 import Image from "next/image";
 import ShareModal from "./ShareModal";
@@ -128,9 +129,15 @@ const CommentComponent: React.FC<{
               <button
                 onClick={handleReply}
                 className="rounded bg-blue-500 px-3 py-1 text-sm text-white hover:bg-blue-600"
-                disabled={addCommentMutation.isLoading}
+                // disabled={addCommentMutation.isLoading}
+                disabled={
+                  addCommentMutation.status === "pending" || !walletAddress
+                }
               >
-                {addCommentMutation.isLoading ? "Replying..." : "Reply"}
+                {/* {addCommentMutation.isLoading ? "Replying..." : "Reply"} */}
+                {addCommentMutation.status === "pending"
+                  ? "Posting..."
+                  : "Comment"}
               </button>
             </div>
           </div>
@@ -166,30 +173,6 @@ const CommentsInner: React.FC<CommentsProps> = ({ postId }) => {
   const { publicKey } = useWallet();
   const walletAddress = publicKey?.toBase58();
 
-<<<<<<< HEAD
-  console.log("PostId in Comments:", postId); // Debug log
-
-  // Get comments only if postId exists
-  // const { data: fetchedComments, refetch: refetchComments } =
-  //   api.story.getComments.useQuery(
-  //     { storyKey: postId },
-  //     {
-  //       enabled: !!postId,
-  //       onSuccess: (data) => {
-  //         setComments(data);
-  //       },
-  //     },
-  //   );
-
-  const { data: fetchedComments, refetch: refetchComments } =
-    api.story.getComments.useQuery({ storyKey: postId }, { enabled: !!postId });
-
-  useEffect(() => {
-    if (fetchedComments) {
-      setComments(fetchedComments);
-    }
-  }, [fetchedComments]);
-=======
   const { data: comments = [], refetch: refetchComments } =
     api.story.getComments.useQuery(
       { storyKey: postId },
@@ -198,7 +181,6 @@ const CommentsInner: React.FC<CommentsProps> = ({ postId }) => {
         refetchInterval: 3000,
       },
     );
->>>>>>> main
 
   const addCommentMutation = api.story.addComment.useMutation({
     onSuccess: async () => {
@@ -236,19 +218,11 @@ const CommentsInner: React.FC<CommentsProps> = ({ postId }) => {
             <div className="mt-2 flex justify-end">
               <button
                 className="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:opacity-50"
-<<<<<<< HEAD
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleSubmitComment();
-                }}
-                // disabled={addCommentMutation.isLoading || !walletAddress}
+                onClick={handleSubmitComment}
+                // disabled={addCommentMutation.isLoading}
                 disabled={
                   addCommentMutation.status === "pending" || !walletAddress
                 }
-=======
-                onClick={handleSubmitComment}
-                disabled={addCommentMutation.isLoading}
->>>>>>> main
               >
                 {/* {addCommentMutation.isLoading ? "Posting..." : "Comment"} */}
                 {addCommentMutation.status === "pending"
