@@ -268,4 +268,21 @@ export const storyRouter = createTRPCRouter({
         });
       }
     }),
+
+  getComments: publicProcedure
+    .input(
+      z.object({
+        storyKey: z.string(),
+      }),
+    )
+    .query(async ({ input }) => {
+      const story = await storyStorage.getStory(input.storyKey);
+      if (!story) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Story not found",
+        });
+      }
+      return story.comments;
+    }),
 });
