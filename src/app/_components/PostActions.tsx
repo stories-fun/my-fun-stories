@@ -1,11 +1,4 @@
-<<<<<<< HEAD
 import React, { useEffect, useState } from "react";
-
-import Image from "next/image";
-import Comments from "./Comments";
-import { useStoriesStore } from "~/store/useStoriesStore";
-=======
-import React, { useState } from "react";
 import { IoFlowerOutline } from "react-icons/io5";
 import { FaRegComment, FaRegHeart, FaRegBookmark } from "react-icons/fa";
 import { LuWallet } from "react-icons/lu";
@@ -13,7 +6,7 @@ import Image from "next/image";
 import Comments from "./Comments";
 import ShareModal from "./ShareModal";
 import { useRouter } from "next/navigation";
->>>>>>> main
+import { useStoriesStore } from "~/store/useStoriesStore";
 
 interface PostActionsProps {
   storyKey: string;
@@ -28,7 +21,6 @@ const PostActions: React.FC<PostActionsProps> = ({
   const [showShareModal, setShowShareModal] = useState(false);
   const router = useRouter();
 
-<<<<<<< HEAD
   const { like, isLoading, error, stories, likeCounts } = useStoriesStore();
 
   // const count =
@@ -86,22 +78,20 @@ const PostActions: React.FC<PostActionsProps> = ({
     }
   };
 
-  const handleCommentClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setShowComments((prev) => !prev);
-    console.log("Comment button clicked, showComments:", !showComments);
-  };
+  // const handleCommentClick = (e: React.MouseEvent) => {
+  //   e.preventDefault();
+  //   e.stopPropagation();
+  //   setShowComments((prev) => !prev);
+  //   console.log("Comment button clicked, showComments:", !showComments);
+  // };
 
   // like(storyKey, walletAddress);
 
-=======
   const handleCommentClick = () => {
     // Navigate to the story page with comment section focus
-    router.push(`/stories/${postId}#comments`);
+    router.push(`/stories/${storyKey}#comments`);
   };
 
->>>>>>> main
   return (
     <div className="relative mt-4">
       <div className="flex items-center space-x-6">
@@ -165,7 +155,7 @@ const PostActions: React.FC<PostActionsProps> = ({
       <ShareModal
         isOpen={showShareModal}
         onClose={() => setShowShareModal(false)}
-        postId={postId}
+        postId={storyKey}
       />
     </div>
   );
