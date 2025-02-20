@@ -6,10 +6,12 @@ const RightSidebar = () => {
     <div className="bg-[#F6F7F8]">
       {/* banner */}
       <div className="">
-        <img
+        <Image
           src={"/images/Image.png"}
           alt="cover image"
-          className="h-full w-full"
+          className="h-[100px] w-full"
+          width={500}
+          height={100}
         />
       </div>
       {/* profile */}

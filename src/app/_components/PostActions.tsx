@@ -51,6 +51,11 @@ const PostActions: React.FC<PostActionsProps> = ({
   const handleLikeClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
 
+    if (!walletAddress) {
+      alert("Please connect your wallet to like posts");
+      return;
+    }
+
     if (isLiked) {
       alert("You cannot unlike this post.");
       return;
@@ -70,7 +75,7 @@ const PostActions: React.FC<PostActionsProps> = ({
   };
 
   return (
-    <div className="relative mt-4">
+    <div className="relative mt-4 pb-4">
       <div className="flex items-center space-x-6">
         {/* flower button */}
         <button

@@ -21,7 +21,7 @@ interface StoriesSlice {
   isLoading: boolean;
   error: string | null;
   nextCursor: string | undefined;
-  likeCounts: { [key: string]: number };
+  likeCounts: Record<string, number>;
 }
 interface Comment {
   id: string;
@@ -49,15 +49,24 @@ const toDate = (date: string | Date) => {
 };
 
 // Helper function
-const transformStory = (story: any): Story => ({
+const transformStory = (story: {
+  id?: string;
+  key?: string;
+  walletAddress?: string;
+  username?: string;
+  content?: string;
+  title?: string;
+  createdAt: string | Date;
+  likes?: string[];
+}): Story => ({
   id: story.id ?? story.key ?? "",
   walletAddres: story.walletAddress ?? "",
   username: story.username ?? "",
   content: story.content ?? "",
-  title: story.title,
+  title: story.title ?? "",
   createdAt: toDate(story.createdAt),
   likeCount: Array.isArray(story.likes) ? story.likes.length : 0,
-  comments: Array.isArray(story.comments) ? story.comments : [],
+  comments: [], // Initialize empty comments array since comments don't exist in input type
 });
 
 export const useStoriesStore = create<StoriesState>((set, get) => ({
@@ -84,7 +93,9 @@ export const useStoriesStore = create<StoriesState>((set, get) => ({
     if (!nextCursor || get().isLoading) return;
     set({ isLoading: true });
     const result = await getMoreStoriesFromServer(nextCursor);
-    const transformStories = (result?.stories ?? []).map(transformStory);
+    const transformStories = (result?.stories ?? [])
+      .filter((story): story is NonNullable<typeof story> => story !== null)
+      .map(transformStory);
     set({
       stories: [...stories, ...transformStories],
       nextCursor: result?.nextCursor,
@@ -117,7 +128,6 @@ export const useStoriesStore = create<StoriesState>((set, get) => ({
 
   like: async (storyKey: string, walletAddress: string) => {
     const result = await createLike(storyKey, walletAddress);
-
     if (result && result.likeCount !== undefined) {
       set((state) => ({
         stories: state.stories.map((story) =>
