@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { IoFlowerOutline } from "react-icons/io5";
-import { FaRegComment, FaRegHeart, FaRegBookmark } from "react-icons/fa";
-import { LuWallet } from "react-icons/lu";
 import Image from "next/image";
-import Comments from "./Comments";
 import ShareModal from "./ShareModal";
 import { useRouter } from "next/navigation";
 import { useStoriesStore } from "~/store/useStoriesStore";
@@ -23,30 +19,17 @@ const PostActions: React.FC<PostActionsProps> = ({
 
   const { like, isLoading, error, stories, likeCounts } = useStoriesStore();
 
-  // const count =
-  //   likeCounts[storyKey] ??
-  //   stories.find((s) => s.id === storyKey)?.likeCount ??
-  //   0;
-
-  // const story = stories.find((s) => s.id === storyKey);
-  // const [isLiked, setIsLiked] = useState(false);
+  const story = stories.find((s) => s.id === storyKey);
+  const [count, setCount] = useState(0);
+  const [isLiked, setIsLiked] = useState(false);
+  // const [isLiked, setIsLiked] = useState(
+  //   Array.isArray(story?.likeCount)
+  //     ? story.likeCount.includes(walletAddress)
+  //     : false,
+  // );
   // const [count, setCount] = useState(
   //   likeCounts[storyKey] ?? story?.likeCount ?? 0,
   // );
-  const story = stories.find((s) => s.id === storyKey);
-  const [isLiked, setIsLiked] = useState(
-    Array.isArray(story?.likeCount)
-      ? story.likeCount.includes(walletAddress)
-      : false,
-  );
-  const [count, setCount] = useState(
-    likeCounts[storyKey] ?? story?.likeCount ?? 0,
-  );
-
-  // useEffect(() => {
-  //   setIsLiked(false);
-  //   setCount(likeCounts[storyKey] ?? story?.likeCount ?? 0);
-  // }, [stories, likeCounts, storyKey, walletAddress]);
 
   useEffect(() => {
     if (story) {
@@ -55,7 +38,13 @@ const PostActions: React.FC<PostActionsProps> = ({
           ? story.likeCount.includes(walletAddress)
           : false,
       );
-      setCount(likeCounts[storyKey] ?? story.likeCount);
+      // setCount(likeCounts[storyKey] ?? story.likeCount);
+      setCount(
+        likeCounts[storyKey] ??
+          (Array.isArray(story.likeCount)
+            ? story.likeCount.length
+            : (story.likeCount ?? 0)),
+      );
     }
   }, [storyKey, likeCounts, story, walletAddress]);
 
@@ -75,16 +64,13 @@ const PostActions: React.FC<PostActionsProps> = ({
     try {
       await like(storyKey, walletAddress);
       setIsLiked(true);
-      setCount(count + 1);
     } catch (error) {
       console.error("Error liking post:", error);
       setIsLiked(false);
-      setCount((prev) => prev - 1);
     }
   };
 
   const handleCommentClick = () => {
-    // Navigate to the story page with comment section focus
     router.push(`/stories/${storyKey}#comments`);
   };
 
@@ -92,17 +78,15 @@ const PostActions: React.FC<PostActionsProps> = ({
     <div className="relative mt-4 pb-4">
       <div className="flex items-center space-x-6">
         {/* flower button */}
-        <div
+        <button
           className="flex cursor-pointer items-center space-x-2 rounded-full text-sm font-bold"
           onClick={handleLikeClick}
         >
           <Image src={"/images/Flower.png"} width={20} height={20} alt="" />
           {/* <IoFlowerOutline /> */}
-          <button>
-            {count}
-            Likes
-          </button>
-        </div>
+
+          <span>{count} Likes</span>
+        </button>
         <div className="flex items-center space-x-2 rounded-full text-sm font-bold">
           {/* <LuWallet /> */}
           <Image src={"/images/Advertise.png"} width={20} height={20} alt="" />

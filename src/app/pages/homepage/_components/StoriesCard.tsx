@@ -166,6 +166,7 @@ const StoriesCard = () => {
                 walletAddress={story.walletAddres}
               />
 
+
               <div>
                 <ProgressBar />
               </div>

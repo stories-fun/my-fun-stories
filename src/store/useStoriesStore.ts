@@ -128,19 +128,14 @@ export const useStoriesStore = create<StoriesState>((set, get) => ({
 
   like: async (storyKey: string, walletAddress: string) => {
     const result = await createLike(storyKey, walletAddress);
-    // if (result && result.likeCount !== undefined) {
-    //   set((state) => ({
-    //     likeCounts: { ...state.likeCounts, [storyKey]: result.likeCount },
-    //     isLoading: false,
-    //     error: result?.error,
-    if (result?.likeCount !== undefined) {
+    if (result && result.likeCount !== undefined) {
       set((state) => ({
         stories: state.stories.map((story) =>
           story.id === storyKey
             ? { ...story, likeCount: result.likeCount }
             : story,
         ),
-        error: null, // Clear errors if the request is successful
+        error: null,
       }));
     }
   },
