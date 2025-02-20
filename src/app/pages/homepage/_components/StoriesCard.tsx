@@ -85,7 +85,8 @@ const StoriesCard = () => {
           </div>
 
           {/* Action buttons */}
-          <div className="flex items-center space-x-6">
+          <PostActions storyKey={story.id} walletAddress={story.walletAddres} />
+          {/* <div className="flex items-center space-x-6">
             <button className="flex items-center space-x-2">
               <Image
                 src="/images/Flower.png"
@@ -122,7 +123,7 @@ const StoriesCard = () => {
               />
               <span>Share</span>
             </button>
-          </div>
+          </div> */}
 
           {/* Participation message */}
           <div className="mt-4 text-sm text-gray-600">
