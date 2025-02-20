@@ -2,12 +2,19 @@
 
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
-import { FiMenu, FiX } from "react-icons/fi";
+import {
+  FiMenu,
+  FiX,
+  FiBell,
+  FiPlus,
+  FiMessageSquare,
+  FiUser,
+} from "react-icons/fi";
 import Link from "next/link";
 import { WalletProvider } from "./wallet";
 
 const NavLogo = () => (
-  <Link href="/aboutus" className="group flex items-center space-x-2">
+  <Link href="/" className="group flex items-center space-x-2">
     <div className="relative h-[50px] w-[50px]">
       <Image
         src="/images/logo.png"
@@ -20,24 +27,6 @@ const NavLogo = () => (
     <div className="font-mont text-2xl font-bold text-black transition-colors group-hover:text-gray-700">
       stories.fun
     </div>
-  </Link>
-);
-
-const HomeLink = () => (
-  <Link
-    href="/"
-    className="flex cursor-pointer items-center space-x-2 transition-colors hover:text-gray-700"
-  >
-    <div className="relative h-[35px] w-[35px]">
-      <Image
-        src="/images/home.png"
-        fill
-        className="object-contain"
-        alt="home"
-        priority
-      />
-    </div>
-    <span>Home</span>
   </Link>
 );
 
@@ -103,15 +92,46 @@ const NavBar = () => {
       <div className="container mx-auto flex items-center justify-between px-4 py-3">
         <div className="flex items-center space-x-6">
           <NavLogo />
-          <HomeLink />
         </div>
 
         <SearchBar className="hidden w-96 sm:block" />
 
         <div className="flex items-center space-x-4">
           <div className="hidden sm:block">
+            <Link href="/aboutus">about us</Link>
+          </div>
+
+          <button
+            className="hidden rounded-lg p-2 text-xl transition-colors hover:bg-gray-100 sm:block"
+            aria-label="Notifications"
+          >
+            <FiBell />
+          </button>
+
+          <button
+            className="hidden rounded-lg p-2 text-xl transition-colors hover:bg-gray-100 sm:block"
+            aria-label="Create new"
+          >
+            <FiPlus />
+          </button>
+
+          <button
+            className="hidden rounded-lg p-2 text-xl transition-colors hover:bg-gray-100 sm:block"
+            aria-label="Messages"
+          >
+            <FiMessageSquare />
+          </button>
+
+          <div className="hidden sm:block">
             <WalletProvider />
           </div>
+
+          <button
+            className="hidden rounded-lg p-2 text-xl transition-colors hover:bg-gray-100 sm:block"
+            aria-label="Profile"
+          >
+            <FiUser />
+          </button>
 
           <button
             onClick={() => setMenuOpen(!menuOpen)}

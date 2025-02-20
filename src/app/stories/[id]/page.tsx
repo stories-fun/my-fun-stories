@@ -8,7 +8,8 @@ import Comments from "~/app/_components/Comments";
 import { useStoriesStore } from "~/store/useStoriesStore";
 
 const Page = () => {
-  const { id } = useParams();
+  const params = useParams();
+  const id = params?.id;
   const { stories, isLoading } = useStoriesStore();
   const [hasScrolled, setHasScrolled] = useState(false);
 
