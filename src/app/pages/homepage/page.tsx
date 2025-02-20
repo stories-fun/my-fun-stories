@@ -4,14 +4,23 @@ import RightSection from "./_components/RightSection";
 
 const HomePage = () => {
   return (
-    <div className="container mx-auto flex gap-6 p-10">
-      {/* main stories  */}
-      <div className="w-full rounded-lg md:w-3/4">
-        <StoriesLayout />
-      </div>
-      {/* rightside section */}
-      <div className="hidden rounded-lg md:block md:w-1/4">
-        <RightSection />
+    <div className="min-h-screen bg-gray-50">
+      <div className="container mx-auto px-4 py-6 lg:px-8 lg:py-10">
+        <div className="flex flex-col gap-6 lg:flex-row">
+          {/* Main stories section */}
+          <div className="w-full lg:w-3/4">
+            <div className="rounded-xl bg-white shadow-sm">
+              <StoriesLayout />
+            </div>
+          </div>
+
+          {/* Right section - hidden on mobile */}
+          <div className="hidden lg:block lg:w-1/4">
+            <div className="sticky top-6">
+              <RightSection />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -1,135 +1,152 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import PostActions from "~/app/_components/PostActions";
 import ProgressBar from "~/app/_components/ProgressBar";
 import { ImageSlider } from "./ImageSlider";
-import { EditorState } from "draft-js";
-import "draft-js/dist/Draft.css";
-import dynamic from "next/dynamic";
 import { useStoriesStore } from "~/store/useStoriesStore";
 import { useRouter } from "next/navigation";
-import Comments from "~/app/_components/Comments";
 import Loading from "./Loading";
 
-// const Editor = dynamic(() => import("draft-js").then((mod) => mod.Editor), {
-//   ssr: false,
-// });
+const ProfileImage = ({ src, alt }: { src: string; alt: string }) => {
+  // Using useState to handle image loading state
+  const [isLoading, setIsLoading] = useState(true);
+
+  return (
+    <div className="relative h-10 w-10 overflow-hidden rounded-full bg-gray-100">
+      <Image
+        src={src}
+        fill
+        className={`object-cover transition-opacity duration-300 ${
+          isLoading ? "opacity-0" : "opacity-100"
+        }`}
+        alt={alt}
+        onLoadingComplete={() => setIsLoading(false)}
+        priority={true}
+      />
+    </div>
+  );
+};
+
+const VerificationBadge = () => (
+  <div className="relative h-5 w-5">
+    <Image
+      src="/images/verification.png"
+      fill
+      className="object-contain"
+      alt="verified"
+      priority={true}
+    />
+  </div>
+);
+
+const StoryHeader = ({ username }: { username: string }) => (
+  <div className="border-b p-4">
+    <div className="flex items-center space-x-3">
+      <ProfileImage src="/images/profile.png" alt={`${username}'s profile`} />
+      <div className="flex flex-col">
+        <div className="flex items-center space-x-2">
+          <span className="text-sm font-semibold">{username}</span>
+          <VerificationBadge />
+        </div>
+        <div className="inline-block">
+          <span className="rounded-full bg-purple-500 px-3 py-1 text-xs text-white">
+            Trending
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const StoryContent = ({
+  title,
+  content,
+  onClick,
+}: {
+  title: string;
+  content: string;
+  onClick: () => void;
+}) => (
+  <div
+    className="cursor-pointer border-t p-4 lg:w-1/3 lg:border-l lg:border-t-0"
+    onClick={onClick}
+  >
+    <div className="h-full max-h-[500px] overflow-y-auto">
+      <h2 className="mb-4 text-xl font-bold">{title}</h2>
+      <div className="prose prose-sm max-w-none">{content}</div>
+    </div>
+  </div>
+);
 
 const StoriesCard = () => {
   const router = useRouter();
-  // const [editorState, setEditorState] = useState(EditorState.createEmpty());
-
   const { stories, error, isLoading, getStories } = useStoriesStore();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     void getStories();
   }, [getStories]);
 
-  console.log("Stories in StoriesCard:", stories); // Debug log
+  // Don't render anything until client-side hydration is complete
+  if (!mounted) return null;
 
   if (isLoading) return <Loading />;
-  if (error) return <p>Error Loading Stories{error}</p>;
-  if (!stories.length) return <p>No stories found</p>;
+  if (error)
+    return (
+      <div className="rounded-lg bg-red-50 p-4 text-center text-red-500">
+        Error Loading Stories: {error}
+      </div>
+    );
+  if (!stories?.length)
+    return (
+      <div className="rounded-lg bg-gray-50 p-4 text-center text-gray-500">
+        No stories found
+      </div>
+    );
 
   const handleCardClick = (id: string) => {
     router.push(`/stories/${id}`);
   };
 
   return (
-    <div className="container mx-auto space-y-6">
+    <div className="mx-auto max-w-6xl space-y-8 px-4">
       {stories.map((story) => (
-        <div key={story.id} className="rounded-lg bg-white p-4 shadow">
-          {/* Header with profile and trending tag */}
-          <div className="mb-4 flex items-center space-x-3">
-            <Image
-              src="/images/profile.png"
-              width={40}
-              height={40}
-              alt="profile"
-              className="rounded-full"
-            />
-            <div>
-              <div className="flex items-center space-x-2">
-                <span className="font-semibold">{story.username}</span>
-                <Image
-                  src="/images/verification.png"
-                  width={20}
-                  height={20}
-                  alt="verified"
+        <article
+          key={story.id}
+          className="overflow-hidden rounded-lg bg-white shadow-lg transition-all duration-200 hover:shadow-xl"
+        >
+          <StoryHeader username={story.username} />
+
+          <div className="flex flex-col lg:flex-row">
+            <div className="p-4 lg:w-2/3">
+              <div
+                className="cursor-pointer overflow-hidden rounded-lg"
+                onClick={() => handleCardClick(story.id)}
+              >
+                <ImageSlider />
+              </div>
+
+              <div className="mt-6">
+                <PostActions
+                  storyKey={story.id}
+                  walletAddress={story.walletAddres}
                 />
               </div>
-              <div className="flex space-x-2">
-                <span className="rounded-full bg-purple-500 px-3 py-0.5 text-xs text-white">
-                  Trending
-                </span>
-                <span className="rounded-full bg-red-500 px-3 py-0.5 text-xs text-white">
-                  Live Now
-                </span>
+
+              <div className="my-6">
+                <ProgressBar />
               </div>
             </div>
-          </div>
 
-          {/* Story content */}
-          <div
-            className="cursor-pointer"
-            onClick={() => handleCardClick(story.id)}
-          >
-            <h2 className="mb-2 text-xl font-bold">{story.title}</h2>
-            <p className="mb-4 text-gray-700">{story.content}</p>
+            <StoryContent
+              title={story.title}
+              content={story.content}
+              onClick={() => handleCardClick(story.id)}
+            />
           </div>
-
-          {/* Image slider */}
-          <div className="mb-4">
-            <ImageSlider />
-          </div>
-
-          {/* Action buttons */}
-          <div className="flex items-center space-x-6">
-            <button className="flex items-center space-x-2">
-              <Image
-                src="/images/Flower.png"
-                width={24}
-                height={24}
-                alt="like"
-              />
-              <span>{story.likeCount} Likes</span>
-            </button>
-            <button className="flex items-center space-x-2">
-              <Image
-                src="/images/Advertise.png"
-                width={24}
-                height={24}
-                alt="invest"
-              />
-              <span>Invest</span>
-            </button>
-            <button className="flex items-center space-x-2">
-              <Image
-                src="/images/comment.png"
-                width={24}
-                height={24}
-                alt="comment"
-              />
-              <span>29 Comments</span>
-            </button>
-            <button className="flex items-center space-x-2">
-              <Image
-                src="/images/Share.png"
-                width={24}
-                height={24}
-                alt="share"
-              />
-              <span>Share</span>
-            </button>
-          </div>
-
-          {/* Participation message */}
-          <div className="mt-4 text-sm text-gray-600">
-            Participate in the Presale of this token now.
-          </div>
-          {/* Progress bar could go here */}
-        </div>
+        </article>
       ))}
     </div>
   );

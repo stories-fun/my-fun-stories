@@ -62,6 +62,11 @@ const PostActions: React.FC<PostActionsProps> = ({
   const handleLikeClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
 
+    if (!walletAddress) {
+      alert("Please connect your wallet to like posts");
+      return;
+    }
+
     if (isLiked) {
       alert("You cannot unlike this post.");
       return;
@@ -77,15 +82,6 @@ const PostActions: React.FC<PostActionsProps> = ({
       setCount((prev) => prev - 1);
     }
   };
-
-  // const handleCommentClick = (e: React.MouseEvent) => {
-  //   e.preventDefault();
-  //   e.stopPropagation();
-  //   setShowComments((prev) => !prev);
-  //   console.log("Comment button clicked, showComments:", !showComments);
-  // };
-
-  // like(storyKey, walletAddress);
 
   const handleCommentClick = () => {
     // Navigate to the story page with comment section focus

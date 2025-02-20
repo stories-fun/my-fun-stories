@@ -15,7 +15,9 @@ const PostCard = ({ storyId }: { storyId: string }) => {
 
   useEffect(() => {
     if (storyId) {
-      getById(storyId);
+      getById(storyId).catch((error) => {
+        console.error("Failed to fetch story:", error);
+      });
     }
   }, [storyId, getById]);
 
