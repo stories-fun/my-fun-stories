@@ -5,10 +5,12 @@ import {
   UnifiedWalletProvider,
   useWallet,
 } from "@jup-ag/wallet-adapter";
-import type { Cluster } from "@solana/web3.js";
+import { ConnectionProvider } from "@solana/wallet-adapter-react";
+import { clusterApiUrl, Connection, type Cluster } from "@solana/web3.js";
 import { WalletNotification } from "./wallet-notification";
+import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import WalletConnectHandler from "./WalletConnectHandler";
 
 export const WALLET_CONFIG = {
@@ -25,33 +27,32 @@ export const WALLET_CONFIG = {
   lang: "en" as const,
 };
 
+const wallets = [new PhantomWalletAdapter()];
+
 export function WalletProvider() {
+  const endpoint = useMemo(() => clusterApiUrl("devnet"), []);
+
   return (
-    // <UnifiedWalletProvider wallets={[]} config={WALLET_CONFIG}>
-    //   <UnifiedWalletButton
-    //     buttonClassName="!bg-[#FFE700] !text-sm !text-black"
-    //     currentUserClassName="!bg-[#FFE700] !text-sm !text-black"
-    //   />
-    // </UnifiedWalletProvider>
-    <UnifiedWalletProvider wallets={[]} config={WALLET_CONFIG}>
-      <WalletConnectHandler />
-    </UnifiedWalletProvider>
+    <ConnectionProvider endpoint={endpoint}>
+      <UnifiedWalletProvider wallets={wallets} config={WALLET_CONFIG}>
+        <WalletConnectHandler />
+      </UnifiedWalletProvider>
+    </ConnectionProvider>
   );
 }
+
 export function WalletChildrenProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const endpoint = useMemo(() => clusterApiUrl("devnet"), []);
+
   return (
-    // <UnifiedWalletProvider wallets={[]} config={WALLET_CONFIG}>
-    //   <UnifiedWalletButton
-    //     buttonClassName="!bg-[#FFE700] !text-sm !text-black"
-    //     currentUserClassName="!bg-[#FFE700] !text-sm !text-black"
-    //   />
-    // </UnifiedWalletProvider>
-    <UnifiedWalletProvider wallets={[]} config={WALLET_CONFIG}>
-      {children}
-    </UnifiedWalletProvider>
+    <ConnectionProvider endpoint={endpoint}>
+      <UnifiedWalletProvider wallets={wallets} config={WALLET_CONFIG}>
+        {children}
+      </UnifiedWalletProvider>
+    </ConnectionProvider>
   );
 }
