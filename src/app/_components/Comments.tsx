@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useWallet } from "@jup-ag/wallet-adapter";
 import { api } from "~/trpc/react";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 import { WalletChildrenProvider } from "./wallet";
 import Image from "next/image";
 import ShareModal from "./ShareModal";
+
 import dynamic from "next/dynamic";
+
 
 interface Comment {
   id: string;
@@ -56,9 +58,9 @@ const CommentComponentWithNoSSR = dynamic(
             await utils.story.getComments.invalidate({ storyKey: postId });
           },
         });
-
         const handleVote = async (voteType: "upvote" | "downvote") => {
           if (!walletAddress) return;
+
 
           const isUpvoted = comment.upvotes.includes(walletAddress);
           const isDownvoted = comment.downvotes.includes(walletAddress);
