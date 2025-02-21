@@ -9,9 +9,9 @@ const RightSidebar = () => {
         <Image
           src={"/images/Image.png"}
           alt="cover image"
-          className="w-full"
-          width={100}
-          height={50}
+          className="h-[100px] w-full"
+          width={500}
+          height={100}
         />
       </div>
       {/* profile */}

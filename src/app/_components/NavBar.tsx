@@ -57,7 +57,6 @@ const SearchBar = ({
   </div>
 );
 
-<<<<<<< Updated upstream
 const MobileMenuItem = ({
   icon: Icon,
   label,
@@ -69,9 +68,6 @@ const MobileMenuItem = ({
   onClick?: () => void;
   href?: string;
 }) => {
-=======
-const MobileMenuItem = ({ icon: Icon, label, onClick, href }: any) => {
->>>>>>> Stashed changes
   const content = (
     <div
       className="flex items-center space-x-3 rounded-lg p-3 text-gray-700 transition-colors hover:bg-gray-100"
