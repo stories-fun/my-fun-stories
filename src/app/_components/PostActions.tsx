@@ -3,6 +3,7 @@ import Image from "next/image";
 import ShareModal from "./ShareModal";
 import { useRouter } from "next/navigation";
 import { useStoriesStore } from "~/store/useStoriesStore";
+import { BuyTokensDialog } from "./BuyToken";
 import { useWallet } from "@jup-ag/wallet-adapter";
 
 interface PostActionsProps {
@@ -37,7 +38,6 @@ const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
   const [count, setCount] = useState<number>(
     likeCounts[storyKey] ?? story?.likeCount ?? 0,
   );
-
   useEffect(() => {
     if (story && userWallet) {
       setIsLiked(likesArray.includes(userWallet));
@@ -85,10 +85,19 @@ const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
 
           <span>{count} Likes</span>
         </button>
-        <div className="flex items-center space-x-2 rounded-full text-sm font-bold">
+        <div
+          className="flex cursor-pointer items-center space-x-2 rounded-full text-sm font-bold"
+          onClick={() => setShowBuyDialog(true)}
+        >
           <Image src={"/images/Advertise.png"} width={20} height={20} alt="" />
           <span>Invest</span>
         </div>
+        {showBuyDialog && (
+          <BuyTokensDialog
+            open={showBuyDialog}
+            onClose={() => setShowBuyDialog(false)}
+          />
+        )}
         {/* Comment button */}
         <button
           type="button"

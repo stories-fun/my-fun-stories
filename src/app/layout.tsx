@@ -2,9 +2,9 @@ import "~/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
-
+import { WalletChildrenProvider } from "./_components/wallet";
 import { TRPCReactProvider } from "~/trpc/react";
-import ClientWrapper from "./ClientWrapper";
+import { PresaleProvider } from "~/context/PresaleContext";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -18,8 +18,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
-        {/* <TRPCReactProvider>{children}</TRPCReactProvider> */}
-        <ClientWrapper>{children}</ClientWrapper>
+        <TRPCReactProvider>
+          <WalletChildrenProvider>
+            <PresaleProvider>{children}</PresaleProvider>
+          </WalletChildrenProvider>
+        </TRPCReactProvider>
       </body>
     </html>
   );

@@ -1,12 +1,21 @@
+"use client";
+
 import { UnifiedWalletButton, useWallet } from "@jup-ag/wallet-adapter";
 import React, { useEffect, useState } from "react";
 import { api } from "~/trpc/react";
 import { UserCreationDialog } from "./UserCreationDialog";
 
 const WalletConnectHandler = () => {
+  const { publicKey } = useWallet();
   const wallet = useWallet();
   const [showUserDialog, setShowUserDialog] = useState(false);
   const [hasCheckedUser, setHasCheckedUser] = useState(false);
+
+  useEffect(() => {
+    if (publicKey) {
+      console.log("Wallet connected:", publicKey.toString());
+    }
+  }, [publicKey]);
 
   const {
     data: existingUser,
