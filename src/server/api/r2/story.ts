@@ -64,7 +64,6 @@ export class StoryStorage {
         }),
       );
       const rawData = await response.Body!.transformToString();
-      console.log("Raw story data:", rawData);
       const data = JSON.parse(rawData);
 
       // If the id is missing, derive it from the key string (e.g., 'stories/1739354908779_pDHykt.json' becomes '1739354908779_pDHykt')

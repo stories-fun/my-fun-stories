@@ -4,6 +4,7 @@ import {
   getByIdFromServer,
   getMoreStoriesFromServer,
   getStoriesFromServer,
+  voteComment,
 } from "~/server/action";
 
 interface Story {
@@ -14,6 +15,7 @@ interface Story {
   title: string;
   createdAt: Date;
   likeCount: number;
+  likes: string[];
   comments: Comment[];
 }
 interface StoriesSlice {
@@ -39,6 +41,12 @@ interface StoriesActions {
   getMoreStories: () => Promise<void>;
   getById: (storyKey: string) => Promise<void>;
   like: (storyKey: string, walletAddress: string) => Promise<void>;
+  voteComment: (
+    storyKey: string,
+    commentId: string,
+    walletAddress: string,
+    voteType: "upvote" | "downvote" | "remove",
+  ) => Promise<void>;
 }
 
 type StoriesState = StoriesSlice & StoriesActions;
@@ -58,6 +66,7 @@ const transformStory = (story: {
   title?: string;
   createdAt: string | Date;
   likes?: string[];
+  comments?: Comment[];
 }): Story => ({
   id: story.id ?? story.key ?? "",
   walletAddres: story.walletAddress ?? "",
@@ -66,7 +75,8 @@ const transformStory = (story: {
   title: story.title ?? "",
   createdAt: toDate(story.createdAt),
   likeCount: Array.isArray(story.likes) ? story.likes.length : 0,
-  comments: [], // Initialize empty comments array since comments don't exist in input type
+  likes: story.likes ?? [],
+  comments: story.comments ?? [], // Initialize empty comments array since comments don't exist in input type
 });
 
 export const useStoriesStore = create<StoriesState>((set, get) => ({
@@ -132,11 +142,64 @@ export const useStoriesStore = create<StoriesState>((set, get) => ({
       set((state) => ({
         stories: state.stories.map((story) =>
           story.id === storyKey
-            ? { ...story, likeCount: result.likeCount }
+            ? {
+                ...story,
+                likeCount: result.likeCount,
+                likes: [...story.likes, walletAddress],
+              }
             : story,
         ),
         error: null,
       }));
+    } else if (result?.error) {
+      set({ error: result.error });
+    }
+  },
+
+  voteComment: async (
+    storyKey: string,
+    walletAddress: string,
+    commentId: string,
+    voteType: "upvote" | "downvote" | "remove",
+  ) => {
+    const result = await voteComment(
+      storyKey,
+      walletAddress,
+      commentId,
+      voteType,
+    );
+    if (result.success) {
+      set((state) => ({
+        stories: state.stories.map((story) =>
+          story.id === storyKey
+            ? {
+                ...story,
+                comments: story.comments.map((comment) =>
+                  comment.id === commentId
+                    ? {
+                        ...comment,
+                        upvotes:
+                          voteType === "upvote"
+                            ? [...comment.upvotes, walletAddress]
+                            : comment.upvotes.filter(
+                                (addr) => addr !== walletAddress,
+                              ),
+                        downvotes:
+                          voteType === "downvote"
+                            ? [...comment.downvotes, walletAddress]
+                            : comment.downvotes.filter(
+                                (addr) => addr !== walletAddress,
+                              ),
+                      }
+                    : comment,
+                ),
+              }
+            : story,
+        ),
+        error: null,
+      }));
+    } else if (result.error) {
+      set({ error: result.error });
     }
   },
 }));

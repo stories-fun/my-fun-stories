@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useWallet } from "@jup-ag/wallet-adapter";
 import { api } from "~/trpc/react";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 import { WalletChildrenProvider } from "./wallet";
 import Image from "next/image";
 import ShareModal from "./ShareModal";
+import { useStoriesStore } from "~/store/useStoriesStore";
+import { useShallow } from "zustand/react/shallow";
 
 interface Comment {
   id: string;
@@ -52,6 +54,38 @@ const CommentComponent: React.FC<{
     });
   };
 
+  const [userWallet, setUserWallet] = useState<string | null>(null);
+  const wallet = useWallet();
+  const { stories, voteComment, isLoading, error } = useStoriesStore(
+    useShallow((state) => ({
+      stories: state.stories,
+      voteComment: state.voteComment,
+      isLoading: state.isLoading,
+      error: state.error,
+    })),
+  );
+  useEffect(() => {
+    if (wallet.connected && wallet.publicKey) {
+      const address = wallet.publicKey.toString();
+      setUserWallet(address);
+    } else {
+      setUserWallet(null);
+    }
+  }, [wallet.connected, wallet.publicKey]);
+
+  const story = stories.find((s) => s.id === postId);
+
+  // const handleVote = async (
+  //   commentId: string,
+  //   voteType: "upvote" | "downvote" | "remove",
+  // ) => {
+  //   try {
+  //     await voteComment(postId, commentId, userWallet, voteType);
+  //   } catch (error) {
+  //     console.log("voting failed", error);
+  //   }
+  // };
+
   return (
     <div className={`mt-4 ${level > 0 ? "ml-8" : ""}`}>
       <div className="rounded-lg bg-gray-50 p-4">
@@ -70,13 +104,20 @@ const CommentComponent: React.FC<{
         {/* Comment Actions */}
         <div className="mt-3 flex items-center gap-4">
           {/* Flower (Like) */}
-          <button className="flex items-center gap-1 text-sm text-gray-600 hover:text-blue-500">
+          <button
+            className="flex items-center gap-1 text-sm text-gray-600 hover:text-blue-500"
+            // onClick={() => handleVote(comment.id, "upvote")}
+            // disabled={isLoading}
+          >
             <Image src="/images/Flower.png" width={20} height={20} alt="like" />
             <span>{comment.likes?.length ?? 0}</span>
           </button>
 
           {/* Dislike */}
-          <button className="flex items-center gap-1 text-sm text-gray-600 hover:text-red-500">
+          <button
+            className="flex items-center gap-1 text-sm text-gray-600 hover:text-red-500"
+            // onClick={handleVote}
+          >
             <Image
               src="/images/dislike.png"
               width={20}

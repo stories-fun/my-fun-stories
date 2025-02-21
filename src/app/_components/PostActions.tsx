@@ -3,55 +3,52 @@ import Image from "next/image";
 import ShareModal from "./ShareModal";
 import { useRouter } from "next/navigation";
 import { useStoriesStore } from "~/store/useStoriesStore";
+import { useWallet } from "@jup-ag/wallet-adapter";
 
 interface PostActionsProps {
   storyKey: string;
-  walletAddress: string;
 }
 
-const PostActions: React.FC<PostActionsProps> = ({
-  storyKey,
-  walletAddress,
-}) => {
-  const [showComments, setShowComments] = useState(false);
+const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
   const [showShareModal, setShowShareModal] = useState(false);
+  const [userWallet, setUserWallet] = useState<string | null>(null);
   const router = useRouter();
 
   const { like, isLoading, error, stories, likeCounts } = useStoriesStore();
-
-  const story = stories.find((s) => s.id === storyKey);
-  const [count, setCount] = useState(0);
-  const [isLiked, setIsLiked] = useState(false);
-  // const [isLiked, setIsLiked] = useState(
-  //   Array.isArray(story?.likeCount)
-  //     ? story.likeCount.includes(walletAddress)
-  //     : false,
-  // );
-  // const [count, setCount] = useState(
-  //   likeCounts[storyKey] ?? story?.likeCount ?? 0,
-  // );
+  const wallet = useWallet();
 
   useEffect(() => {
-    if (story) {
-      setIsLiked(
-        Array.isArray(story.likeCount)
-          ? story.likeCount.includes(walletAddress)
-          : false,
-      );
-      // setCount(likeCounts[storyKey] ?? story.likeCount);
-      setCount(
-        likeCounts[storyKey] ??
-          (Array.isArray(story.likeCount)
-            ? story.likeCount.length
-            : (story.likeCount ?? 0)),
-      );
+    if (wallet.connected && wallet.publicKey) {
+      const address = wallet.publicKey.toString();
+      setUserWallet(address);
+      console.log("Connected wallet address:", address);
+    } else {
+      setUserWallet(null);
+      console.log("Wallet not connected");
     }
-  }, [storyKey, likeCounts, story, walletAddress]);
+  }, [wallet.connected, wallet.publicKey]);
+
+  const story = stories.find((s) => s.id === storyKey);
+
+  const likesArray = story?.likes || [];
+  const [isLiked, setIsLiked] = useState<boolean>(
+    userWallet ? likesArray.includes(userWallet) : false,
+  );
+  const [count, setCount] = useState<number>(
+    likeCounts[storyKey] ?? story?.likeCount ?? 0,
+  );
+
+  useEffect(() => {
+    if (story && userWallet) {
+      setIsLiked(likesArray.includes(userWallet));
+      setCount(likeCounts[storyKey] ?? story.likeCount);
+    }
+  }, [storyKey, likeCounts, story, userWallet]);
 
   const handleLikeClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
 
-    if (!walletAddress) {
+    if (!userWallet) {
       alert("Please connect your wallet to like posts");
       return;
     }
@@ -62,11 +59,13 @@ const PostActions: React.FC<PostActionsProps> = ({
     }
 
     try {
-      await like(storyKey, walletAddress);
       setIsLiked(true);
+      setCount((prev) => prev + 1);
+      await like(storyKey, userWallet);
     } catch (error) {
       console.error("Error liking post:", error);
       setIsLiked(false);
+      setCount((prev) => prev - 1);
     }
   };
 
@@ -83,12 +82,10 @@ const PostActions: React.FC<PostActionsProps> = ({
           onClick={handleLikeClick}
         >
           <Image src={"/images/Flower.png"} width={20} height={20} alt="" />
-          {/* <IoFlowerOutline /> */}
 
           <span>{count} Likes</span>
         </button>
         <div className="flex items-center space-x-2 rounded-full text-sm font-bold">
-          {/* <LuWallet /> */}
           <Image src={"/images/Advertise.png"} width={20} height={20} alt="" />
           <span>Invest</span>
         </div>
@@ -98,7 +95,6 @@ const PostActions: React.FC<PostActionsProps> = ({
           className="flex cursor-pointer items-center space-x-2 rounded-full text-sm font-bold hover:opacity-80"
           onClick={handleCommentClick}
         >
-          {/* <FaRegComment /> */}
           <Image
             src={"/images/comment.png"}
             width={25}
@@ -114,23 +110,6 @@ const PostActions: React.FC<PostActionsProps> = ({
           </div>
         </button>
       </div>
-
-      {/* {showComments && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
-          onClick={(e) => {
-            e.stopPropagation();
-            setShowComments(false);
-          }}
-        >
-          <div
-            className="mx-4 w-full max-w-2xl rounded-lg bg-white"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Comments postId={storyKey} />
-          </div>
-        </div>
-      )} */}
 
       <ShareModal
         isOpen={showShareModal}
