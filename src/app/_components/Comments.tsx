@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useWallet } from "@jup-ag/wallet-adapter";
 import { api } from "~/trpc/react";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 import { WalletChildrenProvider } from "./wallet";
+import Image from "next/image";
+import ShareModal from "./CommentsShareModal";
 import dynamic from "next/dynamic";
 
 interface Comment {
@@ -17,7 +19,6 @@ interface Comment {
 }
 
 const COMMENTS_PER_PAGE = 5;
-const INITIAL_VISIBLE_REPLIES = 2;
 
 const CommentComponentWithNoSSR = dynamic(
   () =>
@@ -31,20 +32,14 @@ const CommentComponentWithNoSSR = dynamic(
         postId: string;
         level?: number;
       }) => {
-        const [isCollapsed, setIsCollapsed] = useState(level > 0);
+        const [isCollapsed, setIsCollapsed] = useState(true);
         const [showReplyInput, setShowReplyInput] = useState(false);
         const [replyContent, setReplyContent] = useState("");
         const [showShareModal, setShowShareModal] = useState(false);
-        const [visibleReplies, setVisibleReplies] = useState(
-          INITIAL_VISIBLE_REPLIES,
-        );
         const { publicKey } = useWallet();
         const walletAddress = publicKey?.toBase58();
         const utils = api.useUtils();
 
-        const remainingReplies = comment.replies.length - visibleReplies;
-
-        // Generate consistent avatar background color based on wallet address
         const getAvatarColor = (address: string) => {
           const colors = [
             "bg-blue-500",
@@ -60,7 +55,6 @@ const CommentComponentWithNoSSR = dynamic(
           return colors[index % colors.length];
         };
 
-        // Get user initials or first characters from wallet address
         const getAvatarText = (address: string, username?: string) => {
           if (username) {
             return username.slice(0, 2).toUpperCase();
@@ -81,10 +75,6 @@ const CommentComponentWithNoSSR = dynamic(
             await utils.story.getComments.invalidate({ storyKey: postId });
           },
         });
-
-        const getVoteCount = () => {
-          return comment.upvotes.length - comment.downvotes.length;
-        };
 
         const handleVote = async (voteType: "upvote" | "downvote") => {
           if (!walletAddress) return;
@@ -112,124 +102,180 @@ const CommentComponentWithNoSSR = dynamic(
 
         return (
           <div className="group relative">
-            <div className={`pl-8 ${isCollapsed ? "" : "mb-2"}`}>
-              <div className="flex items-center space-x-2">
-                <div
-                  className={`flex h-8 w-8 items-center justify-center rounded-full ${getAvatarColor(comment.walletAddress)} text-sm font-medium text-white`}
-                >
-                  {getAvatarText(comment.walletAddress, comment.username)}
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-sm font-medium text-gray-900">
-                    {comment.username ??
-                      `${comment.walletAddress.slice(0, 8)}...`}
-                  </span>
-                  <span className="text-xs text-gray-500">{formattedDate}</span>
-                </div>
+            <div className="flex">
+              {/* Thread line container */}
+              <div className="relative mr-4 w-[24px] flex-shrink-0">
+                {level > 0 && (
+                  <>
+                    {/* Vertical line */}
+                    <div className="absolute -top-3 bottom-0 left-0 w-[2px] bg-gray-200" />
+                    {/* Horizontal connector */}
+                    <div className="absolute left-0 top-[16px] h-[2px] w-6 bg-gray-200" />
+                  </>
+                )}
               </div>
 
-              <div className="ml-10">
-                <div className="my-2 text-sm text-gray-900">
-                  {comment.content}
-                </div>
-
-                <div className="mb-2 flex items-center space-x-4 text-xs">
-                  <div className="flex items-center space-x-1">
-                    <button
-                      onClick={() => handleVote("upvote")}
-                      className={`rounded hover:bg-gray-100 ${
-                        comment.upvotes.includes(walletAddress ?? "")
-                          ? "text-blue-500"
-                          : "text-gray-400"
-                      }`}
-                    >
-                      ↑ {comment.upvotes.length}
-                    </button>
-                    <button
-                      onClick={() => handleVote("downvote")}
-                      className={`rounded hover:bg-gray-100 ${
-                        comment.downvotes.includes(walletAddress ?? "")
-                          ? "text-red-500"
-                          : "text-gray-400"
-                      }`}
-                    >
-                      ↓ {comment.downvotes.length}
-                    </button>
-                  </div>
-
-                  <button
-                    onClick={() => setShowReplyInput(!showReplyInput)}
-                    className="text-gray-500 hover:text-gray-700"
+              {/* Comment content */}
+              <div className="flex-1">
+                <div className="flex items-start">
+                  <div
+                    className={`mr-2 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full ${getAvatarColor(
+                      comment.walletAddress,
+                    )} text-sm font-medium text-white`}
                   >
-                    Reply
-                  </button>
-
-                  {comment.replies.length > 0 && (
-                    <button
-                      onClick={() => setIsCollapsed(!isCollapsed)}
-                      className="text-gray-500 hover:text-gray-700"
-                    >
-                      {isCollapsed
-                        ? `Show ${comment.replies.length} replies`
-                        : "Hide replies"}
-                    </button>
-                  )}
-                </div>
-
-                {showReplyInput && (
-                  <div className="mb-4">
-                    <textarea
-                      value={replyContent}
-                      onChange={(e) => setReplyContent(e.target.value)}
-                      className="min-h-[100px] w-full rounded border border-gray-200 p-2 text-sm focus:border-gray-300 focus:outline-none"
-                      placeholder="Write a reply..."
-                    />
-                    <div className="mt-2 flex justify-end space-x-2">
-                      <button
-                        onClick={() => setShowReplyInput(false)}
-                        className="rounded px-4 py-1 text-sm text-gray-500 hover:bg-gray-100"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        onClick={handleReply}
-                        className="rounded bg-blue-500 px-4 py-1 text-sm text-white hover:bg-blue-600 disabled:opacity-50"
-                        disabled={
-                          !replyContent.trim() || addCommentMutation.isPending
-                        }
-                      >
-                        {addCommentMutation.isPending ? "Sending..." : "Reply"}
-                      </button>
-                    </div>
+                    {getAvatarText(comment.walletAddress, comment.username)}
                   </div>
-                )}
-
-                {!isCollapsed &&
-                  comment.replies &&
-                  comment.replies.length > 0 && (
-                    <div className="mt-2 space-y-4">
-                      {comment.replies.slice(0, visibleReplies).map((reply) => (
-                        <CommentComponentWithNoSSR
-                          key={reply.id}
-                          comment={reply}
-                          postId={postId}
-                          level={level + 1}
-                        />
-                      ))}
-
-                      {remainingReplies > 0 && (
-                        <button
-                          onClick={() =>
-                            setVisibleReplies(comment.replies.length)
-                          }
-                          className="text-sm text-blue-500 hover:text-blue-600"
-                        >
-                          Show {remainingReplies} more{" "}
-                          {remainingReplies === 1 ? "reply" : "replies"}
-                        </button>
-                      )}
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium text-gray-900">
+                        {comment.username ??
+                          `${comment.walletAddress.slice(0, 8)}...`}
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        {formattedDate}
+                      </span>
                     </div>
-                  )}
+
+                    <div className="mt-1">
+                      <div className="text-sm text-gray-900">
+                        {comment.content}
+                      </div>
+
+                      <div className="mt-2 flex items-center gap-4">
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => handleVote("upvote")}
+                            className={`flex items-center gap-1 text-sm ${
+                              comment.upvotes.includes(walletAddress ?? "")
+                                ? "text-blue-500"
+                                : "text-gray-400 hover:text-blue-500"
+                            }`}
+                          >
+                            <Image
+                              src="/images/Flower.png"
+                              width={16}
+                              height={16}
+                              alt="upvote"
+                            />
+                            <span>{comment.upvotes.length}</span>
+                          </button>
+
+                          <button
+                            onClick={() => handleVote("downvote")}
+                            className={`flex items-center gap-1 pl-4 text-sm ${
+                              comment.downvotes.includes(walletAddress ?? "")
+                                ? "text-red-500"
+                                : "text-gray-400 hover:text-red-500"
+                            }`}
+                          >
+                            <Image
+                              src="/images/dislike.png"
+                              width={16}
+                              height={16}
+                              alt="downvote"
+                            />
+                            <span>{comment.downvotes.length}</span>
+                          </button>
+                        </div>
+
+                        <button
+                          onClick={() => setShowReplyInput(!showReplyInput)}
+                          className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
+                        >
+                          <Image
+                            src="/images/comment.png"
+                            width={16}
+                            height={16}
+                            alt="reply"
+                          />
+                          <span>Reply</span>
+                        </button>
+
+                        <button
+                          onClick={() => setShowShareModal(true)}
+                          className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
+                        >
+                          <Image
+                            src="/images/Share.png"
+                            width={16}
+                            height={16}
+                            alt="share"
+                          />
+                          <span>Share</span>
+                        </button>
+
+                        {comment.replies && comment.replies.length > 0 && (
+                          <button
+                            onClick={() => setIsCollapsed(!isCollapsed)}
+                            className="text-sm text-gray-500 hover:text-gray-700"
+                          >
+                            {isCollapsed
+                              ? `[+] ${comment.replies.length} ${
+                                  comment.replies.length === 1
+                                    ? "reply"
+                                    : "replies"
+                                }`
+                              : "[-] Hide"}
+                          </button>
+                        )}
+                      </div>
+
+                      {showReplyInput && (
+                        <div className="mt-4">
+                          <textarea
+                            value={replyContent}
+                            onChange={(e) => setReplyContent(e.target.value)}
+                            className="min-h-[100px] w-full rounded border border-gray-200 p-3 text-sm focus:border-gray-300 focus:outline-none"
+                            placeholder="Write a reply..."
+                          />
+                          <div className="mt-2 flex justify-end gap-2">
+                            <button
+                              onClick={() => setShowReplyInput(false)}
+                              className="rounded px-4 py-1 text-sm text-gray-500 hover:bg-gray-100"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              onClick={handleReply}
+                              className="rounded bg-blue-500 px-4 py-1 text-sm text-white hover:bg-blue-600 disabled:opacity-50"
+                              disabled={
+                                !replyContent.trim() ||
+                                addCommentMutation.isPending
+                              }
+                            >
+                              {addCommentMutation.isPending
+                                ? "Sending..."
+                                : "Reply"}
+                            </button>
+                          </div>
+                        </div>
+                      )}
+
+                      <ShareModal
+                        isOpen={showShareModal}
+                        onClose={() => setShowShareModal(false)}
+                        postId={postId}
+                        commentId={comment.id}
+                        content={comment.content}
+                      />
+                    </div>
+
+                    {comment.replies &&
+                      comment.replies.length > 0 &&
+                      !isCollapsed && (
+                        <div className="mt-4 space-y-4">
+                          {comment.replies.map((reply) => (
+                            <CommentComponentWithNoSSR
+                              key={reply.id}
+                              comment={reply}
+                              postId={postId}
+                              level={level + 1}
+                            />
+                          ))}
+                        </div>
+                      )}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
