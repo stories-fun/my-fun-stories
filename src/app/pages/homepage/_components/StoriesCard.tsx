@@ -54,24 +54,7 @@ const VerificationBadge = () => (
   </div>
 );
 
-const PaginationDots = ({
-  total,
-  current,
-}: {
-  total: number;
-  current: number;
-}) => (
-  <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-1.5">
-    {Array.from({ length: total }).map((_, i) => (
-      <div
-        key={i}
-        className={`h-1.5 w-1.5 rounded-full ${
-          i === current ? "bg-blue-500" : "bg-gray-300"
-        }`}
-      />
-    ))}
-  </div>
-);
+
 
 const StoryHeader = ({ username }: { username: string }) => (
   <div className="mb-3 flex items-center space-x-2">
@@ -105,15 +88,7 @@ const StoriesCard = () => {
     router.push(`/stories/${id}`);
   };
 
-  const handlePrevImage = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setCurrentImageIndex((prev) => (prev === 0 ? 2 : prev - 1));
-  };
 
-  const handleNextImage = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setCurrentImageIndex((prev) => (prev === 2 ? 0 : prev + 1));
-  };
 
   if (!mounted) return null;
   if (isLoading) return <Loading />;
@@ -142,52 +117,8 @@ const StoriesCard = () => {
           <div className="flex flex-col space-x-6 lg:flex-row">
             <div className="w-full lg:w-1/3">
               {/* Image Section */}
-<<<<<<< Updated upstream
-              <div
-                className="relative mb-3 aspect-video h-[55%] w-[80%] cursor-pointer rounded-2xl bg-gray-100"
-                onClick={() => handleCardClick(story.id)}
-              >
-                <button
-                  className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2"
-                  onClick={handlePrevImage}
-                >
-                  <svg
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 19l-7-7 7-7"
-                    />
-                  </svg>
-                </button>
-                <button
-                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2"
-                  onClick={handleNextImage}
-                >
-                  <svg
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </button>
-                <PaginationDots total={3} current={currentImageIndex} />
-=======
               <div className="relative aspect-video h-[55%] w-full cursor-pointer rounded-lg bg-gray-100">
                 <ImageSlider />
->>>>>>> Stashed changes
               </div>
 
               <PostActions storyKey={story.id} />

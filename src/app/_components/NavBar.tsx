@@ -15,6 +15,13 @@ import {
 import Link from "next/link";
 import { WalletProvider } from "./wallet";
 
+interface MobileMenuItemProps{
+  icon: React.ElementType;
+  label: string;
+  onClick?:()=>void;
+  href?:string;
+}
+
 const NavLogo = () => (
   <Link href="/" className="group flex items-center space-x-2">
     <div className="relative h-[40px] w-[40px] sm:h-[50px] sm:w-[50px]">
@@ -57,21 +64,7 @@ const SearchBar = ({
   </div>
 );
 
-<<<<<<< Updated upstream
-const MobileMenuItem = ({
-  icon: Icon,
-  label,
-  onClick,
-  href,
-}: {
-  icon: React.ElementType;
-  label: string;
-  onClick?: () => void;
-  href?: string;
-}) => {
-=======
-const MobileMenuItem = ({ icon: Icon, label, onClick, href }: any) => {
->>>>>>> Stashed changes
+const MobileMenuItem = ({ icon: Icon, label, onClick, href }: MobileMenuItemProps) => {
   const content = (
     <div
       className="flex items-center space-x-3 rounded-lg p-3 text-gray-700 transition-colors hover:bg-gray-100"

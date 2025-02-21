@@ -1,9 +1,5 @@
-<<<<<<< Updated upstream
-import React from "react";
-=======
 "use client";
 import React, { useEffect, useState } from "react";
->>>>>>> Stashed changes
 import StoriesCard from "./_components/StoriesCard";
 import RightSidebar from "~/app/_components/RightSidebar";
 import PreLoginSide from "~/app/_components/PreLoginSide";
@@ -19,7 +15,7 @@ const HomePage = () => {
 
   useEffect(() => {
     if (wallet.connected && walletAddress) {
-      getStories(walletAddress);
+      void getStories(walletAddress);
     }
   }, [wallet.connected, walletAddress, getStories]);
 

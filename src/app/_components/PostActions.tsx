@@ -97,22 +97,11 @@ const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
             <span>Likes</span>
           </span>
         </button>
-<<<<<<< Updated upstream
         <div
           className="flex cursor-pointer items-center space-x-2 rounded-full text-sm font-bold"
           onClick={() => setShowBuyDialog(true)}
         >
           <Image src={"/images/Advertise.png"} width={20} height={20} alt="" />
-=======
-        <div className="flex items-center space-x-2 rounded-full text-sm font-bold">
-          <Image
-            src={"/images/Advertise.png"}
-            width={25}
-            height={25}
-            alt=""
-            className="h-5 w-5"
-          />
->>>>>>> Stashed changes
           <span>Invest</span>
         </div>
         {showBuyDialog && (
