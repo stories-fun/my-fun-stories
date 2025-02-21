@@ -3,10 +3,9 @@ import React, { useEffect, useState } from "react";
 import StoriesCard from "./_components/StoriesCard";
 import RightSidebar from "~/app/_components/RightSidebar";
 import PreLoginSide from "~/app/_components/PreLoginSide";
-import HasnotInvestedSide from "~/app/_components/HasnotInvestedSide";
-import HasInvestedSide from "~/app/_components/HasInvestedSide";
 import { useWallet } from "@jup-ag/wallet-adapter";
 import { useStoriesStore } from "~/store/useStoriesStore";
+import HasnotInvestedSide from "~/app/_components/HasNotInvestedSide";
 
 const HomePage = () => {
   const wallet = useWallet();

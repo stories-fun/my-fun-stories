@@ -10,8 +10,8 @@ const ProgressBar = () => {
       <div className="mb-3 font-bold">
         <span>Participate in presale of this token now!</span>
       </div>
-      <div className="w-[80%]">
-        <div className="h-2 rounded-full bg-gray-200">
+      <div className="w-[100%]">
+        <div className="h-2 rounded-full bg-[#00000099]">
           <div
             className="mb-2 h-2 rounded-full bg-[#46D160] transition-all duration-500"
             style={{ width: `${progress}%` }}

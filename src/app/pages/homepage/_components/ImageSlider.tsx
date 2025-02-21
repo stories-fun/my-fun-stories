@@ -8,39 +8,37 @@ import Image from "next/image";
 
 export const ImageSlider = () => {
   return (
-    <div className="w-full bg-[#F6F7F8] sm:h-[360px] sm:w-[640px]">
+    <div className="h-full w-full bg-[#F6F7F8]">
       <Swiper
         modules={[Navigation, Pagination]}
         navigation
         pagination={{ clickable: true }}
-        className="rounded-lg"
+        className="h-full w-full rounded-lg"
       >
         {/* Replace these with your images */}
         <SwiperSlide>
           <Image
             src="/images/profile.png"
-            width={640}
-            height={360}
+            fill
+            priority
             alt="Slide 1"
-            className="h-auto w-full object-cover sm:h-[360px] sm:w-[640px]"
+            className="object-cover"
           />
         </SwiperSlide>
         <SwiperSlide>
           <Image
             src="/images/profile.png"
-            width={640}
-            height={360}
+            fill
             alt="Slide 2"
-            className="h-auto w-full object-cover sm:h-[360px] sm:w-[640px]"
+            className="overflow-hidden object-cover"
           />
         </SwiperSlide>
         <SwiperSlide>
           <Image
             src="/images/profile.png"
-            width={640}
-            height={360}
+            fill
             alt="Slide 3"
-            className="h-auto w-full object-cover sm:h-[360px] sm:w-[640px]"
+            className="overflow-hidden object-cover"
           />
         </SwiperSlide>
       </Swiper>
