@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useWallet } from "@jup-ag/wallet-adapter";
 import { api } from "~/trpc/react";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 import { WalletChildrenProvider } from "./wallet";
 import Image from "next/image";
-import ShareModal from "./ShareModal";
-
+import ShareModal from "./CommentsShareModal";
 import dynamic from "next/dynamic";
-
 
 interface Comment {
   id: string;
@@ -25,7 +23,6 @@ interface CommentsProps {
   postId: string;
 }
 
-// Dynamically import the component with no SSR
 const CommentComponentWithNoSSR = dynamic(
   () =>
     Promise.resolve(
@@ -58,9 +55,9 @@ const CommentComponentWithNoSSR = dynamic(
             await utils.story.getComments.invalidate({ storyKey: postId });
           },
         });
+
         const handleVote = async (voteType: "upvote" | "downvote") => {
           if (!walletAddress) return;
-
 
           const isUpvoted = comment.upvotes.includes(walletAddress);
           const isDownvoted = comment.downvotes.includes(walletAddress);
@@ -200,7 +197,9 @@ const CommentComponentWithNoSSR = dynamic(
               <ShareModal
                 isOpen={showShareModal}
                 onClose={() => setShowShareModal(false)}
-                postId={comment.id}
+                postId={postId}
+                commentId={comment.id}
+                content={comment.content}
               />
             </div>
 

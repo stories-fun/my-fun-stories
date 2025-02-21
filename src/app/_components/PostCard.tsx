@@ -30,16 +30,16 @@ const PostCard = ({ storyId }: { storyId: string }) => {
 
   return (
     <div className="container mx-auto w-full rounded-lg">
-      <h2 className="font-bold">{story.title}</h2>
+      <h2 className="font-[IBM_Plex_Sans] font-bold">{story.title}</h2>
       <div className="bg-[#F6F7F8]">
         <ImageSliderForStories />
       </div>
       <div className="mt-4">
-        <PostActions storyKey={story.id}  />
+        <PostActions storyKey={story.id} walletAddress={story.walletAddres} />
         {/* <PostActions postId={story.id || storyId} /> */}
       </div>
 
-      <div className="mt-4">
+      <div className="mt-4 font-[IBM_Plex_Sans]">
         <div>{story.content}</div>
       </div>
     </div>
