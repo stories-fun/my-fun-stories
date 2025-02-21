@@ -75,3 +75,27 @@ export const createLike = async (storyKey: string, walletAddress: string) => {
     };
   }
 };
+
+export const voteComment = async (
+  storyKey: string,
+  commentId: string,
+  walletAddress: string,
+  voteType: "upvote" | "downvote" | "remove",
+) => {
+  try {
+    const result = await api.story.voteComment({
+      storyKey,
+      commentId,
+      walletAddress,
+      voteType,
+    });
+    return {
+      success: result.success,
+    };
+  } catch (error) {
+    return {
+      error:
+        error instanceof Error ? error.message : "Failed to vote a comment",
+    };
+  }
+};

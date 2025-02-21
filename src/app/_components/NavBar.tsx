@@ -57,7 +57,17 @@ const SearchBar = ({
   </div>
 );
 
-const MobileMenuItem = ({ icon: Icon, label, onClick, href }) => {
+const MobileMenuItem = ({
+  icon: Icon,
+  label,
+  onClick,
+  href,
+}: {
+  icon: React.ElementType;
+  label: string;
+  onClick?: () => void;
+  href?: string;
+}) => {
   const content = (
     <div
       className="flex items-center space-x-3 rounded-lg p-3 text-gray-700 transition-colors hover:bg-gray-100"

@@ -161,11 +161,7 @@ const StoriesCard = () => {
                 <PaginationDots total={3} current={currentImageIndex} />
               </div>
 
-              <PostActions
-                storyKey={story.id}
-                walletAddress={story.walletAddres}
-              />
-
+              <PostActions storyKey={story.id} />
 
               <div>
                 <ProgressBar />
@@ -177,7 +173,7 @@ const StoriesCard = () => {
               onClick={() => handleCardClick(story.id)}
             >
               <div className="space-y-2">
-                <h2 className="text-lg font-[IBM_Plex_Sans] font-medium leading-tight">
+                <h2 className="font-lg text-lg font-[IBM_Plex_Sans] leading-tight">
                   {story.title}
                 </h2>
                 <p className="text-sm text-gray-600">{story.content}</p>

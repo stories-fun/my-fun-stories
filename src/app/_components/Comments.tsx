@@ -4,7 +4,7 @@ import { api } from "~/trpc/react";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 import { WalletChildrenProvider } from "./wallet";
 import Image from "next/image";
-import ShareModal from "./ShareModal";
+import ShareModal from "./CommentsShareModal";
 import dynamic from "next/dynamic";
 
 interface Comment {
@@ -23,7 +23,6 @@ interface CommentsProps {
   postId: string;
 }
 
-// Dynamically import the component with no SSR
 const CommentComponentWithNoSSR = dynamic(
   () =>
     Promise.resolve(
@@ -198,7 +197,9 @@ const CommentComponentWithNoSSR = dynamic(
               <ShareModal
                 isOpen={showShareModal}
                 onClose={() => setShowShareModal(false)}
-                postId={comment.id}
+                postId={postId}
+                commentId={comment.id}
+                content={comment.content}
               />
             </div>
 
