@@ -84,15 +84,35 @@ const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
           className="flex cursor-pointer items-center space-x-2 rounded-full text-sm font-bold"
           onClick={handleLikeClick}
         >
-          <Image src={"/images/Flower.png"} width={20} height={20} alt="" />
+          <Image
+            src={"/images/Flower.png"}
+            width={25}
+            height={25}
+            alt=""
+            className="h-6 w-6"
+          />
 
-          <span>{count} Likes</span>
+          <span className="flex space-x-2">
+            <span>{count}</span>
+            <span>Likes</span>
+          </span>
         </button>
+<<<<<<< Updated upstream
         <div
           className="flex cursor-pointer items-center space-x-2 rounded-full text-sm font-bold"
           onClick={() => setShowBuyDialog(true)}
         >
           <Image src={"/images/Advertise.png"} width={20} height={20} alt="" />
+=======
+        <div className="flex items-center space-x-2 rounded-full text-sm font-bold">
+          <Image
+            src={"/images/Advertise.png"}
+            width={25}
+            height={25}
+            alt=""
+            className="h-5 w-5"
+          />
+>>>>>>> Stashed changes
           <span>Invest</span>
         </div>
         {showBuyDialog && (
@@ -111,12 +131,19 @@ const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
             width={25}
             height={25}
             alt="comment"
+            className="h-6 w-6"
           />
           <span>Comment</span>
         </button>
         <button onClick={() => setShowShareModal(true)}>
           <div className="flex items-center space-x-2 rounded-full text-sm font-bold">
-            <Image src={"/images/Share.png"} width={25} height={25} alt="" />
+            <Image
+              src={"/images/Share.png"}
+              width={25}
+              height={25}
+              alt=""
+              className="h-6 w-6"
+            />
             <span>Share</span>
           </div>
         </button>
