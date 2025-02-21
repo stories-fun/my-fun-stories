@@ -5,8 +5,9 @@ import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 import { WalletChildrenProvider } from "./wallet";
 import Image from "next/image";
 import ShareModal from "./ShareModal";
-import { useStoriesStore } from "~/store/useStoriesStore";
-import { useShallow } from "zustand/react/shallow";
+
+import dynamic from "next/dynamic";
+
 
 interface Comment {
   id: string;
@@ -16,191 +17,211 @@ interface Comment {
   createdAt: Date;
   replies: Comment[];
   parentCommentId?: string;
-  likes?: string[];
-  dislikes?: string[];
+  upvotes: string[];
+  downvotes: string[];
 }
 
 interface CommentsProps {
   postId: string;
 }
 
-const CommentComponent: React.FC<{
-  comment: Comment;
-  postId: string;
-  level?: number;
-}> = ({ comment, postId, level = 0 }) => {
-  const [showReplyInput, setShowReplyInput] = useState(false);
-  const [replyContent, setReplyContent] = useState("");
-  const [showShareModal, setShowShareModal] = useState(false);
-  const { publicKey } = useWallet();
-  const walletAddress = publicKey?.toBase58();
-  const utils = api.useUtils();
+// Dynamically import the component with no SSR
+const CommentComponentWithNoSSR = dynamic(
+  () =>
+    Promise.resolve(
+      ({
+        comment,
+        postId,
+        level = 0,
+      }: {
+        comment: Comment;
+        postId: string;
+        level?: number;
+      }) => {
+        const [showReplyInput, setShowReplyInput] = useState(false);
+        const [replyContent, setReplyContent] = useState("");
+        const [showShareModal, setShowShareModal] = useState(false);
+        const { publicKey } = useWallet();
+        const walletAddress = publicKey?.toBase58();
+        const utils = api.useUtils();
 
-  const addCommentMutation = api.story.addComment.useMutation({
-    onSuccess: async () => {
-      await utils.story.getComments.invalidate({ storyKey: postId });
-      setReplyContent("");
-      setShowReplyInput(false);
-    },
-  });
+        const addCommentMutation = api.story.addComment.useMutation({
+          onSuccess: async () => {
+            await utils.story.getComments.invalidate({ storyKey: postId });
+            setReplyContent("");
+            setShowReplyInput(false);
+          },
+        });
 
-  const handleReply = async () => {
-    if (!replyContent.trim() || !walletAddress) return;
-    await addCommentMutation.mutateAsync({
-      storyKey: postId,
-      content: replyContent,
-      walletAddress,
-      parentCommentId: comment.id,
-    });
-  };
+        const voteMutation = api.story.voteComment.useMutation({
+          onSuccess: async () => {
+            await utils.story.getComments.invalidate({ storyKey: postId });
+          },
+        });
+        const handleVote = async (voteType: "upvote" | "downvote") => {
+          if (!walletAddress) return;
 
-  const [userWallet, setUserWallet] = useState<string | null>(null);
-  const wallet = useWallet();
-  const { stories, voteComment, isLoading, error } = useStoriesStore(
-    useShallow((state) => ({
-      stories: state.stories,
-      voteComment: state.voteComment,
-      isLoading: state.isLoading,
-      error: state.error,
-    })),
-  );
-  useEffect(() => {
-    if (wallet.connected && wallet.publicKey) {
-      const address = wallet.publicKey.toString();
-      setUserWallet(address);
-    } else {
-      setUserWallet(null);
-    }
-  }, [wallet.connected, wallet.publicKey]);
 
-  const story = stories.find((s) => s.id === postId);
+          const isUpvoted = comment.upvotes.includes(walletAddress);
+          const isDownvoted = comment.downvotes.includes(walletAddress);
 
-  // const handleVote = async (
-  //   commentId: string,
-  //   voteType: "upvote" | "downvote" | "remove",
-  // ) => {
-  //   try {
-  //     await voteComment(postId, commentId, userWallet, voteType);
-  //   } catch (error) {
-  //     console.log("voting failed", error);
-  //   }
-  // };
+          let action: "upvote" | "downvote" | "remove" = voteType;
 
-  return (
-    <div className={`mt-4 ${level > 0 ? "ml-8" : ""}`}>
-      <div className="rounded-lg bg-gray-50 p-4">
-        <div className="flex justify-between">
-          <span className="font-semibold">
-            {comment.username ?? `${comment.walletAddress.slice(0, 8)}...`}
-          </span>
-          <span className="text-sm text-gray-500">
-            {formatDistanceToNow(new Date(comment.createdAt), {
-              addSuffix: true,
-            })}
-          </span>
-        </div>
-        <p className="mt-2 text-gray-700">{comment.content}</p>
+          if (voteType === "upvote" && isUpvoted) {
+            action = "remove";
+          } else if (voteType === "downvote" && isDownvoted) {
+            action = "remove";
+          }
 
-        {/* Comment Actions */}
-        <div className="mt-3 flex items-center gap-4">
-          {/* Flower (Like) */}
-          <button
-            className="flex items-center gap-1 text-sm text-gray-600 hover:text-blue-500"
-            // onClick={() => handleVote(comment.id, "upvote")}
-            // disabled={isLoading}
-          >
-            <Image src="/images/Flower.png" width={20} height={20} alt="like" />
-            <span>{comment.likes?.length ?? 0}</span>
-          </button>
+          await voteMutation.mutateAsync({
+            storyKey: postId,
+            commentId: comment.id,
+            walletAddress,
+            voteType: action,
+          });
+        };
 
-          {/* Dislike */}
-          <button
-            className="flex items-center gap-1 text-sm text-gray-600 hover:text-red-500"
-            // onClick={handleVote}
-          >
-            <Image
-              src="/images/dislike.png"
-              width={20}
-              height={20}
-              alt="dislike"
-            />
-            <span>{comment.dislikes?.length ?? 0}</span>
-          </button>
+        const handleReply = async () => {
+          if (!replyContent.trim() || !walletAddress) return;
+          await addCommentMutation.mutateAsync({
+            storyKey: postId,
+            content: replyContent,
+            walletAddress,
+            parentCommentId: comment.id,
+          });
+        };
 
-          {/* Reply */}
-          <button
-            onClick={() => setShowReplyInput(!showReplyInput)}
-            className="flex items-center gap-1 text-sm text-gray-600 hover:text-blue-500"
-          >
-            <Image
-              src="/images/comment.png"
-              width={20}
-              height={20}
-              alt="reply"
-            />
-            <span>Reply</span>
-          </button>
+        const formattedDate = formatDistanceToNow(new Date(comment.createdAt), {
+          addSuffix: true,
+        });
 
-          {/* Share */}
-          <button
-            onClick={() => setShowShareModal(true)}
-            className="flex items-center gap-1 text-sm text-gray-600 hover:text-blue-500"
-          >
-            <Image src="/images/Share.png" width={20} height={20} alt="share" />
-            <span>Share</span>
-          </button>
-        </div>
+        return (
+          <div className={`mt-4 ${level > 0 ? "ml-8" : ""}`}>
+            <div className="rounded-lg bg-gray-50 p-4">
+              <div className="flex justify-between">
+                <span className="font-semibold">
+                  {comment.username ??
+                    `${comment.walletAddress.slice(0, 8)}...`}
+                </span>
+                <span className="text-sm text-gray-500">{formattedDate}</span>
+              </div>
+              <p className="mt-2 text-gray-700">{comment.content}</p>
 
-        {showReplyInput && (
-          <div className="mt-2">
-            <textarea
-              value={replyContent}
-              onChange={(e) => setReplyContent(e.target.value)}
-              className="w-full rounded border p-2 text-sm"
-              placeholder="Write a reply..."
-            />
-            <div className="mt-2 flex justify-end space-x-2">
-              <button
-                onClick={() => setShowReplyInput(false)}
-                className="rounded px-3 py-1 text-sm text-gray-600 hover:bg-gray-100"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleReply}
-                className="rounded bg-blue-500 px-3 py-1 text-sm text-white hover:bg-blue-600"
-                disabled={addCommentMutation.isPending}
-              >
-                {addCommentMutation.isPending ? "Replying..." : "Reply"}
-              </button>
+              <div className="mt-3 flex items-center gap-4">
+                <button
+                  onClick={() => handleVote("upvote")}
+                  className={`flex items-center gap-1 text-sm ${
+                    comment.upvotes.includes(walletAddress ?? "")
+                      ? "text-blue-500"
+                      : "text-gray-600 hover:text-blue-500"
+                  }`}
+                  disabled={voteMutation.isPending}
+                >
+                  <Image
+                    src="/images/Flower.png"
+                    width={20}
+                    height={20}
+                    alt="upvote"
+                  />
+                  <span>{comment.upvotes.length}</span>
+                </button>
+
+                <button
+                  onClick={() => handleVote("downvote")}
+                  className={`flex items-center gap-1 text-sm ${
+                    comment.downvotes.includes(walletAddress ?? "")
+                      ? "text-red-500"
+                      : "text-gray-600 hover:text-red-500"
+                  }`}
+                  disabled={voteMutation.isPending}
+                >
+                  <Image
+                    src="/images/dislike.png"
+                    width={20}
+                    height={20}
+                    alt="downvote"
+                  />
+                  <span>{comment.downvotes.length}</span>
+                </button>
+
+                <button
+                  onClick={() => setShowReplyInput(!showReplyInput)}
+                  className="flex items-center gap-1 text-sm text-gray-600 hover:text-blue-500"
+                >
+                  <Image
+                    src="/images/comment.png"
+                    width={20}
+                    height={20}
+                    alt="reply"
+                  />
+                  <span>Reply</span>
+                </button>
+
+                <button
+                  onClick={() => setShowShareModal(true)}
+                  className="flex items-center gap-1 text-sm text-gray-600 hover:text-blue-500"
+                >
+                  <Image
+                    src="/images/Share.png"
+                    width={20}
+                    height={20}
+                    alt="share"
+                  />
+                  <span>Share</span>
+                </button>
+              </div>
+
+              {showReplyInput && (
+                <div className="mt-2">
+                  <textarea
+                    value={replyContent}
+                    onChange={(e) => setReplyContent(e.target.value)}
+                    className="w-full rounded border p-2 text-sm"
+                    placeholder="Write a reply..."
+                  />
+                  <div className="mt-2 flex justify-end space-x-2">
+                    <button
+                      onClick={() => setShowReplyInput(false)}
+                      className="rounded px-3 py-1 text-sm text-gray-600 hover:bg-gray-100"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleReply}
+                      className="rounded bg-blue-500 px-3 py-1 text-sm text-white hover:bg-blue-600"
+                      disabled={addCommentMutation.isPending}
+                    >
+                      {addCommentMutation.isPending ? "Replying..." : "Reply"}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              <ShareModal
+                isOpen={showShareModal}
+                onClose={() => setShowShareModal(false)}
+                postId={comment.id}
+              />
             </div>
+
+            {comment.replies && comment.replies.length > 0 && (
+              <div className="ml-8">
+                {comment.replies.map((reply) => (
+                  <CommentComponentWithNoSSR
+                    key={reply.id}
+                    comment={reply}
+                    postId={postId}
+                    level={level + 1}
+                  />
+                ))}
+              </div>
+            )}
           </div>
-        )}
-
-        {/* Share Modal */}
-        <ShareModal
-          isOpen={showShareModal}
-          onClose={() => setShowShareModal(false)}
-          postId={comment.id} // Using comment ID for sharing specific comment
-        />
-      </div>
-
-      {/* Render replies */}
-      {comment.replies && comment.replies.length > 0 && (
-        <div className="ml-8">
-          {comment.replies.map((reply) => (
-            <CommentComponent
-              key={reply.id}
-              comment={reply}
-              postId={postId}
-              level={level + 1}
-            />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
+        );
+      },
+    ),
+  { ssr: false },
+);
 
 const CommentsInner: React.FC<CommentsProps> = ({ postId }) => {
   const [newComment, setNewComment] = useState("");
@@ -265,7 +286,7 @@ const CommentsInner: React.FC<CommentsProps> = ({ postId }) => {
       <div className="space-y-4">
         {comments && comments.length > 0 ? (
           comments.map((comment) => (
-            <CommentComponent
+            <CommentComponentWithNoSSR
               key={comment.id}
               comment={comment}
               postId={postId}
