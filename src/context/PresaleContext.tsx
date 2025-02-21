@@ -69,9 +69,9 @@ export const PresaleProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  useEffect(() => {
-    loadPresaleData();
-  }, []);
+  // useEffect(() => {
+  //   loadPresaleData();
+  // }, []);
 
   return (
     <PresaleContext.Provider

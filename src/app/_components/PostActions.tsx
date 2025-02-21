@@ -12,6 +12,7 @@ interface PostActionsProps {
 
 const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
   const [showShareModal, setShowShareModal] = useState(false);
+  const [showBuyDialog, setShowBuyDialog] = useState(false);
   const [userWallet, setUserWallet] = useState<string | null>(null);
   const router = useRouter();
 
