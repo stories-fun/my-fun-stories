@@ -103,13 +103,11 @@ const CommentComponentWithNoSSR = dynamic(
         return (
           <div className="group relative">
             <div className="flex">
-              {/* Thread line container */}
-              <div className="relative mr-4 w-[24px] flex-shrink-0">
+              {/* Thread line container - hidden on mobile */}
+              <div className="relative mr-2 hidden w-[24px] flex-shrink-0 sm:mr-4 sm:block">
                 {level > 0 && (
                   <>
-                    {/* Vertical line */}
                     <div className="absolute -top-3 bottom-0 left-0 w-[2px] bg-gray-200" />
-                    {/* Horizontal connector */}
                     <div className="absolute left-0 top-[16px] h-[2px] w-6 bg-gray-200" />
                   </>
                 )}
@@ -119,15 +117,15 @@ const CommentComponentWithNoSSR = dynamic(
               <div className="flex-1">
                 <div className="flex items-start">
                   <div
-                    className={`mr-2 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full ${getAvatarColor(
+                    className={`mr-2 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full sm:h-8 sm:w-8 ${getAvatarColor(
                       comment.walletAddress,
-                    )} text-sm font-medium text-white`}
+                    )} text-xs font-medium text-white sm:text-sm`}
                   >
                     {getAvatarText(comment.walletAddress, comment.username)}
                   </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-900">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="break-all text-xs font-medium text-gray-900 sm:text-sm">
                         {comment.username ??
                           `${comment.walletAddress.slice(0, 8)}...`}
                       </span>
@@ -137,15 +135,15 @@ const CommentComponentWithNoSSR = dynamic(
                     </div>
 
                     <div className="mt-1">
-                      <div className="text-sm text-gray-900">
+                      <div className="break-words text-xs text-gray-900 sm:text-sm">
                         {comment.content}
                       </div>
 
-                      <div className="mt-2 flex items-center gap-4">
+                      <div className="mt-2 flex flex-wrap items-center gap-2 sm:gap-4">
                         <div className="flex items-center gap-1">
                           <button
                             onClick={() => handleVote("upvote")}
-                            className={`flex items-center gap-1 text-sm ${
+                            className={`flex items-center gap-1 text-xs sm:text-sm ${
                               comment.upvotes.includes(walletAddress ?? "")
                                 ? "text-blue-500"
                                 : "text-gray-400 hover:text-blue-500"
@@ -153,16 +151,17 @@ const CommentComponentWithNoSSR = dynamic(
                           >
                             <Image
                               src="/images/Flower.png"
-                              width={16}
-                              height={16}
+                              width={14}
+                              height={14}
                               alt="upvote"
+                              className="sm:h-4 sm:w-4"
                             />
                             <span>{comment.upvotes.length}</span>
                           </button>
 
                           <button
                             onClick={() => handleVote("downvote")}
-                            className={`flex items-center gap-1 pl-4 text-sm ${
+                            className={`flex items-center gap-1 pl-2 text-xs sm:pl-4 sm:text-sm ${
                               comment.downvotes.includes(walletAddress ?? "")
                                 ? "text-red-500"
                                 : "text-gray-400 hover:text-red-500"
@@ -170,9 +169,10 @@ const CommentComponentWithNoSSR = dynamic(
                           >
                             <Image
                               src="/images/dislike.png"
-                              width={16}
-                              height={16}
+                              width={14}
+                              height={14}
                               alt="downvote"
+                              className="sm:h-4 sm:w-4"
                             />
                             <span>{comment.downvotes.length}</span>
                           </button>
@@ -180,26 +180,28 @@ const CommentComponentWithNoSSR = dynamic(
 
                         <button
                           onClick={() => setShowReplyInput(!showReplyInput)}
-                          className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
+                          className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700 sm:text-sm"
                         >
                           <Image
                             src="/images/comment.png"
-                            width={16}
-                            height={16}
+                            width={14}
+                            height={14}
                             alt="reply"
+                            className="sm:h-4 sm:w-4"
                           />
                           <span>Reply</span>
                         </button>
 
                         <button
                           onClick={() => setShowShareModal(true)}
-                          className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
+                          className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700 sm:text-sm"
                         >
                           <Image
                             src="/images/Share.png"
-                            width={16}
-                            height={16}
+                            width={14}
+                            height={14}
                             alt="share"
+                            className="sm:h-4 sm:w-4"
                           />
                           <span>Share</span>
                         </button>
@@ -207,7 +209,7 @@ const CommentComponentWithNoSSR = dynamic(
                         {comment.replies && comment.replies.length > 0 && (
                           <button
                             onClick={() => setIsCollapsed(!isCollapsed)}
-                            className="text-sm text-gray-500 hover:text-gray-700"
+                            className="text-xs text-gray-500 hover:text-gray-700 sm:text-sm"
                           >
                             {isCollapsed
                               ? `[+] ${comment.replies.length} ${
@@ -221,23 +223,23 @@ const CommentComponentWithNoSSR = dynamic(
                       </div>
 
                       {showReplyInput && (
-                        <div className="mt-4">
+                        <div className="mt-3 sm:mt-4">
                           <textarea
                             value={replyContent}
                             onChange={(e) => setReplyContent(e.target.value)}
-                            className="min-h-[100px] w-full rounded border border-gray-200 p-3 text-sm focus:border-gray-300 focus:outline-none"
+                            className="min-h-[80px] w-full rounded border border-gray-200 p-2 text-xs focus:border-gray-300 focus:outline-none sm:min-h-[100px] sm:p-3 sm:text-sm"
                             placeholder="Write a reply..."
                           />
                           <div className="mt-2 flex justify-end gap-2">
                             <button
                               onClick={() => setShowReplyInput(false)}
-                              className="rounded px-4 py-1 text-sm text-gray-500 hover:bg-gray-100"
+                              className="rounded px-3 py-1 text-xs text-gray-500 hover:bg-gray-100 sm:px-4 sm:text-sm"
                             >
                               Cancel
                             </button>
                             <button
                               onClick={handleReply}
-                              className="rounded bg-blue-500 px-4 py-1 text-sm text-white hover:bg-blue-600 disabled:opacity-50"
+                              className="rounded bg-blue-500 px-3 py-1 text-xs text-white hover:bg-blue-600 disabled:opacity-50 sm:px-4 sm:text-sm"
                               disabled={
                                 !replyContent.trim() ||
                                 addCommentMutation.isPending
@@ -263,7 +265,7 @@ const CommentComponentWithNoSSR = dynamic(
                     {comment.replies &&
                       comment.replies.length > 0 &&
                       !isCollapsed && (
-                        <div className="mt-4 space-y-4">
+                        <div className="mt-3 space-y-3 sm:mt-4 sm:space-y-4">
                           {comment.replies.map((reply) => (
                             <CommentComponentWithNoSSR
                               key={reply.id}
@@ -318,22 +320,22 @@ const CommentsInner = ({ postId }: { postId: string }) => {
 
   return (
     <div className="rounded-lg bg-white shadow">
-      <div className="border-b p-4">
+      <div className="border-b p-3 sm:p-4">
         {!walletAddress ? (
-          <div className="rounded bg-gray-50 p-4 text-center text-sm text-gray-500">
+          <div className="rounded bg-gray-50 p-3 text-center text-xs text-gray-500 sm:p-4 sm:text-sm">
             Connect wallet to join the discussion
           </div>
         ) : (
           <div className="space-y-2">
             <textarea
-              className="min-h-[100px] w-full rounded border p-3 text-sm focus:border-blue-300 focus:outline-none"
+              className="min-h-[80px] w-full rounded border p-2 text-xs focus:border-blue-300 focus:outline-none sm:min-h-[100px] sm:p-3 sm:text-sm"
               placeholder="What are your thoughts?"
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
             />
             <div className="flex justify-end">
               <button
-                className="rounded bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600 disabled:opacity-50"
+                className="rounded bg-blue-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-600 disabled:opacity-50 sm:px-4 sm:py-2 sm:text-sm"
                 onClick={handleSubmitComment}
                 disabled={!newComment.trim() || addCommentMutation.isPending}
               >
@@ -347,24 +349,24 @@ const CommentsInner = ({ postId }: { postId: string }) => {
       <div className="divide-y divide-gray-100">
         {comments.length > 0 ? (
           comments.slice(0, visibleComments).map((comment) => (
-            <div key={comment.id} className="p-4">
+            <div key={comment.id} className="p-3 sm:p-4">
               <CommentComponentWithNoSSR comment={comment} postId={postId} />
             </div>
           ))
         ) : (
-          <div className="p-8 text-center text-gray-500">
+          <div className="p-6 text-center text-xs text-gray-500 sm:p-8 sm:text-sm">
             No comments yet. Be the first to share your thoughts!
           </div>
         )}
       </div>
 
       {comments.length > visibleComments && (
-        <div className="p-4">
+        <div className="p-3 sm:p-4">
           <button
             onClick={() =>
               setVisibleComments((prev) => prev + COMMENTS_PER_PAGE)
             }
-            className="w-full rounded-full border border-gray-200 py-2 text-sm text-blue-500 hover:border-gray-300 hover:text-blue-600"
+            className="w-full rounded-full border border-gray-200 py-1.5 text-xs text-blue-500 hover:border-gray-300 hover:text-blue-600 sm:py-2 sm:text-sm"
           >
             Load More Comments
           </button>
