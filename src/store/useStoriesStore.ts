@@ -138,7 +138,7 @@ export const useStoriesStore = create<StoriesState>((set, get) => ({
 
   like: async (storyKey: string, walletAddress: string) => {
     const result = await createLike(storyKey, walletAddress);
-    if (result && result.likeCount !== undefined) {
+    if (result?.likeCount !== undefined) {
       set((state) => ({
         stories: state.stories.map((story) =>
           story.id === storyKey

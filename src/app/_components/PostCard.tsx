@@ -1,10 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import PostActions from "./PostActions";
-// import { EditorState } from "draft-js";
 import "draft-js/dist/Draft.css";
-// import dynamic from "next/dynamic";
-// import NestedComment from "../comment/_component/nestedComment";
 
 import { ImageSliderForStories } from "./ImageSliderForStories";
 import "draft-js/dist/Draft.css";
@@ -36,7 +33,6 @@ const PostCard = ({ storyId }: { storyId: string }) => {
       </div>
       <div className="mt-4">
         <PostActions storyKey={story.id} walletAddress={story.walletAddres} />
-        {/* <PostActions postId={story.id || storyId} /> */}
       </div>
 
       <div className="mt-4 font-[IBM_Plex_Sans]">

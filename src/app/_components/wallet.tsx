@@ -1,16 +1,11 @@
 "use client";
 
-import {
-  UnifiedWalletButton,
-  UnifiedWalletProvider,
-  useWallet,
-} from "@jup-ag/wallet-adapter";
+import { UnifiedWalletProvider } from "@jup-ag/wallet-adapter";
 import { ConnectionProvider } from "@solana/wallet-adapter-react";
-import { clusterApiUrl, Connection, type Cluster } from "@solana/web3.js";
+import { clusterApiUrl, type Cluster } from "@solana/web3.js";
 import { WalletNotification } from "./wallet-notification";
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
-
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import WalletConnectHandler from "./WalletConnectHandler";
 
 export const WALLET_CONFIG = {

@@ -97,6 +97,16 @@ const StoriesCard = () => {
     router.push(`/stories/${id}`);
   };
 
+  const handlePrevImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentImageIndex((prev) => (prev === 0 ? 2 : prev - 1));
+  };
+
+  const handleNextImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentImageIndex((prev) => (prev === 2 ? 0 : prev + 1));
+  };
+
   if (!mounted) return null;
   if (isLoading) return <Loading />;
   if (error)
@@ -128,7 +138,10 @@ const StoriesCard = () => {
                 className="relative mb-3 aspect-video h-[55%] w-[80%] cursor-pointer rounded-2xl bg-gray-100"
                 onClick={() => handleCardClick(story.id)}
               >
-                <button className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2">
+                <button
+                  className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2"
+                  onClick={handlePrevImage}
+                >
                   <svg
                     className="h-4 w-4"
                     fill="none"
@@ -143,7 +156,10 @@ const StoriesCard = () => {
                     />
                   </svg>
                 </button>
-                <button className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2">
+                <button
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2"
+                  onClick={handleNextImage}
+                >
                   <svg
                     className="h-4 w-4"
                     fill="none"

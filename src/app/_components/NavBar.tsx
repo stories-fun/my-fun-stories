@@ -90,7 +90,6 @@ const MobileMenuItem = ({
 const NavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     setMounted(true);
@@ -124,8 +123,8 @@ const NavBar = () => {
   }, [menuOpen]);
 
   const handleSearch = (value: string) => {
-    setSearchQuery(value);
-    // Implement search functionality here
+    // TODO: Implement search functionality here
+    console.log("Search:", value);
   };
 
   if (!mounted) {

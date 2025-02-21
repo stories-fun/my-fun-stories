@@ -7,7 +7,7 @@ import {
 import { StorySchema } from "~/server/schema/story";
 import { env } from "../../../env";
 import type { HttpRequest } from "@aws-sdk/protocol-http";
-import { Comment } from "~/server/schema/comments";
+import type { Comment } from "~/server/schema/comments";
 
 export class StoryStorage {
   private client: S3Client;
@@ -64,15 +64,26 @@ export class StoryStorage {
         }),
       );
       const rawData = await response.Body!.transformToString();
-      const data = JSON.parse(rawData);
+      const data = JSON.parse(rawData) as unknown;
 
-      // If the id is missing, derive it from the key string (e.g., 'stories/1739354908779_pDHykt.json' becomes '1739354908779_pDHykt')
-      if (!data.id && typeof key === "string") {
+      // If the id is missing, derive it from the key string
+      if (
+        typeof data === "object" &&
+        data !== null &&
+        !("id" in data) &&
+        typeof key === "string"
+      ) {
         const derivedId = key.split("/").pop()?.replace(".json", "");
-        data.id = derivedId;
+        (data as Record<string, unknown>).id = derivedId;
       }
+
       // Convert createdAt from string to Date if necessary
-      if (typeof data.createdAt === "string") {
+      if (
+        data &&
+        typeof data === "object" &&
+        "createdAt" in data &&
+        typeof data.createdAt === "string"
+      ) {
         data.createdAt = new Date(data.createdAt);
       }
 

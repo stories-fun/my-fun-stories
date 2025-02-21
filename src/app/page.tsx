@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import NavBar from "./_components/NavBar";
 import HomePage from "./pages/homepage/page";
 

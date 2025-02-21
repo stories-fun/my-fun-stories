@@ -6,6 +6,7 @@ import {
 } from "@aws-sdk/client-s3";
 import { env } from "../../../env";
 import type { HttpRequest } from "@aws-sdk/protocol-http";
+import { UserSchema } from "../../schema/user";
 
 export class UserStorage {
   private client: S3Client;
@@ -72,9 +73,16 @@ export class UserStorage {
           Key: `users/${walletAddress}.json`,
         }),
       );
-      return JSON.parse(await response.Body!.transformToString());
+      const rawData = await response.Body!.transformToString();
+      const data = JSON.parse(rawData) as unknown;
+      return UserSchema.parse(data);
     } catch (error) {
-      if ((error as { name?: string })?.name === "NoSuchKey") {
+      if (
+        error &&
+        typeof error === "object" &&
+        "name" in error &&
+        error.name === "NoSuchKey"
+      ) {
         return null;
       }
       console.error("Error getting user:", error);
@@ -93,13 +101,15 @@ export class UserStorage {
 
       const users = [];
       for (const item of response.Contents ?? []) {
-        const key = item.Key;
-        if (key && key.endsWith(".json")) {
-          const walletAddress = key.replace("users/", "").replace(".json", "");
-          const user = await this.getUser(walletAddress);
-          if (user) {
-            users.push(user);
-          }
+        if (!item.Key?.endsWith(".json")) continue;
+
+        const walletAddress = item.Key.replace("users/", "").replace(
+          ".json",
+          "",
+        );
+        const user = await this.getUser(walletAddress);
+        if (user) {
+          users.push(user);
         }
       }
       return users;

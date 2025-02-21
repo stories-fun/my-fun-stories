@@ -1,7 +1,9 @@
 "use server";
 import { api } from "../trpc/server";
+import type { Story } from "./schema/story";
+
 type StoryResult = {
-  stories: any[];
+  stories: Story[];
   nextCursor?: string;
   error?: string;
   debugWalletAddress?: string;

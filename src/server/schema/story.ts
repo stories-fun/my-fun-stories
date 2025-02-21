@@ -11,3 +11,5 @@ export const StorySchema = z.object({
   likes: z.array(z.string()).default([]),
   comments: z.array(commentSchema).default([]),
 });
+
+export type Story = z.infer<typeof StorySchema>;

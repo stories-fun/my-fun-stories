@@ -13,23 +13,31 @@ interface BuyTokensDialogProps {
   onClose: () => void;
 }
 
+interface ErrorResponse {
+  error: string;
+}
+
+interface TransactionResponse {
+  transaction: string;
+}
+
 export const BuyTokensDialog = ({ open, onClose }: BuyTokensDialogProps) => {
   const { publicKey, signTransaction } = useWallet();
-  const { pricePerToken, tokenMint, loadPresaleData, error } = usePresale();
+  const { pricePerToken, tokenMint, loadPresaleData } = usePresale();
   const { connection } = useConnection();
-  const [solAmount, setSolAmount] = useState("");
+  const [solAmount, setSolAmount] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [errorState, setError] = useState<string | null>(null);
 
-  // Retry loading presale data if token mint is not available
   useEffect(() => {
     if (open && !tokenMint) {
-      loadPresaleData();
+      void loadPresaleData();
     }
   }, [open, tokenMint, loadPresaleData]);
 
   const tokensToReceive = useMemo(() => {
     if (!solAmount || !pricePerToken) return 0;
-    const lamports = Number(solAmount) * 1e9; // Convert SOL to lamports
+    const lamports = Number(solAmount) * 1e9;
     return lamports / Number(pricePerToken);
   }, [solAmount, pricePerToken]);
 
@@ -64,7 +72,6 @@ export const BuyTokensDialog = ({ open, onClose }: BuyTokensDialogProps) => {
 
     setLoading(true);
     try {
-      // Check if the wallet has enough SOL
       const balance = await connection.getBalance(publicKey);
       const requiredAmount = Number(solAmount) * 1e9;
       if (balance < requiredAmount) {
@@ -73,7 +80,6 @@ export const BuyTokensDialog = ({ open, onClose }: BuyTokensDialogProps) => {
         );
       }
 
-      // Verify mint authority
       const mintInfo = await getMint(connection, new PublicKey(tokenMint));
       console.log("Mint authority:", mintInfo.mintAuthority?.toString());
 
@@ -81,36 +87,39 @@ export const BuyTokensDialog = ({ open, onClose }: BuyTokensDialogProps) => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          solAmount: Number(solAmount) * 1e9, // Convert SOL to lamports
+          solAmount: Number(solAmount) * 1e9,
           buyer: publicKey.toString(),
         }),
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = (await response.json()) as ErrorResponse;
         throw new Error(errorData.error || "Failed to create transaction");
       }
 
-      const { transaction } = await response.json();
+      const { transaction } = (await response.json()) as TransactionResponse;
       const tx = Transaction.from(Buffer.from(transaction, "base64"));
       const signedTx = await signTransaction(tx);
       const rawTransaction = signedTx.serialize();
 
-      // Send transaction
       const txid = await connection.sendRawTransaction(rawTransaction);
       await connection.confirmTransaction(txid);
       onClose();
-    } catch (error) {
-      if (error && typeof (error as any).getLogs === "function") {
-        const logs = await (error as any).getLogs();
+    } catch (err) {
+      if (
+        err &&
+        typeof err === "object" &&
+        "getLogs" in err &&
+        typeof err.getLogs === "function"
+      ) {
+        const logs = await (err as { getLogs(): Promise<string[]> }).getLogs();
         console.error("Transaction simulation error logs:", logs);
       }
-      console.error("Buy error:", error);
-      alert(
-        error instanceof Error
-          ? error.message
-          : "Failed to process transaction",
-      );
+      console.error("Buy error:", err);
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to process transaction";
+      setError(errorMessage);
+      alert(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -123,8 +132,8 @@ export const BuyTokensDialog = ({ open, onClose }: BuyTokensDialogProps) => {
           <DialogTitle>Buy Tokens</DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
-          {error ? (
-            <div className="text-sm text-red-600">{error}</div>
+          {errorState ? (
+            <div className="text-sm text-red-600">{errorState}</div>
           ) : (
             <>
               <div>

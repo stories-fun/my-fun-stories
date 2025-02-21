@@ -1,6 +1,19 @@
 import { z } from "zod";
 
-interface IComment {
+// Define the input type that matches the raw data shape
+export interface CommentInput {
+  id: string;
+  content: string;
+  walletAddress: string;
+  username: string;
+  createdAt: string | Date;
+  upvotes?: string[];
+  downvotes?: string[];
+  replies?: CommentInput[];
+}
+
+// Define the output type with proper Date
+export interface Comment {
   id: string;
   content: string;
   walletAddress: string;
@@ -8,35 +21,87 @@ interface IComment {
   createdAt: Date;
   upvotes: string[];
   downvotes: string[];
-  replies: IComment[];
+  replies: Comment[];
 }
 
-const CommentBase = z.object({
+const baseSchema = z.object({
   id: z.string(),
-  content: z.string().min(1),
+  content: z.string(),
   walletAddress: z.string(),
   username: z.string(),
-  // createdAt: z.date(),
-  createdAt: z.union([z.string(), z.date()]).transform((val) => new Date(val)),
-  upvotes: z.array(z.string()).default([]),
-  downvotes: z.array(z.string()).default([]),
+  createdAt: z.union([z.string(), z.date()]),
+  upvotes: z
+    .array(z.string())
+    .optional()
+    .transform((arr) => arr ?? []),
+  downvotes: z
+    .array(z.string())
+    .optional()
+    .transform((arr) => arr ?? []),
 });
 
-// @ts-ignore-next-line
-const CommentSchema: z.ZodType<IComment> = CommentBase.extend({
-  replies: z.array(z.lazy(() => CommentSchema)).default([]),
-});
+// Create the recursive schema with proper input/output types
+export const commentSchema: z.ZodType<Comment, z.ZodTypeDef, CommentInput> =
+  z.lazy(() =>
+    baseSchema
+      .extend({
+        replies: z
+          .array(commentSchema)
+          .optional()
+          .transform((arr) => arr ?? []),
+      })
+      .transform((data) => ({
+        ...data,
+        createdAt:
+          data.createdAt instanceof Date
+            ? data.createdAt
+            : new Date(data.createdAt),
+        replies: (data.replies ?? []).map((reply) => ({
+          ...reply,
+          createdAt:
+            reply.createdAt instanceof Date
+              ? reply.createdAt
+              : new Date(reply.createdAt),
+        })),
+      })),
+  );
 
-export const commentSchema = CommentSchema;
+export interface CommentWithScore extends Comment {
+  score: number;
+}
 
-export type Comment = z.infer<typeof commentSchema>;
+export interface CommentWithScoreInput extends CommentInput {
+  score: number;
+}
 
-// @ts-ignore-next-line
-export const CommentWithScore = commentSchema.extend({
-  score: z.number(),
-});
-
-export type CommentWithScore = z.infer<typeof CommentWithScore>;
+export const CommentWithScoreSchema: z.ZodType<
+  CommentWithScore,
+  z.ZodTypeDef,
+  CommentWithScoreInput
+> = z.lazy(() =>
+  baseSchema
+    .extend({
+      replies: z
+        .array(CommentWithScoreSchema)
+        .optional()
+        .transform((arr) => arr ?? []),
+      score: z.number(),
+    })
+    .transform((data) => ({
+      ...data,
+      createdAt:
+        data.createdAt instanceof Date
+          ? data.createdAt
+          : new Date(data.createdAt),
+      replies: (data.replies ?? []).map((reply) => ({
+        ...reply,
+        createdAt:
+          reply.createdAt instanceof Date
+            ? reply.createdAt
+            : new Date(reply.createdAt),
+      })),
+    })),
+);
 
 export function calculateCommentScore(comment: Comment): number {
   return comment.upvotes.length - comment.downvotes.length;

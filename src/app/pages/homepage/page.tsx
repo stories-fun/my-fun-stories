@@ -1,5 +1,4 @@
 import React from "react";
-import RightSection from "./_components/RightSection";
 import StoriesCard from "./_components/StoriesCard";
 import RightSidebar from "~/app/_components/RightSidebar";
 

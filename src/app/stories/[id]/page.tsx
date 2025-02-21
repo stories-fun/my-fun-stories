@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import PostCard from "~/app/_components/PostCard";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import RightSidebar from "~/app/_components/RightSidebar";
 import NavBar from "~/app/_components/NavBar";
 import Comments from "~/app/_components/Comments";

@@ -1,6 +1,6 @@
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { UserStorage } from "../r2/user";
-import { UserSchema } from "../../schema/user";
+import { UserSchema, type User } from "../../schema/user";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
@@ -19,7 +19,7 @@ export const userRouter = createTRPCRouter({
         description: UserSchema.shape.description.optional(),
       }),
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input }): Promise<{ success: boolean; user: User }> => {
       const existingUser = await userStorage.getUser(input.walletAddress);
       if (existingUser) {
         throw new TRPCError({
@@ -28,7 +28,7 @@ export const userRouter = createTRPCRouter({
         });
       }
 
-      const newUser = {
+      const newUser: User = {
         ...input,
         createdAt: new Date(),
       };
@@ -43,7 +43,7 @@ export const userRouter = createTRPCRouter({
         walletAddress: UserSchema.shape.walletAddress,
       }),
     )
-    .query(async ({ input }) => {
+    .query(async ({ input }): Promise<User> => {
       const user = await userStorage.getUser(input.walletAddress);
       if (!user) {
         throw new TRPCError({
@@ -102,7 +102,7 @@ export const userRouter = createTRPCRouter({
       }
     }),
 
-  list: publicProcedure.query(async () => {
+  list: publicProcedure.query(async (): Promise<User[]> => {
     const users = await userStorage.listUsers();
     return users;
   }),

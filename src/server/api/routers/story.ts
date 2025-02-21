@@ -1,10 +1,25 @@
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { StoryStorage } from "../r2/story";
 import { StorySchema } from "../../schema/story";
+import type { Story } from "../../schema/story";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { UserStorage } from "../r2/user";
-import { Comment } from "~/server/schema/comments";
+import type { Comment } from "~/server/schema/comments";
+import type { User } from "~/server/schema/user";
+
+interface S3Object {
+  Key: string;
+}
+
+interface ListObjectsResponse {
+  objects: S3Object[];
+  nextToken?: string;
+}
+
+interface StoryWithKey extends Story {
+  key: string;
+}
 
 const storyStorage = new StoryStorage();
 const userStorage = new UserStorage();
@@ -20,8 +35,6 @@ export const storyRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ input }) => {
-      const username = input.writerName;
-
       const key = `${Date.now()}_${input.walletAddress.slice(2, 8)}`;
       const storyData = {
         id: key,
@@ -50,16 +63,16 @@ export const storyRouter = createTRPCRouter({
     .query(async ({ input }) => {
       try {
         console.log("List stories input:", input);
-        const { objects, nextToken } = await storyStorage.listObjects(
+        const { objects, nextToken } = (await storyStorage.listObjects(
           "stories/",
           input.cursor,
-        );
+        )) as ListObjectsResponse;
 
         console.log("Found objects:", objects.length);
 
         const validStories = (
           await Promise.all(
-            objects.map(async (obj: any) => {
+            objects.map(async (obj: S3Object) => {
               try {
                 if (!obj.Key) {
                   console.log("Object has no Key:", obj);
@@ -81,19 +94,19 @@ export const storyRouter = createTRPCRouter({
                 return {
                   key,
                   ...story,
-                };
+                } as StoryWithKey;
               } catch (error) {
                 console.error("Error processing story:", error);
                 return null;
               }
             }),
           )
-        ).filter(Boolean);
+        ).filter((story): story is StoryWithKey => story !== null);
 
         console.log("Valid stories found:", validStories.length);
 
         const filteredStories = validStories
-          .filter((s: any) =>
+          .filter((s) =>
             input.walletAddress
               ? s.walletAddress.toLowerCase() ===
                 input.walletAddress.toLowerCase()
@@ -104,13 +117,13 @@ export const storyRouter = createTRPCRouter({
         console.log("Filtered stories:", filteredStories.length);
 
         const uniqueWallets = Array.from(
-          new Set(filteredStories.map((s: any) => s.walletAddress)),
+          new Set(filteredStories.map((s) => s.walletAddress)),
         );
-        const users: { [wallet: string]: any } = {};
+        const users: Record<string, User | null> = {};
         await Promise.all(
           uniqueWallets.map(async (wallet) => {
             const user = await userStorage.getUser(wallet);
-            users[wallet] = user; // may be null if user doesn't exist
+            users[wallet] = user;
           }),
         );
 
@@ -141,6 +154,13 @@ export const storyRouter = createTRPCRouter({
       const user = await userStorage.getUser(input.walletAddress);
       if (!user)
         throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
+
+      if (!user.username) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "User must have a username to comment",
+        });
+      }
 
       const commentId = `${Date.now()}_${input.walletAddress.slice(2, 8)}`;
       const newComment = {

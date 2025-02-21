@@ -1,13 +1,7 @@
 "use client";
 
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  ReactNode,
-} from "react";
-import { PublicKey } from "@solana/web3.js";
+import { createContext, useContext, useState } from "react";
+import type { ReactNode } from "react";
 
 interface PresaleContextType {
   pricePerToken: number;
@@ -16,6 +10,13 @@ interface PresaleContextType {
   tokenMint: string;
   error: string | null;
   loadPresaleData: () => Promise<void>;
+}
+
+interface PresaleData {
+  pricePerToken: string;
+  tokensSold: string;
+  hardcap: string;
+  tokenMint: string;
 }
 
 const PresaleContext = createContext<PresaleContextType>(
@@ -56,7 +57,7 @@ export const PresaleProvider = ({ children }: { children: ReactNode }) => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
+      const data = (await response.json()) as PresaleData;
       console.log("Presale data received:", data);
       setPricePerToken(Number(data.pricePerToken));
       setTokensSold(Number(data.tokensSold));

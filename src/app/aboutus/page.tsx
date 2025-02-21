@@ -7,22 +7,23 @@ const AboutUs = () => {
   return (
     <div>
       <NavBar />
-      <div>
-        <img
-          src={"/images/aboutus.png"}
+      <div className="relative h-[300px] w-full md:h-[400px]">
+        <Image
+          src="/images/aboutus.png"
           alt="cover image"
-          className="h-full w-full"
+          fill
+          className="object-cover"
+          priority
         />
-        {/* <Image src={"/images/aboutus.png"} className="h-full w-full" alt="" /> */}
       </div>
       <div className="container mx-auto my-6 w-full p-4 md:w-[50%]">
         <div className="text-align space-y-2">
           <p>
-            Traditional social media is broken. It’s all about followers, fake
-            personas, and superficial connections.
+            Traditional social media is broken. It&apos;s all about followers,
+            fake personas, and superficial connections.
           </p>{" "}
           <p>
-            At <strong>stories.fun</strong>, we’re flipping the script.
+            At <strong>stories.fun</strong>, we&apos;re flipping the script.
           </p>{" "}
           <p>
             {" "}
@@ -37,26 +38,26 @@ const AboutUs = () => {
           </p>
           <p>
             {" "}
-            Whether you’re dating, networking, or just sharing your life, your{" "}
-            <strong>stories.fun</strong> link becomes the ultimate way to
-            introduce yourself. It’s like a digital handshake, but way more
+            Whether you&apos;re dating, networking, or just sharing your life,
+            your <strong>stories.fun</strong> link becomes the ultimate way to
+            introduce yourself. It&apos;s like a digital handshake, but way more
             personal.
           </p>
-          <p> We’re bringing the world’s stories on-chain.</p>
+          <p> We&apos;re bringing the world&apos;s stories on-chain.</p>
           <p>
             {" "}
             Hold tokens of your favorite stories for future airdrops, exclusive
             perks, and premium features (coming soon).
-            <strong>You’re EARLY</strong> .
+            <strong>You&apos;re EARLY</strong> .
           </p>
           <p>
             {" "}
             Remember: Keep your story <strong>genuine and honest</strong>. This
-            is the place to show a side of yourself you can’t share anywhere
-            else.
+            is the place to show a side of yourself you can&apos;t share
+            anywhere else.
           </p>
           <p> More announcements coming soon.</p>
-          <p> Follow us for updates. Let’s make storytelling fun again.</p>
+          <p> Follow us for updates. Let&apos;s make storytelling fun again.</p>
         </div>
       </div>
 
