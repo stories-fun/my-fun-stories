@@ -6,6 +6,7 @@ import ProgressBar from "~/app/_components/ProgressBar";
 import { useStoriesStore } from "~/store/useStoriesStore";
 import { useRouter } from "next/navigation";
 import Loading from "./Loading";
+import { ImageSlider } from "./ImageSlider";
 
 const LiveIndicator = () => (
   <div className="flex items-center space-x-1">
@@ -13,6 +14,14 @@ const LiveIndicator = () => (
     <span className="text-xs">Live Now</span>
   </div>
 );
+
+const truncateContent = (content: string, wordLimit: number) => {
+  const words = content.split(" ");
+  if (words.length > wordLimit) {
+    return words.slice(0, wordLimit).join(" ") + "...";
+  }
+  return content;
+};
 
 const ProfileImage = ({ src, alt }: { src: string; alt: string }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -45,24 +54,7 @@ const VerificationBadge = () => (
   </div>
 );
 
-const PaginationDots = ({
-  total,
-  current,
-}: {
-  total: number;
-  current: number;
-}) => (
-  <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-1.5">
-    {Array.from({ length: total }).map((_, i) => (
-      <div
-        key={i}
-        className={`h-1.5 w-1.5 rounded-full ${
-          i === current ? "bg-blue-500" : "bg-gray-300"
-        }`}
-      />
-    ))}
-  </div>
-);
+
 
 const StoryHeader = ({ username }: { username: string }) => (
   <div className="mb-3 flex items-center space-x-2">
@@ -86,26 +78,17 @@ const StoriesCard = () => {
   const router = useRouter();
   const { stories, error, isLoading, getStories } = useStoriesStore();
   const [mounted, setMounted] = useState(false);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     setMounted(true);
     void getStories();
-  }, [getStories]);
+  }, [getStories]); 
 
   const handleCardClick = (id: string) => {
     router.push(`/stories/${id}`);
   };
 
-  const handlePrevImage = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setCurrentImageIndex((prev) => (prev === 0 ? 2 : prev - 1));
-  };
 
-  const handleNextImage = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setCurrentImageIndex((prev) => (prev === 2 ? 0 : prev + 1));
-  };
 
   if (!mounted) return null;
   if (isLoading) return <Loading />;
@@ -123,7 +106,7 @@ const StoriesCard = () => {
     );
 
   return (
-    <div className="mx-auto w-full max-w-4xl">
+    <div className="mx-auto w-full">
       {stories.map((story) => (
         <article
           key={story.id}
@@ -131,50 +114,11 @@ const StoriesCard = () => {
         >
           <StoryHeader username={story.username} />
 
-          <div className="flex flex-col gap-4 lg:flex-row">
-            <div className="w-full lg:w-3/5">
+          <div className="flex flex-col space-x-6 lg:flex-row">
+            <div className="w-full lg:w-1/3">
               {/* Image Section */}
-              <div
-                className="relative mb-3 aspect-video h-[55%] w-[80%] cursor-pointer rounded-2xl bg-gray-100"
-                onClick={() => handleCardClick(story.id)}
-              >
-                <button
-                  className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2"
-                  onClick={handlePrevImage}
-                >
-                  <svg
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 19l-7-7 7-7"
-                    />
-                  </svg>
-                </button>
-                <button
-                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2"
-                  onClick={handleNextImage}
-                >
-                  <svg
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </button>
-                <PaginationDots total={3} current={currentImageIndex} />
+              <div className="relative aspect-video h-[55%] w-full cursor-pointer rounded-lg bg-gray-100">
+                <ImageSlider />
               </div>
 
               <PostActions storyKey={story.id} />
@@ -185,14 +129,16 @@ const StoriesCard = () => {
             </div>
 
             <div
-              className="w-full cursor-pointer lg:w-2/5"
+              className="w-full cursor-pointer lg:w-2/3"
               onClick={() => handleCardClick(story.id)}
             >
               <div className="space-y-2">
                 <h2 className="font-lg text-lg font-[IBM_Plex_Sans] leading-tight">
                   {story.title}
                 </h2>
-                <p className="text-sm text-gray-600">{story.content}</p>
+                <p className="text-sm text-gray-600">
+                  {truncateContent(story.content, 80)}
+                </p>
               </div>
             </div>
           </div>

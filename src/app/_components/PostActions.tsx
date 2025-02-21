@@ -86,7 +86,10 @@ const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
         >
           <Image src={"/images/Flower.png"} width={20} height={20} alt="" />
 
-          <span>{count} Likes</span>
+          <span>
+            {count}
+            Likes
+          </span>
         </button>
         <div
           className="flex cursor-pointer items-center space-x-2 rounded-full text-sm font-bold"
