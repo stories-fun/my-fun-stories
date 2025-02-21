@@ -6,7 +6,6 @@ import ProgressBar from "~/app/_components/ProgressBar";
 import { useStoriesStore } from "~/store/useStoriesStore";
 import { useRouter } from "next/navigation";
 import Loading from "./Loading";
-import { ImageSlider } from "./ImageSlider";
 
 const LiveIndicator = () => (
   <div className="flex items-center space-x-1">
@@ -14,14 +13,6 @@ const LiveIndicator = () => (
     <span className="text-xs">Live Now</span>
   </div>
 );
-
-const truncateContent = (content: string, wordLimit: number) => {
-  const words = content.split(" ");
-  if (words.length > wordLimit) {
-    return words.slice(0, wordLimit).join(" ") + "...";
-  }
-  return content;
-};
 
 const ProfileImage = ({ src, alt }: { src: string; alt: string }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -95,11 +86,12 @@ const StoriesCard = () => {
   const router = useRouter();
   const { stories, error, isLoading, getStories } = useStoriesStore();
   const [mounted, setMounted] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     setMounted(true);
     void getStories();
-  }, [getStories]); 
+  }, [getStories]);
 
   const handleCardClick = (id: string) => {
     router.push(`/stories/${id}`);
@@ -131,7 +123,7 @@ const StoriesCard = () => {
     );
 
   return (
-    <div className="mx-auto w-full">
+    <div className="mx-auto w-full max-w-4xl">
       {stories.map((story) => (
         <article
           key={story.id}
@@ -139,10 +131,9 @@ const StoriesCard = () => {
         >
           <StoryHeader username={story.username} />
 
-          <div className="flex flex-col space-x-6 lg:flex-row">
-            <div className="w-full lg:w-1/3">
+          <div className="flex flex-col gap-4 lg:flex-row">
+            <div className="w-full lg:w-3/5">
               {/* Image Section */}
-<<<<<<< Updated upstream
               <div
                 className="relative mb-3 aspect-video h-[55%] w-[80%] cursor-pointer rounded-2xl bg-gray-100"
                 onClick={() => handleCardClick(story.id)}
@@ -184,10 +175,6 @@ const StoriesCard = () => {
                   </svg>
                 </button>
                 <PaginationDots total={3} current={currentImageIndex} />
-=======
-              <div className="relative aspect-video h-[55%] w-full cursor-pointer rounded-lg bg-gray-100">
-                <ImageSlider />
->>>>>>> Stashed changes
               </div>
 
               <PostActions storyKey={story.id} />
@@ -198,16 +185,14 @@ const StoriesCard = () => {
             </div>
 
             <div
-              className="w-full cursor-pointer lg:w-2/3"
+              className="w-full cursor-pointer lg:w-2/5"
               onClick={() => handleCardClick(story.id)}
             >
               <div className="space-y-2">
                 <h2 className="font-lg text-lg font-[IBM_Plex_Sans] leading-tight">
                   {story.title}
                 </h2>
-                <p className="text-sm text-gray-600">
-                  {truncateContent(story.content, 80)}
-                </p>
+                <p className="text-sm text-gray-600">{story.content}</p>
               </div>
             </div>
           </div>
