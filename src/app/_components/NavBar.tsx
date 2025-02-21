@@ -64,6 +64,7 @@ const SearchBar = ({
   </div>
 );
 
+
 const MobileMenuItem = ({ icon: Icon, label, onClick, href }: MobileMenuItemProps) => {
   const content = (
     <div

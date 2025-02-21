@@ -37,7 +37,7 @@ const WalletConnectHandler = () => {
       error?.data?.code === "NOT_FOUND" &&
       wallet.connected
     ) {
-      setHasCheckedUser(true);  
+      setHasCheckedUser(true);
       setShowUserDialog(true);
     }
   }, [isSuccess, isError, error, wallet.connected]);
