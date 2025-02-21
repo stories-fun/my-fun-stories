@@ -10,7 +10,7 @@ const AboutUs = () => {
 
       {/* Hero Image Section */}
       <div className="relative h-[200px] w-full sm:h-[250px] md:h-[300px] lg:h-[300px]">
-        <div className="bg-[#007AFF flex h-[70%] w-full items-center justify-center font-bold text-white sm:text-3xl md:text-5xl lg:text-7xl">
+        <div className="bg-[#007AFF] flex h-[70%] w-full items-center justify-center font-bold text-white sm:text-3xl md:text-5xl lg:text-7xl">
           <p>Believe In Stories</p>
           <p className="text-black">.</p>
         </div>
