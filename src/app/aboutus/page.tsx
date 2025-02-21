@@ -9,27 +9,23 @@ const AboutUs = () => {
       <NavBar />
 
       {/* Hero Image Section */}
-      <div className="relative h-[200px] w-full sm:h-[250px] md:h-[300px] lg:h-[400px]">
-        <Image
-          src="/images/aboutus.png"
-          alt="cover image"
-          fill
-          sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 100vw"
-          className="object-cover object-center"
-          priority
-        />
+      <div className="relative h-[200px] w-full sm:h-[250px] md:h-[300px] lg:h-[300px]">
+        <div className="bg-[#007AFF flex h-[70%] w-full items-center justify-center font-bold text-white sm:text-3xl md:text-5xl lg:text-7xl">
+          <p>Believe In Stories</p>
+          <p className="text-black">.</p>
+        </div>
       </div>
 
       {/* Content Section */}
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-prose">
           <div className="space-y-4 text-base leading-relaxed text-gray-700 sm:text-lg">
-            <p>
+            <p className="text-lg font-medium sm:text-xl">
               Traditional social media is broken. It&apos;s all about followers,
               fake personas, and superficial connections.
             </p>
 
-            <p>
+            <p className="text-lg font-medium sm:text-xl">
               At <strong className="text-gray-900">stories.fun</strong>,
               we&apos;re flipping the script.
             </p>
