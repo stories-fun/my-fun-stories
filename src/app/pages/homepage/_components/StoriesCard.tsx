@@ -6,12 +6,13 @@ import ProgressBar from "~/app/_components/ProgressBar";
 import { useStoriesStore } from "~/store/useStoriesStore";
 import { useRouter } from "next/navigation";
 import Loading from "./Loading";
-import { ImageSlider } from "./ImageSlider";
+// import { ImageSlider } from "./ImageSlider";
+import { StoryVideo } from "./StoryVideo";
 
 const LiveIndicator = () => (
   <div className="flex items-center space-x-1">
     <div className="h-1.5 w-1.5 rounded-full bg-red-500"></div>
-    <span className="text-xs">Live Now</span>
+    <span className="text-xs">Going Live on date</span>
   </div>
 );
 
@@ -54,8 +55,6 @@ const VerificationBadge = () => (
   </div>
 );
 
-
-
 const StoryHeader = ({ username }: { username: string }) => (
   <div className="mb-3 flex items-center space-x-2">
     <ProfileImage src="/images/profile.png" alt={`${username}'s profile`} />
@@ -82,13 +81,11 @@ const StoriesCard = () => {
   useEffect(() => {
     setMounted(true);
     void getStories();
-  }, [getStories]); 
+  }, [getStories]);
 
   const handleCardClick = (id: string) => {
     router.push(`/stories/${id}`);
   };
-
-
 
   if (!mounted) return null;
   if (isLoading) return <Loading />;
@@ -118,7 +115,8 @@ const StoriesCard = () => {
             <div className="w-full lg:w-1/3">
               {/* Image Section */}
               <div className="relative aspect-video h-[55%] w-full cursor-pointer rounded-lg bg-gray-100">
-                <ImageSlider />
+                {/* <ImageSlider /> */}
+                <StoryVideo src={"/video.mp4"} />
               </div>
 
               <PostActions storyKey={story.id} />

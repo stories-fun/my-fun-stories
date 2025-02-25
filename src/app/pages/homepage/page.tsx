@@ -1,16 +1,16 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import StoriesCard from "./_components/StoriesCard";
-import RightSidebar from "~/app/_components/RightSidebar";
 import PreLoginSide from "~/app/_components/PreLoginSide";
 import { useWallet } from "@jup-ag/wallet-adapter";
 import { useStoriesStore } from "~/store/useStoriesStore";
 import HasnotInvestedSide from "~/app/_components/HasNotInvestedSide";
+import { api } from "~/trpc/react";
 
 const HomePage = () => {
   const wallet = useWallet();
   const walletAddress = wallet.publicKey?.toString();
-  const { getStories, stories, isLoading, error } = useStoriesStore();
+  const { getStories, isLoading } = useStoriesStore();
 
   useEffect(() => {
     if (wallet.connected && walletAddress) {
@@ -18,13 +18,26 @@ const HomePage = () => {
     }
   }, [wallet.connected, walletAddress, getStories]);
 
+  const {
+    data: user,
+  } = api.user.get.useQuery(
+    {
+      walletAddress: walletAddress!, // '!' assets walletAddress is defined
+    },
+    {
+      enabled: !!wallet.connected && !!walletAddress, //only run the query when wallet is connected and  address exists
+    },
+  );
+
   let rightSidebarContent;
   if (isLoading) {
     rightSidebarContent = <p className="text-gray-500">Loading...</p>;
   } else if (!wallet.connected) {
     rightSidebarContent = <PreLoginSide />;
   } else {
-    rightSidebarContent = <HasnotInvestedSide />;
+    rightSidebarContent = (
+      <HasnotInvestedSide username={user?.username ?? "Unknown User"} />
+    );
   }
 
   return (

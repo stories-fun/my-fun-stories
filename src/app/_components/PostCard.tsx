@@ -3,9 +3,10 @@ import React, { useEffect } from "react";
 import PostActions from "./PostActions";
 import "draft-js/dist/Draft.css";
 
-import { ImageSliderForStories } from "./ImageSliderForStories";
+// import { ImageSliderForStories } from "./ImageSliderForStories";
 import "draft-js/dist/Draft.css";
 import { useStoriesStore } from "~/store/useStoriesStore";
+import { StoryVideo } from "../pages/homepage/_components/StoryVideo";
 
 const PostCard = ({ storyId }: { storyId: string }) => {
   const { getById, stories, isLoading, error } = useStoriesStore();
@@ -27,9 +28,12 @@ const PostCard = ({ storyId }: { storyId: string }) => {
 
   return (
     <div className="container mx-auto w-full rounded-lg">
-      <h2 className="font-[IBM_Plex_Sans] font-bold">{story.title}</h2>
+      <h1 className="text-2xl font-[IBM_Plex_Sans] font-bold md:text-3xl lg:text-4xl">
+        {story.title}
+      </h1>
       <div className="bg-[#F6F7F8]">
-        <ImageSliderForStories />
+        {/* <ImageSliderForStories /> */}
+        <StoryVideo src={"/video.mp4"} />
       </div>
       <div className="mt-4">
         <PostActions storyKey={story.id} walletAddress={story.walletAddres} />

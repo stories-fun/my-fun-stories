@@ -1,7 +1,13 @@
 import React from "react";
 import Image from "next/image";
 
-const HasnotInvestedSide = () => {
+interface HasnotInvestedSideProps {
+  username?: string | null;
+}
+
+const HasnotInvestedSide: React.FC<HasnotInvestedSideProps> = ({
+  username,
+}) => {
   return (
     <div className="rounded-lg bg-[#F6F7F8] shadow-md">
       <Image
@@ -33,7 +39,7 @@ const HasnotInvestedSide = () => {
                 height={25}
                 alt=""
               />
-              <div>Name</div>
+              <div>{username}</div>
               <Image
                 src={"/images/verification.png"}
                 width={25}
