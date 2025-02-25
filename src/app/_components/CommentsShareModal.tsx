@@ -28,7 +28,7 @@ const ShareModalContent = ({
   useEffect(() => {
     // Generate URLs only on client side
     const baseUrl = window.location.origin;
-    const fullCommentUrl = `${baseUrl}/post/${postId}/comment/${commentId}`;
+    const fullCommentUrl = `${baseUrl}/stories/${postId}/comment/${commentId}`;
 
     setCommentUrl(fullCommentUrl);
     setTwitterShareUrl(
