@@ -6,13 +6,43 @@ import ProgressBar from "~/app/_components/ProgressBar";
 import { useStoriesStore } from "~/store/useStoriesStore";
 import { useRouter } from "next/navigation";
 import Loading from "./Loading";
-// import { ImageSlider } from "./ImageSlider";
 import { StoryVideo } from "./StoryVideo";
+import { ImageSlider } from "./ImageSlider";
 
-const LiveIndicator = () => (
+const LiveIndicator = ({ index }: { index: number }) => (
   <div className="flex items-center space-x-1">
-    <div className="h-1.5 w-1.5 rounded-full bg-red-500"></div>
-    <span className="text-xs">Going Live on date</span>
+    <div
+      className={`h-1.5 w-1.5 rounded-full ${index === 1 ? "bg-green-500" : "bg-red-500"}`}
+    ></div>
+    <span className="text-xs">
+      {index === 1 ? "Going Live on 5th March" : "Going Live on date"}
+    </span>
+  </div>
+);
+
+const StoryHeader = ({
+  username,
+  index,
+}: {
+  username: string;
+  index: number;
+}) => (
+  <div className="mb-3 flex items-center space-x-2">
+    <ProfileImage src="/images/profile.png" alt={`${username}'s profile`} />
+    <div className="flex flex-col">
+      <div className="flex items-center space-x-1">
+        <span className="text-sm font-medium">{username}</span>
+        <VerificationBadge />
+      </div>
+      <div className="flex items-center space-x-2">
+        {index !== 1 && (
+          <span className="rounded-full bg-purple-500 px-2 py-0.5 text-xs text-white">
+            Trending
+          </span>
+        )}
+        <LiveIndicator index={index} />
+      </div>
+    </div>
   </div>
 );
 
@@ -55,31 +85,19 @@ const VerificationBadge = () => (
   </div>
 );
 
-const StoryHeader = ({ username }: { username: string }) => (
-  <div className="mb-3 flex items-center space-x-2">
-    <ProfileImage src="/images/profile.png" alt={`${username}'s profile`} />
-    <div className="flex flex-col">
-      <div className="flex items-center space-x-1">
-        <span className="text-sm font-medium">{username}</span>
-        <VerificationBadge />
-      </div>
-      <div className="flex items-center space-x-2">
-        <span className="rounded-full bg-purple-500 px-2 py-0.5 text-xs text-white">
-          Trending
-        </span>
-        <LiveIndicator />
-      </div>
-    </div>
-  </div>
-);
-
 const StoriesCard = () => {
   const router = useRouter();
   const { stories, error, isLoading, getStories } = useStoriesStore();
-  const [mounted, setMounted] = useState(false);
+
+  // Hardcoded story for index 1
+  const hardcodedStory = {
+    title:
+      "Committed Visa Fraud. Successfully Had a Christ Awakening. Confessed to Immigration and then...",
+    content:
+      "I moved from Vietnam to the US. Fraudulently Acquired Citizenship with a fake marriage to a citizen. One Day, I had a Strange Christ Experience and Confessed my Crimes to the Authorities...This is what happened next...",
+  };
 
   useEffect(() => {
-    setMounted(true);
     void getStories();
   }, [getStories]);
 
@@ -87,7 +105,6 @@ const StoriesCard = () => {
     router.push(`/stories/${id}`);
   };
 
-  if (!mounted) return null;
   if (isLoading) return <Loading />;
   if (error)
     return (
@@ -107,42 +124,53 @@ const StoriesCard = () => {
       {stories.map((story, index) => (
         <article
           key={story.id}
-          className="relative overflow-hidden rounded-lg bg-white p-3"
+          className={`relative overflow-hidden rounded-lg bg-white p-3 ${
+            index >= 2 ? "opacity-50" : ""
+          }`}
         >
-
-          <StoryHeader username={story.username} />
+          <StoryHeader username={story.username} index={index} />
 
           <div className="flex flex-col space-x-6 lg:flex-row">
             <div className="w-full lg:w-1/3">
               {/* Image Section */}
               <div className="relative aspect-video h-[55%] w-full cursor-pointer rounded-lg bg-gray-100">
-                {/* <ImageSlider /> */}
-                <StoryVideo src={"/video.mp4"} />
-                </div>
-                <PostActions storyKey={story.id} />
-
-                <div>
-                  <ProgressBar />
-                </div>
+                {index === 1 ? (
+                  <Image
+                    src="https://firebasestorage.googleapis.com/v0/b/himgagic.appspot.com/o/E61D02C0-AE00-48B5-958D-006EC41B570A.webp?alt=media&token=d2401a28-7505-4723-9b42-aa942a5fd2b9"
+                    alt="Story image"
+                    width={400}
+                    height={300}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <ImageSlider />
+                )}
               </div>
+              <PostActions storyKey={story.id} />
+              <div>
+                <ProgressBar />
+              </div>
+            </div>
 
-              <div
-                className="w-full cursor-pointer lg:w-2/3"
-                onClick={() => handleCardClick(story.id)}
-              >
-                <div className="space-y-2">
-                  <h2 className="font-lg text-lg font-[IBM_Plex_Sans] leading-tight">
-                    {story.title}
-                  </h2>
-                  <p className="text-sm text-gray-600">
-                    {truncateContent(story.content, 80)}
-                  </p>
-                </div>
+            <div
+              className="w-full cursor-pointer lg:w-2/3"
+              onClick={() => handleCardClick(story.id)}
+            >
+              <div className="space-y-2">
+                <h2 className="font-lg text-lg font-[IBM_Plex_Sans] leading-tight">
+                  {index === 1 ? hardcodedStory.title : story.title}
+                </h2>
+                <p className="text-sm text-gray-600">
+                  {index === 1
+                    ? truncateContent(hardcodedStory.content, 80)
+                    : truncateContent(story.content, 80)}
+                </p>
               </div>
             </div>
           </div>
+
           {index >= 2 && (
-            <div className="absolute inset-0 flex items-center justify-center">
+            <div className="absolute inset-0 flex items-center justify-center bg-white/50">
               <span className="z-10 text-xl font-semibold text-black">
                 Coming Soon
               </span>

@@ -9,6 +9,9 @@ const config = {
   eslint: {
     ignoreDuringBuilds: false,
   },
+  images: {
+    domains: ["firebasestorage.googleapis.com"],
+  },
 };
 
 export default config;
