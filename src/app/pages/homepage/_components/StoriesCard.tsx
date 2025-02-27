@@ -133,7 +133,9 @@ const StoriesCard = () => {
             <div className="w-full lg:w-1/3">
               {/* Image Section */}
               <div className="relative aspect-video h-[55%] w-full cursor-pointer rounded-lg bg-gray-100">
-                {index === 1 ? (
+                {index === 0 ? (
+                  <StoryVideo src="https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/adhi_sample_video.mp4" />
+                ) : index === 1 ? (
                   <Image
                     src="https://firebasestorage.googleapis.com/v0/b/himgagic.appspot.com/o/E61D02C0-AE00-48B5-958D-006EC41B570A.webp?alt=media&token=d2401a28-7505-4723-9b42-aa942a5fd2b9"
                     alt="Story image"
