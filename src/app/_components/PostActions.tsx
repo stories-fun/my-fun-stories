@@ -78,7 +78,7 @@ const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
   };
 
   return (
-    <div className="relative mt-4 pb-4">
+    <div className="relative mt-8 pb-4">
       <div className="flex items-center space-x-6">
         <button
           className="flex cursor-pointer items-center space-x-2 rounded-full text-sm font-bold"
@@ -86,10 +86,7 @@ const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
         >
           <Image src={"/images/Flower.png"} width={20} height={20} alt="" />
 
-          <span>
-            {count}
-            Likes
-          </span>
+          <span>{count}</span>
         </button>
         <div
           className="flex cursor-pointer items-center space-x-2 rounded-full text-sm font-bold"

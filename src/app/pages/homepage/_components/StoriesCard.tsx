@@ -6,12 +6,13 @@ import ProgressBar from "~/app/_components/ProgressBar";
 import { useStoriesStore } from "~/store/useStoriesStore";
 import { useRouter } from "next/navigation";
 import Loading from "./Loading";
-import { ImageSlider } from "./ImageSlider";
+// import { ImageSlider } from "./ImageSlider";
+import { StoryVideo } from "./StoryVideo";
 
 const LiveIndicator = () => (
   <div className="flex items-center space-x-1">
     <div className="h-1.5 w-1.5 rounded-full bg-red-500"></div>
-    <span className="text-xs">Live Now</span>
+    <span className="text-xs">Going Live on date</span>
   </div>
 );
 
@@ -108,15 +109,16 @@ const StoriesCard = () => {
           key={story.id}
           className="relative overflow-hidden rounded-lg bg-white p-3"
         >
-          <div className={index >= 2 ? "pointer-events-none blur-sm" : ""}>
-            <StoryHeader username={story.username} />
-            <div className="flex flex-col space-x-6 lg:flex-row">
-              <div className="w-full lg:w-1/3">
-                {/* Image Section */}
-                <div className="relative aspect-video h-[55%] w-full cursor-pointer rounded-lg bg-gray-100">
-                  <ImageSlider />
-                </div>
 
+          <StoryHeader username={story.username} />
+
+          <div className="flex flex-col space-x-6 lg:flex-row">
+            <div className="w-full lg:w-1/3">
+              {/* Image Section */}
+              <div className="relative aspect-video h-[55%] w-full cursor-pointer rounded-lg bg-gray-100">
+                {/* <ImageSlider /> */}
+                <StoryVideo src={"/video.mp4"} />
+                </div>
                 <PostActions storyKey={story.id} />
 
                 <div>
