@@ -1,8 +1,8 @@
 import React from "react";
-import { usePresale } from "~/context/PresaleContext";
+// import { usePresale } from "~/context/PresaleContext";
 
 const ProgressBar = () => {
-  const { tokensSold, hardcap } = usePresale();
+  // const {} = usePresale();
   // const progress = (tokensSold / hardcap) * 100;
   const progress = 50;
 
