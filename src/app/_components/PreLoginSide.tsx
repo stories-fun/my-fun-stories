@@ -13,11 +13,12 @@ const PreLoginSide = () => {
       />
       <div className="space-y-4 p-2">
         <h2 className="text-sm font-bold">Welcome to story.fun</h2>
-        <p className="text-xs font-light">
-          You&apos;ve entered the world of fascinating stories, and ow it&apos;s
-          time to make your mark. Invest in a story that moves you and unlock
-          exclusive access, perks, and a direct connection with the storyteller.
-          Every investment helps bring these authentic journeys to life.
+        <p className="text-xs font-bold">
+          Share your real story. Tokenize it. Build a community that invests in
+          you. Forget fake personas—here, authentic journeys turn into assets,
+          with fans co-owning the ride via presales and DEX trading. <br />
+          <br />
+          Leave your story on-chain—your legacy, forever etched in time.
         </p>
         <div className="flex items-center justify-center">
           <button className="rounded-full bg-[#0079D3] px-36 py-2">

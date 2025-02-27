@@ -89,12 +89,11 @@ const StoriesCard = () => {
   const router = useRouter();
   const { stories, error, isLoading, getStories } = useStoriesStore();
 
-  // Hardcoded story for index 1
   const hardcodedStory = {
     title:
-      "Committed Visa Fraud. Successfully Had a Christ Awakening. Confessed to Immigration and then...",
+      "Committed Visa Fraud. Had a Strange Awakening. Confessed to Immigration and then...",
     content:
-      "I moved from Vietnam to the US. Fraudulently Acquired Citizenship with a fake marriage to a citizen. One Day, I had a Strange Christ Experience and Confessed my Crimes to the Authorities...This is what happened next...",
+      "My name is Ninh and I grew up in a modest household in Vietnam. I moved from Vietnam to realize my American Dream -at any cost & I did. I fraudulently Acquired my AmericanCitizenship with a fake marriage. One Day, I had a Strange Christ Experience and Confessed my Crimes to the Authorities...This is what happened next...\nThis Is My Story…",
   };
 
   useEffect(() => {
