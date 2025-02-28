@@ -104,11 +104,12 @@ const StoriesCard = () => {
 
   return (
     <div className="mx-auto w-full">
-      {stories.map((story) => (
+      {stories.map((story, index) => (
         <article
           key={story.id}
-          className="overflow-hidden rounded-lg bg-white p-3"
+          className="relative overflow-hidden rounded-lg bg-white p-3"
         >
+
           <StoryHeader username={story.username} />
 
           <div className="flex flex-col space-x-6 lg:flex-row">
@@ -117,29 +118,36 @@ const StoriesCard = () => {
               <div className="relative aspect-video h-[55%] w-full cursor-pointer rounded-lg bg-gray-100">
                 {/* <ImageSlider /> */}
                 <StoryVideo src={"/video.mp4"} />
+                </div>
+                <PostActions storyKey={story.id} />
+
+                <div>
+                  <ProgressBar />
+                </div>
               </div>
 
-              <PostActions storyKey={story.id} />
-
-              <div>
-                <ProgressBar />
-              </div>
-            </div>
-
-            <div
-              className="w-full cursor-pointer lg:w-2/3"
-              onClick={() => handleCardClick(story.id)}
-            >
-              <div className="space-y-2">
-                <h2 className="font-lg text-lg font-[IBM_Plex_Sans] leading-tight">
-                  {story.title}
-                </h2>
-                <p className="text-sm text-gray-600">
-                  {truncateContent(story.content, 80)}
-                </p>
+              <div
+                className="w-full cursor-pointer lg:w-2/3"
+                onClick={() => handleCardClick(story.id)}
+              >
+                <div className="space-y-2">
+                  <h2 className="font-lg text-lg font-[IBM_Plex_Sans] leading-tight">
+                    {story.title}
+                  </h2>
+                  <p className="text-sm text-gray-600">
+                    {truncateContent(story.content, 80)}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
+          {index >= 2 && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="z-10 text-xl font-semibold text-black">
+                Coming Soon
+              </span>
+            </div>
+          )}
         </article>
       ))}
     </div>
