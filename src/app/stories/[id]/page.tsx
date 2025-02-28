@@ -6,12 +6,38 @@ import RightSidebar from "~/app/_components/RightSidebar";
 import NavBar from "~/app/_components/NavBar";
 import Comments from "~/app/_components/Comments";
 import { useStoriesStore } from "~/store/useStoriesStore";
+import PreLoginSide from "~/app/_components/PreLoginSide";
+import { useWallet } from "@jup-ag/wallet-adapter";
+import HasnotInvestedSide from "~/app/_components/HasNotInvestedSide";
+import { api } from "~/trpc/react";
 
 const Page = () => {
   const params = useParams();
   const id = params?.id;
   const { stories, isLoading } = useStoriesStore();
   const [hasScrolled, setHasScrolled] = useState(false);
+  const wallet = useWallet();
+  const walletAddress = wallet.publicKey?.toString();
+
+  const { data: user } = api.user.get.useQuery(
+    {
+      walletAddress: walletAddress!,
+    },
+    {
+      enabled: !!wallet.connected && !!walletAddress,
+    },
+  );
+
+  let rightSidebarContent;
+  if (isLoading) {
+    rightSidebarContent = <p className="text-gray-500">Loading...</p>;
+  } else if (!wallet.connected) {
+    rightSidebarContent = <PreLoginSide />;
+  } else {
+    rightSidebarContent = (
+      <HasnotInvestedSide username={user?.username ?? "Unknown User"} />
+    );
+  }
 
   useEffect(() => {
     if (
@@ -52,18 +78,24 @@ const Page = () => {
   return (
     <>
       <NavBar />
-      <div className="container mx-auto flex gap-6 p-10">
-        {/* middle stories */}
-        <div className="w-full rounded-lg bg-white p-4 md:w-3/4">
-          <PostCard storyId={id as string} />
-          <div id="comments" className="scroll-mt-20 scroll-smooth">
-            <Comments postId={id as string} />
-          </div>
-        </div>
+      <div className="bg-white-50 min-h-screen">
+        <div className="container mx-auto px-4 py-6 lg:px-8 lg:py-10">
+          <div className="flex flex-col gap-14 lg:flex-row">
+            {/* Main stories section */}
+            <div className="w-full lg:w-3/4">
+              <div className="rounded-xl bg-white shadow-sm">
+                <PostCard storyId={id as string} />
+                <div id="comments" className="scroll-mt-20 scroll-smooth">
+                  <Comments postId={id as string} />
+                </div>
+              </div>
+            </div>
 
-        {/* right sidebar */}
-        <div className="hidden rounded-lg bg-gray-100 md:block md:w-1/4">
-          <RightSidebar />
+            {/* Right section - shows at bottom on mobile */}
+            <div className="w-full lg:w-1/4">
+              <div className="">{rightSidebarContent}</div>
+            </div>
+          </div>
         </div>
       </div>
     </>

@@ -47,15 +47,14 @@ const RightSection = () => {
   return (
     <div className="overflow-hidden rounded-xl bg-white shadow-sm">
       {/* Banner Image with gradient overlay */}
-      <div className="relative h-40">
+      <div className="">
         <Image
-          src="/images/Image.png"
-          alt="Cover image"
-          layout="fill"
-          objectFit="cover"
-          className="transition-transform duration-300 hover:scale-105"
+          src={"/images/Image.png"}
+          alt="cover image"
+          className="h-[60px] w-full"
+          width={500}
+          height={100}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/30" />
       </div>
 
       {/* Investor Profile Section */}

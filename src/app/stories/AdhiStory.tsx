@@ -2,8 +2,12 @@ import React from "react";
 import Image from "next/image";
 const AdhiStory = () => {
   return (
-    <div className="mx-auto max-w-4xl p-6 text-gray-800">
+    <div className="mx-auto max-w-4xl pt-2 text-gray-800">
       <section className="mb-12">
+        <p className="mb-4 font-semibold">
+          The following is an exclusive preview of the Intro & Preface of my
+          book How I Met God & Got Into Crypto: Based on a True Story
+        </p>
         <p className="mb-4">
           I started writing this book while I was in India and a large part of
           it was conceptualized and written in India. Parts of the book have
