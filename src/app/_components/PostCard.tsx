@@ -7,6 +7,7 @@ import "draft-js/dist/Draft.css";
 import "draft-js/dist/Draft.css";
 import { useStoriesStore } from "~/store/useStoriesStore";
 import { StoryVideo } from "../pages/homepage/_components/StoryVideo";
+import AdhiStory from "../stories/AdhiStory";
 
 const PostCard = ({ storyId }: { storyId: string }) => {
   const { getById, stories, isLoading, error } = useStoriesStore();
@@ -38,7 +39,7 @@ const PostCard = ({ storyId }: { storyId: string }) => {
 
   return (
     <div className="container mx-auto w-full rounded-lg">
-      <h1 className="text-2xl font-[IBM_Plex_Sans] font-bold md:text-3xl lg:text-4xl">
+      <h1 className="pb-4 text-xl font-[IBM_Plex_Sans] font-bold md:text-3xl lg:text-4xl">
         {story.title}
       </h1>
       <div className="bg-[#F6F7F8]">
@@ -51,7 +52,10 @@ const PostCard = ({ storyId }: { storyId: string }) => {
       </div>
 
       <div className="mt-4 font-[IBM_Plex_Sans]">
-        <div>{story.content}</div>
+        <div>
+          <AdhiStory />
+        </div>
+        {/* <div>{story.content}</div> */}
       </div>
     </div>
   );
