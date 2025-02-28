@@ -15,7 +15,7 @@ const LiveIndicator = ({ index }: { index: number }) => (
       className={`h-1.5 w-1.5 rounded-full ${index === 1 ? "bg-green-500" : "bg-red-500"}`}
     ></div>
     <span className="text-xs">
-      {index === 1 ? "Going Live on 5th March" : "Going Live on date"}
+      {index === 1 ? "Going Live on 5th March" : "Live Now"}
     </span>
   </div>
 );
@@ -134,7 +134,13 @@ const StoriesCard = () => {
               {/* Image Section */}
               <div className="relative aspect-video h-[55%] w-full cursor-pointer rounded-lg bg-gray-100">
                 {index === 0 ? (
-                  <StoryVideo src="https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/adhi_sample_video.mp4" />
+                  <Image
+                    src="https://firebasestorage.googleapis.com/v0/b/himgagic.appspot.com/o/1%2F1.jpg?alt=media&token=7bc531d0-e507-40f6-a97d-f3d26a0fdd7a"
+                    alt="Story image"
+                    width={400}
+                    height={300}
+                    className="h-full w-full object-cover"
+                  />
                 ) : index === 1 ? (
                   <Image
                     src="https://firebasestorage.googleapis.com/v0/b/himgagic.appspot.com/o/E61D02C0-AE00-48B5-958D-006EC41B570A.webp?alt=media&token=d2401a28-7505-4723-9b42-aa942a5fd2b9"

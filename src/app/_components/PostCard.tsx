@@ -43,7 +43,8 @@ const PostCard = ({ storyId }: { storyId: string }) => {
       </h1>
       <div className="bg-[#F6F7F8]">
         {/* <ImageSliderForStories /> */}
-        <StoryVideo src={"/video.mp4"} />
+        {/* <StoryVideo src={"/video.mp4"} /> */}
+        <StoryVideo src="https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/adhi_sample_video.mp4" />
       </div>
       <div className="mt-4">
         <PostActions storyKey={story.id} walletAddress={story.walletAddres} />
