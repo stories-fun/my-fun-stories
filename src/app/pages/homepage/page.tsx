@@ -18,9 +18,7 @@ const HomePage = () => {
     }
   }, [wallet.connected, walletAddress, getStories]);
 
-  const {
-    data: user,
-  } = api.user.get.useQuery(
+  const { data: user } = api.user.get.useQuery(
     {
       walletAddress: walletAddress!, // '!' assets walletAddress is defined
     },
@@ -52,13 +50,11 @@ const HomePage = () => {
           </div>
 
           {/* Right section - hidden on mobile */}
+          <div className="lg:hidden">
+            <div className="mt-4">{rightSidebarContent}</div>
+          </div>
           <div className="hidden lg:block lg:w-1/4">
-            <div className="">
-              {/* <PreLoginSide /> */}
-              {/* <HasnotInvestedSide /> */}
-              {/* <HasInvestedSide /> */}
-              {rightSidebarContent}
-            </div>
+            <div className="">{rightSidebarContent}</div>
           </div>
         </div>
       </div>

@@ -118,6 +118,8 @@ const StoriesCard = () => {
       </div>
     );
 
+  const updatedStory = [stories];
+
   return (
     <div className="mx-auto w-full">
       {stories.map((story, index) => (
@@ -185,6 +187,167 @@ const StoriesCard = () => {
           )}
         </article>
       ))}
+      <article
+        // key={story.id}
+        // className={`relative overflow-hidden rounded-lg bg-white p-3 ${
+        //   index >= 2 ? "opacity-50" : ""
+        // }`}
+        className="relative overflow-hidden rounded-lg bg-white p-3"
+      >
+        <StoryHeader username={"Admin"} index={1} />
+
+        <div className="flex flex-col space-x-6 lg:flex-row">
+          <div className="w-full lg:w-1/3">
+            {/* Image Section */}
+            <div className="relative aspect-video h-[55%] w-full cursor-pointer rounded-lg bg-gray-100">
+              <Image
+                src="https://firebasestorage.googleapis.com/v0/b/himgagic.appspot.com/o/E61D02C0-AE00-48B5-958D-006EC41B570A.webp?alt=media&token=d2401a28-7505-4723-9b42-aa942a5fd2b9"
+                alt="Story image"
+                width={400}
+                height={300}
+                className="h-full w-full object-cover"
+              />
+
+              {/* <ImageSlider /> */}
+            </div>
+            <PostActions storyKey={"1740064537760_DHykt1"} />
+            <div>
+              <ProgressBar />
+            </div>
+          </div>
+
+          <div
+            className="w-full cursor-pointer lg:w-2/3"
+            onClick={() => alert("This story will be released on March 5th!")}
+          >
+            <div className="space-y-2">
+              <h2 className="font-lg text-lg font-[IBM_Plex_Sans] leading-tight">
+                {hardcodedStory.title}
+              </h2>
+              <p className="text-sm text-gray-600">
+                {truncateContent(hardcodedStory.content, 80)}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* {index >= 2 && (
+          <div className="absolute inset-0 flex items-center justify-center bg-white/50">
+            <span className="z-10 text-xl font-semibold text-black">
+              Coming Soon
+            </span>
+          </div>
+        )} */}
+      </article>
+
+      {/* Coming soon contents */}
+      <article className="relative overflow-hidden rounded-lg bg-white p-3">
+        {/* Coming Soon overlay covering entire article */}
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-100/95">
+          <h2 className="text-[32px] font-bold text-black">Coming Soon</h2>
+        </div>
+
+        <StoryHeader username={"Admin"} index={1} />
+
+        <div className="relative flex flex-col space-x-6 lg:flex-row">
+          <div className="w-full lg:w-1/3">
+            {/* Image Section */}
+            <div className="relative aspect-video h-[55%] w-full cursor-pointer rounded-lg bg-gray-100">
+              <ImageSlider />
+            </div>
+            <PostActions storyKey={"1740064537760_DHykt1"} />
+            <div>
+              <ProgressBar />
+            </div>
+          </div>
+
+          <div
+            className="w-full cursor-pointer lg:w-2/3"
+            onClick={() => alert("This story will be released on March 5th!")}
+          >
+            <div className="space-y-2">
+              <h2 className="font-lg text-lg font-[IBM_Plex_Sans] leading-tight">
+                {hardcodedStory.title}
+              </h2>
+              <p className="text-sm text-gray-600">
+                {truncateContent(hardcodedStory.content, 80)}
+              </p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article className="relative overflow-hidden rounded-lg bg-white p-3">
+        {/* Coming Soon overlay covering entire article */}
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-100/95">
+          <h2 className="text-[32px] font-bold text-black">Coming Soon</h2>
+        </div>
+
+        <StoryHeader username={"Admin"} index={1} />
+
+        <div className="relative flex flex-col space-x-6 lg:flex-row">
+          <div className="w-full lg:w-1/3">
+            {/* Image Section */}
+            <div className="relative aspect-video h-[55%] w-full cursor-pointer rounded-lg bg-gray-100">
+              <ImageSlider />
+            </div>
+            <PostActions storyKey={"1740064537760_DHykt1"} />
+            <div>
+              <ProgressBar />
+            </div>
+          </div>
+
+          <div
+            className="w-full cursor-pointer lg:w-2/3"
+            onClick={() => alert("This story will be released on March 5th!")}
+          >
+            <div className="space-y-2">
+              <h2 className="font-lg text-lg font-[IBM_Plex_Sans] leading-tight">
+                {hardcodedStory.title}
+              </h2>
+              <p className="text-sm text-gray-600">
+                {truncateContent(hardcodedStory.content, 80)}
+              </p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article className="relative overflow-hidden rounded-lg bg-white p-3">
+        {/* Coming Soon overlay covering entire article */}
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-100/95">
+          <h2 className="text-[32px] font-bold text-black">Coming Soon</h2>
+        </div>
+
+        <StoryHeader username={"Admin"} index={1} />
+
+        <div className="relative flex flex-col space-x-6 lg:flex-row">
+          <div className="w-full lg:w-1/3">
+            {/* Image Section */}
+            <div className="relative aspect-video h-[55%] w-full cursor-pointer rounded-lg bg-gray-100">
+              <ImageSlider />
+            </div>
+            <PostActions storyKey={"1740064537760_DHykt1"} />
+            <div>
+              <ProgressBar />
+            </div>
+          </div>
+
+          <div
+            className="w-full cursor-pointer lg:w-2/3"
+            onClick={() => alert("This story will be released on March 5th!")}
+          >
+            <div className="space-y-2">
+              <h2 className="font-lg text-lg font-[IBM_Plex_Sans] leading-tight">
+                {hardcodedStory.title}
+              </h2>
+              <p className="text-sm text-gray-600">
+                {truncateContent(hardcodedStory.content, 80)}
+              </p>
+            </div>
+          </div>
+        </div>
+      </article>
     </div>
   );
 };

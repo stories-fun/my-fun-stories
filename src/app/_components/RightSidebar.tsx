@@ -4,16 +4,41 @@ import Image from "next/image";
 import React, { useState } from "react";
 
 const RightSidebar = ({ username }: { username: string }) => {
+  // Define the custom tiers with their prices and descriptions
+  const tiers = [
+    {
+      price: 5,
+      description:
+        "Unlock DM access. Response guaranteed in 5 days else moneyback.",
+    },
+    {
+      price: 10,
+      description: "All of above + Access to full story & future updates",
+    },
+    {
+      price: 20,
+      description: "All of above + Free Book shipped",
+    },
+    {
+      price: 50,
+      description: "All of above + 30 mins Voice call",
+    },
+    {
+      price: 100,
+      description: "All of above + Video Call",
+    },
+  ];
+
   // State to track which tiers are expanded
   const [expandedTiers, setExpandedTiers] = useState<Record<number, boolean>>(
     {},
   );
 
   // Function to toggle a tier's expanded state
-  const toggleTier = (tierNumber: number) => {
+  const toggleTier = (tierIndex: number) => {
     setExpandedTiers((prev: Record<number, boolean>) => ({
       ...prev,
-      [tierNumber]: !prev[tierNumber],
+      [tierIndex]: !prev[tierIndex],
     }));
   };
 
@@ -134,18 +159,18 @@ const RightSidebar = ({ username }: { username: string }) => {
         <div className="mb-2 font-bold text-gray-700">UTILITIES</div>
       </div>
 
-      {/* Tier dropdowns */}
-      {[1, 2, 3, 4, 5, 6].map((tier) => (
-        <div key={tier} className="border-t">
+      {/* Custom tier dropdowns */}
+      {tiers.map((tier, index) => (
+        <div key={index} className="border-t">
           {/* Tier header - clickable */}
           <div
             className="flex cursor-pointer items-center justify-between px-4 py-4"
-            onClick={() => toggleTier(tier)}
+            onClick={() => toggleTier(index)}
           >
-            <div className="font-medium">Tier {tier}</div>
+            <div className="font-medium">${tier.price}</div>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className={`h-5 w-5 text-gray-400 transition-transform ${expandedTiers[tier] ? "rotate-180 transform" : ""}`}
+              className={`h-5 w-5 text-gray-400 transition-transform ${expandedTiers[index] ? "rotate-180 transform" : ""}`}
               viewBox="0 0 20 20"
               fill="currentColor"
             >
@@ -157,13 +182,9 @@ const RightSidebar = ({ username }: { username: string }) => {
             </svg>
           </div>
           {/* Dropdown content */}
-          {expandedTiers[tier] && (
+          {expandedTiers[index] && (
             <div className="border-t bg-gray-50 px-4 py-3">
-              <p className="text-gray-600">
-                Tier {tier} content goes here. This could include benefits,
-                features, or other information specific to this tier level.
-              </p>
-              {/* Additional content can be added here as needed */}
+              <p className="text-gray-600">{tier.description}</p>
             </div>
           )}
         </div>
