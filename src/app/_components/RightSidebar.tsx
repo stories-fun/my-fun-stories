@@ -1,77 +1,171 @@
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 
-const RightSidebar = () => {
+const RightSidebar = ({ username }: { username: string }) => {
+  // State to track which tiers are expanded
+  const [expandedTiers, setExpandedTiers] = useState<Record<number, boolean>>(
+    {},
+  );
+
+  // Function to toggle a tier's expanded state
+  const toggleTier = (tierNumber: number) => {
+    setExpandedTiers((prev: Record<number, boolean>) => ({
+      ...prev,
+      [tierNumber]: !prev[tierNumber],
+    }));
+  };
+
   return (
-    <div className="bg-[#F6F7F8]">
-      {/* banner */}
+    <div className="overflow-hidden rounded-md border bg-white">
+      {/* Space/Planets banner */}
       <div className="">
         <Image
           src={"/images/Image.png"}
           alt="cover image"
-          className="h-[100px] w-full"
+          className="h-[60px] w-full"
           width={500}
           height={100}
         />
       </div>
-      {/* profile */}
-      <div className="border-b-2">
-        <div className="flex items-center justify-between p-2">
-          <div className="flex items-center space-x-2">
-            <div>
-              <Image
-                src={"/images/profile.png"}
-                width={25}
-                height={25}
-                alt="profile"
-              />
+
+      {/* Profile section */}
+      <div className="border-b pb-4">
+        <div className="relative flex items-center justify-between p-4">
+          {/* Profile image and name */}
+          <div className="flex items-center space-x-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-pink-200">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                className="h-6 w-6 text-pink-300"
+              >
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
             </div>
-            <div>Name</div>
-            <div>
-              <Image
-                src={"/images/verification.png"}
-                width={25}
-                height={25}
-                alt="verified badge"
-              />
+            <div className="flex flex-col">
+              <div className="flex items-center">
+                <div className="max-w-[150px] truncate text-lg font-medium">
+                  {username}
+                </div>
+                <div className="ml-2 rounded-full bg-blue-500 p-1">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4 text-white"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <button className="mt-2 rounded-full bg-blue-500 px-6 py-2 font-medium text-white">
+                Follow
+              </button>
             </div>
-          </div>
-          <div className="cursor-pointer rounded-full bg-[#0079D3] px-4 py-1">
-            <h2 className="text-white">Follow</h2>
           </div>
         </div>
 
-        <div className="p-4">
-          <p>
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aliquid
-            itaque quod eum ad recusandae earum mollitia qui fugit accusamus.
-            Fugiat rerum quam minima, est rem maxime quaerat totam
-            necessitatibus asperiores!
+        {/* Bio text */}
+        <div className="px-4 pb-2">
+          <p className="text-gray-800">
+            Your personal frontpage. a short discription to understand you and
+            your story.
           </p>
         </div>
+
+        {/* Show more link */}
         <div className="flex items-center justify-center">
-          <button className="p-4 text-[#878A8C]">Show more</button>
+          <button className="p-2 font-medium text-gray-500">Show more</button>
         </div>
       </div>
 
-      {/* Invest Now */}
-      <div className="space-y-4 p-4">
-        <div className="flex items-center justify-center rounded-full bg-[#0079D3] p-4 font-bold text-white">
-          <button>Invest Now</button>
+      {/* Action buttons */}
+      <div className="space-y-3 p-4">
+        <button className="w-full rounded-full bg-blue-500 py-3 font-medium text-white">
+          Invest Now
+        </button>
+        <button className="w-full rounded-full border-2 border-blue-500 bg-white py-3 font-medium text-blue-500">
+          Chat with creator
+        </button>
+      </div>
+
+      {/* Stats section */}
+      <div className="flex justify-between border-b border-t px-4 py-6">
+        <div className="text-center">
+          <div className="text-xl font-bold">26k</div>
+          <div className="text-gray-500">Market Cap</div>
         </div>
-        {/* Chat with Creator */}
-        <div className="flex items-center justify-center rounded-full bg-white p-4 text-[#0079D3]">
-          <button>Chat with Creator</button>
+        <div className="text-center">
+          <div className="text-xl font-bold">2k</div>
+          <div className="text-gray-500">Holder</div>
+        </div>
+        <div className="flex flex-col items-center text-center">
+          <div className="flex items-center text-xl font-bold">
+            20k
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="ml-1 h-4 w-4 text-green-500"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
+          <div className="text-gray-500">Volume</div>
         </div>
       </div>
 
-      {/* data market cap ,volumn and holders */}
-      <div className="flex justify-between p-8">
-        <div>MarketCap</div>
-        <div>Holder</div>
-
-        <div>Volumn</div>
+      {/* Utilities section */}
+      <div className="px-4 pb-2 pt-4">
+        <div className="mb-2 font-bold text-gray-700">UTILITIES</div>
       </div>
+
+      {/* Tier dropdowns */}
+      {[1, 2, 3, 4, 5, 6].map((tier) => (
+        <div key={tier} className="border-t">
+          {/* Tier header - clickable */}
+          <div
+            className="flex cursor-pointer items-center justify-between px-4 py-4"
+            onClick={() => toggleTier(tier)}
+          >
+            <div className="font-medium">Tier {tier}</div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className={`h-5 w-5 text-gray-400 transition-transform ${expandedTiers[tier] ? "rotate-180 transform" : ""}`}
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
+          {/* Dropdown content */}
+          {expandedTiers[tier] && (
+            <div className="border-t bg-gray-50 px-4 py-3">
+              <p className="text-gray-600">
+                Tier {tier} content goes here. This could include benefits,
+                features, or other information specific to this tier level.
+              </p>
+              {/* Additional content can be added here as needed */}
+            </div>
+          )}
+        </div>
+      ))}
     </div>
   );
 };

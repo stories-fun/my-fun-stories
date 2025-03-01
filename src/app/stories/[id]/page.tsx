@@ -35,7 +35,7 @@ const Page = () => {
     rightSidebarContent = <PreLoginSide />;
   } else {
     rightSidebarContent = (
-      <HasnotInvestedSide username={user?.username ?? "Unknown User"} />
+      <RightSidebar username={user?.username ?? "Unknown User"} />
     );
   }
 
@@ -94,6 +94,7 @@ const Page = () => {
             {/* Right section - shows at bottom on mobile */}
             <div className="w-full lg:w-1/4">
               <div className="">{rightSidebarContent}</div>
+              {/* <RightSidebar /> */}
             </div>
           </div>
         </div>

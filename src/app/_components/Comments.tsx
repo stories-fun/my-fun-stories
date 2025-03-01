@@ -100,6 +100,14 @@ const CommentComponentWithNoSSR = dynamic(
           addSuffix: true,
         });
 
+        // Format the comment content to preserve line breaks
+        const formattedContent = comment.content.split("\n").map((line, i) => (
+          <React.Fragment key={i}>
+            {line}
+            {i < comment.content.split("\n").length - 1 && <br />}
+          </React.Fragment>
+        ));
+
         return (
           <div className="group relative">
             <div className="flex">
@@ -135,8 +143,8 @@ const CommentComponentWithNoSSR = dynamic(
                     </div>
 
                     <div className="mt-1">
-                      <div className="break-words text-xs text-gray-900 sm:text-sm">
-                        {comment.content}
+                      <div className="whitespace-pre-line break-words text-xs text-gray-900 sm:text-sm">
+                        {formattedContent}
                       </div>
 
                       <div className="mt-2 flex flex-wrap items-center gap-2 sm:gap-4">
