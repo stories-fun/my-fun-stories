@@ -206,6 +206,9 @@ const StoriesCard = () => {
                 width={400}
                 height={300}
                 className="h-full w-full object-cover"
+                onClick={() =>
+                  alert("This story will be released on March 5th!")
+                }
               />
 
               {/* <ImageSlider /> */}

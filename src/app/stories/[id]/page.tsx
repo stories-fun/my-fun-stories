@@ -32,7 +32,8 @@ const Page = () => {
   if (isLoading) {
     rightSidebarContent = <p className="text-gray-500">Loading...</p>;
   } else if (!wallet.connected) {
-    rightSidebarContent = <PreLoginSide />;
+    // rightSidebarContent = <PreLoginSide />;
+    rightSidebarContent = <RightSidebar username={user?.username ?? "User"} />;
   } else {
     rightSidebarContent = (
       <RightSidebar username={user?.username ?? "Unknown User"} />
