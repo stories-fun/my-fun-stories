@@ -125,16 +125,16 @@ const StoriesCard = () => {
       {stories.map((story, index) => (
         <article
           key={story.id}
-          className={`relative overflow-hidden rounded-lg bg-white p-3 ${
+          className={`relative mb-4 overflow-hidden bg-white p-3 ${
             index >= 2 ? "opacity-50" : ""
           }`}
         >
           <StoryHeader username={story.username} index={index} />
 
-          <div className="flex flex-col space-x-6 lg:flex-row">
+          <div className="flex flex-col space-y-3 lg:flex-row lg:space-x-6 lg:space-y-0">
             <div className="w-full lg:w-1/3">
               {/* Image Section */}
-              <div className="relative aspect-video h-[55%] w-full cursor-pointer rounded-lg bg-gray-100">
+              <div className="relative aspect-video w-full cursor-pointer bg-gray-100">
                 {index === 0 ? (
                   <Image
                     src="https://firebasestorage.googleapis.com/v0/b/himgagic.appspot.com/o/1%2F1.jpg?alt=media&token=7bc531d0-e507-40f6-a97d-f3d26a0fdd7a"
@@ -162,7 +162,7 @@ const StoriesCard = () => {
             </div>
 
             <div
-              className="w-full cursor-pointer lg:w-2/3"
+              className="w-full cursor-pointer pt-2 lg:w-2/3 lg:pt-0"
               onClick={() => handleCardClick(story.id)}
             >
               <div className="space-y-2">
@@ -187,19 +187,13 @@ const StoriesCard = () => {
           )}
         </article>
       ))}
-      <article
-        // key={story.id}
-        // className={`relative overflow-hidden rounded-lg bg-white p-3 ${
-        //   index >= 2 ? "opacity-50" : ""
-        // }`}
-        className="relative overflow-hidden rounded-lg bg-white p-3"
-      >
+      <article className="relative mb-4 overflow-hidden bg-white p-3">
         <StoryHeader username={"Admin"} index={1} />
 
-        <div className="flex flex-col space-x-6 lg:flex-row">
+        <div className="flex flex-col space-y-3 lg:flex-row lg:space-x-6 lg:space-y-0">
           <div className="w-full lg:w-1/3">
             {/* Image Section */}
-            <div className="relative aspect-video h-[55%] w-full cursor-pointer rounded-lg bg-gray-100">
+            <div className="relative aspect-video w-full cursor-pointer bg-gray-100">
               <Image
                 src="https://firebasestorage.googleapis.com/v0/b/himgagic.appspot.com/o/E61D02C0-AE00-48B5-958D-006EC41B570A.webp?alt=media&token=d2401a28-7505-4723-9b42-aa942a5fd2b9"
                 alt="Story image"
@@ -210,8 +204,6 @@ const StoriesCard = () => {
                   alert("This story will be released on March 5th!")
                 }
               />
-
-              {/* <ImageSlider /> */}
             </div>
             <PostActions storyKey={"1740064537760_DHykt1"} />
             <div>
@@ -220,7 +212,7 @@ const StoriesCard = () => {
           </div>
 
           <div
-            className="w-full cursor-pointer lg:w-2/3"
+            className="w-full cursor-pointer pt-2 lg:w-2/3 lg:pt-0"
             onClick={() => alert("This story will be released on March 5th!")}
           >
             <div className="space-y-2">
@@ -233,29 +225,23 @@ const StoriesCard = () => {
             </div>
           </div>
         </div>
-
-        {/* {index >= 2 && (
-          <div className="absolute inset-0 flex items-center justify-center bg-white/50">
-            <span className="z-10 text-xl font-semibold text-black">
-              Coming Soon
-            </span>
-          </div>
-        )} */}
       </article>
 
       {/* Coming soon contents */}
-      <article className="relative overflow-hidden rounded-lg bg-white p-3">
+      <article className="relative mb-4 overflow-hidden bg-white p-3">
         {/* Coming Soon overlay covering entire article */}
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-100/95">
-          <h2 className="text-[32px] font-bold text-black">Coming Soon</h2>
+          <h2 className="text-2xl font-bold text-black sm:text-[32px]">
+            Coming Soon
+          </h2>
         </div>
 
         <StoryHeader username={"Admin"} index={1} />
 
-        <div className="relative flex flex-col space-x-6 lg:flex-row">
+        <div className="relative flex flex-col space-y-3 lg:flex-row lg:space-x-6 lg:space-y-0">
           <div className="w-full lg:w-1/3">
             {/* Image Section */}
-            <div className="relative aspect-video h-[55%] w-full cursor-pointer rounded-lg bg-gray-100">
+            <div className="relative aspect-video w-full cursor-pointer bg-gray-100">
               <ImageSlider />
             </div>
             <PostActions storyKey={"1740064537760_DHykt1"} />
@@ -265,7 +251,7 @@ const StoriesCard = () => {
           </div>
 
           <div
-            className="w-full cursor-pointer lg:w-2/3"
+            className="w-full cursor-pointer pt-2 lg:w-2/3 lg:pt-0"
             onClick={() => alert("This story will be released on March 5th!")}
           >
             <div className="space-y-2">
@@ -280,18 +266,20 @@ const StoriesCard = () => {
         </div>
       </article>
 
-      <article className="relative overflow-hidden rounded-lg bg-white p-3">
+      <article className="relative mb-4 overflow-hidden bg-white p-3">
         {/* Coming Soon overlay covering entire article */}
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-100/95">
-          <h2 className="text-[32px] font-bold text-black">Coming Soon</h2>
+          <h2 className="text-2xl font-bold text-black sm:text-[32px]">
+            Coming Soon
+          </h2>
         </div>
 
         <StoryHeader username={"Admin"} index={1} />
 
-        <div className="relative flex flex-col space-x-6 lg:flex-row">
+        <div className="relative flex flex-col space-y-3 lg:flex-row lg:space-x-6 lg:space-y-0">
           <div className="w-full lg:w-1/3">
             {/* Image Section */}
-            <div className="relative aspect-video h-[55%] w-full cursor-pointer rounded-lg bg-gray-100">
+            <div className="relative aspect-video w-full cursor-pointer bg-gray-100">
               <ImageSlider />
             </div>
             <PostActions storyKey={"1740064537760_DHykt1"} />
@@ -301,7 +289,7 @@ const StoriesCard = () => {
           </div>
 
           <div
-            className="w-full cursor-pointer lg:w-2/3"
+            className="w-full cursor-pointer pt-2 lg:w-2/3 lg:pt-0"
             onClick={() => alert("This story will be released on March 5th!")}
           >
             <div className="space-y-2">
@@ -316,18 +304,20 @@ const StoriesCard = () => {
         </div>
       </article>
 
-      <article className="relative overflow-hidden rounded-lg bg-white p-3">
+      <article className="relative mb-4 overflow-hidden bg-white p-3">
         {/* Coming Soon overlay covering entire article */}
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-100/95">
-          <h2 className="text-[32px] font-bold text-black">Coming Soon</h2>
+          <h2 className="text-2xl font-bold text-black sm:text-[32px]">
+            Coming Soon
+          </h2>
         </div>
 
         <StoryHeader username={"Admin"} index={1} />
 
-        <div className="relative flex flex-col space-x-6 lg:flex-row">
+        <div className="relative flex flex-col space-y-3 lg:flex-row lg:space-x-6 lg:space-y-0">
           <div className="w-full lg:w-1/3">
             {/* Image Section */}
-            <div className="relative aspect-video h-[55%] w-full cursor-pointer rounded-lg bg-gray-100">
+            <div className="relative aspect-video w-full cursor-pointer bg-gray-100">
               <ImageSlider />
             </div>
             <PostActions storyKey={"1740064537760_DHykt1"} />
@@ -337,7 +327,7 @@ const StoriesCard = () => {
           </div>
 
           <div
-            className="w-full cursor-pointer lg:w-2/3"
+            className="w-full cursor-pointer pt-2 lg:w-2/3 lg:pt-0"
             onClick={() => alert("This story will be released on March 5th!")}
           >
             <div className="space-y-2">
