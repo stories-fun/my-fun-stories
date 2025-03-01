@@ -118,8 +118,6 @@ const StoriesCard = () => {
       </div>
     );
 
-  const updatedStory = [stories];
-
   return (
     <div className="mx-auto w-full">
       {stories.map((story, index) => (
@@ -134,7 +132,10 @@ const StoriesCard = () => {
           <div className="flex flex-col space-y-3 lg:flex-row lg:space-x-6 lg:space-y-0">
             <div className="w-full lg:w-1/3">
               {/* Image Section */}
-              <div className="relative aspect-video w-full cursor-pointer bg-gray-100">
+              <div
+                className="relative aspect-video w-full cursor-pointer bg-gray-100"
+                onClick={() => handleCardClick(story.id)}
+              >
                 {index === 0 ? (
                   <Image
                     src="https://firebasestorage.googleapis.com/v0/b/himgagic.appspot.com/o/1%2F1.jpg?alt=media&token=7bc531d0-e507-40f6-a97d-f3d26a0fdd7a"
