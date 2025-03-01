@@ -40,7 +40,9 @@ const PostCard = ({ storyId }: { storyId: string }) => {
   return (
     <div className="container mx-auto w-full rounded-lg">
       <h1 className="pb-4 text-xl font-[IBM_Plex_Sans] font-bold md:text-3xl lg:text-4xl">
-        {story.title}
+        {/* {story.title} */}
+        Wrote a Bestseller, TEDx went viral, Disappeared from the public sphere
+        Lived in a Monastery, Met God & Got Into Crypto
       </h1>
       <div className="bg-[#F6F7F8]">
         {/* <ImageSliderForStories /> */}
