@@ -167,12 +167,18 @@ const StoriesCard = () => {
             >
               <div className="space-y-2">
                 <h2 className="font-lg text-lg font-[IBM_Plex_Sans] leading-tight">
-                  {index === 1 ? hardcodedStory.title : story.title}
+                  {/* {index === 1 ? hardcodedStory.title : story.title} */}
+                  Wrote a Bestseller, TEDx went viral, Disappeared from the
+                  public sphere Lived in a Monastery, Met God & Got Into Crypto
                 </h2>
                 <p className="text-sm text-gray-600">
-                  {index === 1
-                    ? truncateContent(hardcodedStory.content, 80)
-                    : truncateContent(story.content, 80)}
+                  Nine years ago, I sold chai on the streets of Bengaluru,
+                  launched a record-breaking Kickstarter campaign, wrote a book
+                  that became a bestseller. Then, I disappeared from the face of
+                  the earth for over 4 years. What happened in these years? I
+                  met a mysterious man, somehow ended up in a monastery where I
+                  spent years—questioning everything I thought I knew about
+                  life. And then I Met God & Got Into Crypto…
                 </p>
               </div>
             </div>
