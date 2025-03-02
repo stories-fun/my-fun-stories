@@ -146,10 +146,16 @@ const NavBar = () => {
         /> */}
 
         <div className="flex items-center space-x-2 sm:space-x-4">
-          <div className="hidden md:block">
+          <div className="flex items-center space-x-4">
+            <Link
+              href="/"
+              className="font-mont text-sm font-bold font-semibold text-black underline decoration-2 transition-colors hover:text-gray-700 sm:text-base"
+            >
+              What&apos;s your story
+            </Link>
             <Link
               href="/aboutus"
-              className="text-sm font-medium text-gray-700 transition-colors hover:text-gray-900 sm:text-base"
+              className="font-mont text-sm font-semibold text-gray-700 transition-colors hover:text-gray-700 sm:text-base"
             >
               about us
             </Link>
@@ -212,6 +218,12 @@ const NavBar = () => {
                 icon={FiHome}
                 label="Home"
                 href="/"
+                onClick={() => setMenuOpen(false)}
+              />
+              <MobileMenuItem
+                icon={FiHome}
+                label="What's your story"
+                href="/story"
                 onClick={() => setMenuOpen(false)}
               />
               <MobileMenuItem
