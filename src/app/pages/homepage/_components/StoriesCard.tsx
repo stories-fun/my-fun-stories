@@ -167,12 +167,12 @@ const StoriesCard = () => {
               onClick={() => handleCardClick(story.id)}
             >
               <div className="space-y-2">
-                <h2 className="font-lg text-lg font-[IBM_Plex_Sans] leading-tight">
+                <h2 className="font-lg text-xl font-[IBM_Plex_Sans] leading-tight sm:text-2xl">
                   {/* {index === 1 ? hardcodedStory.title : story.title} */}
                   Wrote a Bestseller, TEDx went viral, Disappeared from the
                   public sphere Lived in a Monastery, Met God & Got Into Crypto
                 </h2>
-                <p className="text-sm text-gray-600">
+                <p className="text-base text-gray-600 sm:text-lg">
                   Nine years ago, I sold chai on the streets of Bengaluru,
                   launched a record-breaking Kickstarter campaign, wrote a book
                   that became a bestseller. Then, I disappeared from the face of
@@ -223,11 +223,11 @@ const StoriesCard = () => {
             onClick={() => alert("This story will be released on March 5th!")}
           >
             <div className="space-y-2">
-              <h2 className="font-lg text-lg font-[IBM_Plex_Sans] leading-tight">
+              <h2 className="font-lg text-xl font-[IBM_Plex_Sans] leading-tight sm:text-2xl">
                 {hardcodedStory.title}
               </h2>
-              <p className="text-sm text-gray-600">
-                {truncateContent(hardcodedStory.content, 80)}
+              <p className="text-base text-gray-600 sm:text-lg">
+                {truncateContent(hardcodedStory.content, 60)}
               </p>
             </div>
           </div>
