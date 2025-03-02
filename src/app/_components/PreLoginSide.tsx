@@ -24,7 +24,7 @@ const PreLoginSide = () => {
         />
       </div>
       <div className="space-y-4 border-b p-4 pb-6">
-        <h2 className="text-lg font-medium">Welcome to story.fun</h2>
+        <h2 className="text-lg font-medium">Welcome to stories.fun</h2>
         <p className="text-sm text-gray-800">
           Share your real story. Tokenize it. Build a community that invests in
           you. Forget fake personas—here, authentic journeys turn into assets,

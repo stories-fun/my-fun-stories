@@ -149,9 +149,9 @@ const NavBar = () => {
           <div className="flex items-center space-x-4">
             <Link
               href="/"
-              className="font-mont text-sm font-bold font-semibold text-black underline decoration-2 transition-colors hover:text-gray-700 sm:text-base"
+              className="font-mont text-sm font-bold font-semibold text-black decoration-2 transition-colors hover:text-gray-700 sm:text-base"
             >
-              What&apos;s your story
+              what&apos;s your story?
             </Link>
             <Link
               href="/aboutus"
@@ -223,7 +223,7 @@ const NavBar = () => {
               <MobileMenuItem
                 icon={FiHome}
                 label="What's your story"
-                href="/story"
+                href="/"
                 onClick={() => setMenuOpen(false)}
               />
               <MobileMenuItem
