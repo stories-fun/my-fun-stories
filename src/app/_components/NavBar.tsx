@@ -23,8 +23,8 @@ interface MobileMenuItemProps {
 }
 
 const NavLogo = () => (
-  <Link href="/" className="group flex items-center space-x-2">
-    <div className="relative h-[40px] w-[40px] sm:h-[50px] sm:w-[50px]">
+  <Link href="/" className="group flex flex-shrink-0 items-center space-x-1">
+    <div className="relative h-[30px] w-[30px] sm:h-[40px] sm:w-[40px] md:h-[50px] md:w-[50px]">
       <Image
         src="/images/logo.png"
         fill
@@ -33,7 +33,7 @@ const NavLogo = () => (
         priority
       />
     </div>
-    <div className="font-mont text-xl font-bold text-black transition-colors group-hover:text-gray-700 sm:text-2xl">
+    <div className="font-mont whitespace-nowrap text-lg font-bold text-black transition-colors group-hover:text-gray-700 sm:text-xl md:text-2xl">
       stories.fun
     </div>
   </Link>
@@ -135,31 +135,28 @@ const NavBar = () => {
 
   return (
     <nav className="sticky top-0 z-50 bg-white shadow-sm">
-      <div className="container mx-auto flex items-center justify-between px-4 py-2 sm:py-3">
-        <div className="flex items-center space-x-4 sm:space-x-6">
+      <div className="container mx-auto flex items-center justify-between px-2 py-2 sm:px-4 sm:py-3">
+        <div className="flex flex-shrink-0 items-center space-x-2 sm:space-x-4">
           <NavLogo />
         </div>
 
-        {/* <SearchBar
-          className="hidden w-64 md:block lg:w-96"
-          onSearch={handleSearch}
-        /> */}
+        {/* Navigation Links and Icons */}
+        <div className="ml-auto flex items-center">
+          {/* What's your story link - always visible but smaller on mobile */}
+          <Link
+            href="/"
+            className="font-mont mr-2 whitespace-nowrap text-xs font-bold font-semibold text-black decoration-2 transition-colors hover:text-gray-700 sm:mr-4 sm:text-sm md:text-base"
+          >
+            what&apos;s your story?
+          </Link>
 
-        <div className="flex items-center space-x-2 sm:space-x-4">
-          <div className="flex items-center space-x-4">
-            <Link
-              href="/"
-              className="font-mont text-sm font-bold font-semibold text-black decoration-2 transition-colors hover:text-gray-700 sm:text-base"
-            >
-              what&apos;s your story?
-            </Link>
-            <Link
-              href="/aboutus"
-              className="font-mont text-sm font-semibold text-gray-700 transition-colors hover:text-gray-700 sm:text-base"
-            >
-              about us
-            </Link>
-          </div>
+          {/* About us link - hidden on small mobile, visible on medium screens */}
+          <Link
+            href="/aboutus"
+            className="xs:block font-mont mr-2 hidden whitespace-nowrap text-xs font-semibold text-gray-700 transition-colors hover:text-gray-700 sm:mr-4 sm:text-sm md:text-base"
+          >
+            about us
+          </Link>
 
           {/* Desktop Navigation Icons */}
           <div className="hidden md:flex md:items-center md:space-x-2">
@@ -199,7 +196,7 @@ const NavBar = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="menu-button rounded-lg p-2 text-xl text-gray-700 transition-colors hover:bg-gray-100 md:hidden"
+            className="menu-button ml-1 rounded-lg p-1 text-xl text-gray-700 transition-colors hover:bg-gray-100 sm:p-2 md:hidden"
             aria-label="Toggle menu"
           >
             {menuOpen ? <FiX /> : <FiMenu />}
@@ -209,7 +206,7 @@ const NavBar = () => {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="mobile-menu fixed inset-x-0 top-[65px] z-50 h-[calc(100vh-65px)] overflow-y-auto bg-white shadow-lg sm:top-[73px] sm:h-[calc(100vh-73px)] md:hidden">
+        <div className="mobile-menu fixed inset-x-0 top-[57px] z-50 h-[calc(100vh-57px)] overflow-y-auto bg-white shadow-lg sm:top-[73px] sm:h-[calc(100vh-73px)] md:hidden">
           <div className="container mx-auto space-y-4 p-4">
             <SearchBar onSearch={handleSearch} />
 
