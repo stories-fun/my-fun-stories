@@ -153,7 +153,7 @@ const NavBar = () => {
           {/* About us link - hidden on small mobile, visible on medium screens */}
           <Link
             href="/aboutus"
-            className="xs:block font-mont mr-2 hidden whitespace-nowrap text-xs font-semibold text-gray-700 transition-colors hover:text-gray-700 sm:mr-4 sm:text-sm md:text-base"
+            className="font-mont mr-2 hidden whitespace-nowrap text-xs font-semibold text-gray-700 transition-colors hover:text-gray-700 sm:mr-4 sm:block sm:text-sm md:text-base"
           >
             about us
           </Link>
