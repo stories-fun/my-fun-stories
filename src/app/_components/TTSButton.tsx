@@ -138,9 +138,7 @@ const TTSButton = ({ text }: { text: string }) => {
             await new Promise((resolve) => setTimeout(resolve, 1500));
           }
 
-          const humeApiKey =
-            process.env.NEXT_PUBLIC_HUME_API_KEY ??
-            "zMPyKc5VbTPwbuzT7OlSAnrP7FBBYMzk2VqTVgAWkY4lokgq";
+          const humeApiKey = process.env.HUME_API_KEY!;
 
           if (!chunks[i]) {
             console.error(`Chunk ${i} is undefined or empty`);

@@ -14,6 +14,7 @@ export const env = createEnv({
     CLOUDFLARE_ACCESS_KEY_ID: z.string(),
     CLOUDFLARE_SECRET_ACCESS_KEY: z.string(),
     CLOUDFLARE_BUCKET_NAME: z.string(),
+    HUME_API_KEY: z.string(),
   },
 
   /**
@@ -35,6 +36,7 @@ export const env = createEnv({
     CLOUDFLARE_ACCESS_KEY_ID: process.env.CLOUDFLARE_ACCESS_KEY_ID,
     CLOUDFLARE_SECRET_ACCESS_KEY: process.env.CLOUDFLARE_SECRET_ACCESS_KEY,
     CLOUDFLARE_BUCKET_NAME: process.env.CLOUDFLARE_BUCKET_NAME,
+    HUME_API_KEY: process.env.HUME_API_KEY,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
