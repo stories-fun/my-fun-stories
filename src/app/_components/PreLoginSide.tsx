@@ -1,9 +1,8 @@
 import React from "react";
 import Image from "next/image";
-import { useWallet } from "@jup-ag/wallet-adapter";
 
 const PreLoginSide = () => {
-  const wallet = useWallet();
+  // Wallet variable removed since it's not used
 
   // const handleLogin = () => {
   //   // Connect to the first available wallet

@@ -6,9 +6,7 @@ import RightSidebar from "~/app/_components/RightSidebar";
 import NavBar from "~/app/_components/NavBar";
 import Comments from "~/app/_components/Comments";
 import { useStoriesStore } from "~/store/useStoriesStore";
-import PreLoginSide from "~/app/_components/PreLoginSide";
 import { useWallet } from "@jup-ag/wallet-adapter";
-import HasnotInvestedSide from "~/app/_components/HasNotInvestedSide";
 import { api } from "~/trpc/react";
 
 const Page = () => {

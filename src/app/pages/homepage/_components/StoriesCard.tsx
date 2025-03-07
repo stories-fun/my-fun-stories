@@ -6,7 +6,6 @@ import ProgressBar from "~/app/_components/ProgressBar";
 import { useStoriesStore } from "~/store/useStoriesStore";
 import { useRouter } from "next/navigation";
 import Loading from "./Loading";
-import { StoryVideo } from "./StoryVideo";
 import { ImageSlider } from "./ImageSlider";
 
 const LiveIndicator = ({ index }: { index: number }) => (
