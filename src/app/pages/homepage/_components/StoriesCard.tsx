@@ -14,7 +14,7 @@ const LiveIndicator = ({ index }: { index: number }) => (
       className={`h-1.5 w-1.5 rounded-full ${index === 1 ? "bg-green-500" : "bg-red-500"}`}
     ></div>
     <span className="text-xs">
-      {index === 1 ? "Going Live on 5th March" : "Live Now"}
+      {index === 1 ? "Going Live on 20th March" : "Live Now"}
     </span>
   </div>
 );
