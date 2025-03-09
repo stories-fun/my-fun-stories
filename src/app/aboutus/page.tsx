@@ -9,6 +9,7 @@ const AboutUs = () => {
       <NavBar />
 
       {/* Hero Image Section */}
+      {/* to authorise deployment */}
       <div className="relative h-[200px] w-full sm:h-[250px] md:h-[300px] lg:h-[300px]">
         <div className="flex h-[70%] w-full items-center justify-center bg-[#007AFF] font-bold text-white sm:text-3xl md:text-5xl lg:text-7xl">
           <p>Believe In Stories</p>
