@@ -207,7 +207,7 @@ const StoriesCard = () => {
                 height={300}
                 className="h-full w-full object-cover"
                 onClick={() =>
-                  alert("This story will be released on March 5th!")
+                  alert("This story will be released on March 20th!")
                 }
               />
             </div>
@@ -219,7 +219,7 @@ const StoriesCard = () => {
 
           <div
             className="w-full cursor-pointer pt-2 lg:w-2/3 lg:pt-0"
-            onClick={() => alert("This story will be released on March 5th!")}
+            onClick={() => alert("This story will be released on March 20th!")}
           >
             <div className="space-y-2">
               <h2 className="font-lg text-xl font-[IBM_Plex_Sans] leading-tight sm:text-2xl">
@@ -258,7 +258,7 @@ const StoriesCard = () => {
 
           <div
             className="w-full cursor-pointer pt-2 lg:w-2/3 lg:pt-0"
-            onClick={() => alert("This story will be released on March 5th!")}
+            onClick={() => alert("This story will be released on March 20th!")}
           >
             <div className="space-y-2">
               <h2 className="font-lg text-lg font-[IBM_Plex_Sans] leading-tight">
@@ -296,7 +296,7 @@ const StoriesCard = () => {
 
           <div
             className="w-full cursor-pointer pt-2 lg:w-2/3 lg:pt-0"
-            onClick={() => alert("This story will be released on March 5th!")}
+            onClick={() => alert("This story will be released on March 20th!")}
           >
             <div className="space-y-2">
               <h2 className="font-lg text-lg font-[IBM_Plex_Sans] leading-tight">
@@ -334,7 +334,7 @@ const StoriesCard = () => {
 
           <div
             className="w-full cursor-pointer pt-2 lg:w-2/3 lg:pt-0"
-            onClick={() => alert("This story will be released on March 5th!")}
+            onClick={() => alert("This story will be released on March 20th!")}
           >
             <div className="space-y-2">
               <h2 className="font-lg text-lg font-[IBM_Plex_Sans] leading-tight">
