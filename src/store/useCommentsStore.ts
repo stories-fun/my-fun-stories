@@ -8,21 +8,18 @@ interface CommentSpecificState {
 }
 
 interface CommentsState {
-  // Per-comment state
   commentStates: Record<string, CommentSpecificState>;
   setCommentCollapsed: (commentId: string, value: boolean) => void;
   setCommentReplyInput: (commentId: string, value: boolean) => void;
   setCommentReplyContent: (commentId: string, value: string) => void;
   setCommentShareModal: (commentId: string, value: boolean) => void;
 
-  // Global state
   newComment: string;
   setNewComment: (value: string) => void;
   visibleComments: number;
   setVisibleComments: (value: number) => void;
   COMMENTS_PER_PAGE: number;
 
-  // CommentsShareModal state
   copied: boolean;
   setCopied: (value: boolean) => void;
   activeTab: string;
@@ -37,7 +34,6 @@ interface CommentsState {
   setEmbedCode: (value: string) => void;
 }
 
-// Default state for a comment
 const getDefaultCommentState = (): CommentSpecificState => ({
   isCollapsed: true,
   showReplyInput: false,
@@ -46,7 +42,6 @@ const getDefaultCommentState = (): CommentSpecificState => ({
 });
 
 export const useCommentsStore = create<CommentsState>((set) => ({
-  // Per-comment state
   commentStates: {},
   setCommentCollapsed: (commentId, value) =>
     set((state) => ({
@@ -89,14 +84,12 @@ export const useCommentsStore = create<CommentsState>((set) => ({
       },
     })),
 
-  // Global states
   newComment: "",
   setNewComment: (value) => set({ newComment: value }),
-  visibleComments: 5, // Default value
+  visibleComments: 5,
   setVisibleComments: (value) => set({ visibleComments: value }),
   COMMENTS_PER_PAGE: 5,
 
-  // CommentsShareModal state
   copied: false,
   setCopied: (value) => set({ copied: value }),
   activeTab: "link",

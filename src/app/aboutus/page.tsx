@@ -7,9 +7,6 @@ const AboutUs = () => {
   return (
     <div className="min-h-screen bg-white">
       <NavBar />
-
-      {/* Hero Image Section */}
-      {/* to authorise deployment */}
       <div className="relative h-[200px] w-full sm:h-[250px] md:h-[300px] lg:h-[300px]">
         <div className="flex h-[70%] w-full items-center justify-center bg-[#007AFF] font-bold text-white sm:text-3xl md:text-5xl lg:text-7xl">
           <p>Believe In Stories</p>
@@ -17,7 +14,6 @@ const AboutUs = () => {
         </div>
       </div>
 
-      {/* Content Section */}
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-prose">
           <div className="space-y-4 text-base leading-relaxed text-gray-700 sm:text-lg">
@@ -65,7 +61,6 @@ const AboutUs = () => {
         </div>
       </div>
 
-      {/* Social Links Section */}
       <div className="mx-auto my-12 flex flex-col items-center justify-center space-y-4 px-4 text-center">
         <h2 className="text-xl font-bold text-gray-900 sm:text-2xl">
           Follow us to stay updated

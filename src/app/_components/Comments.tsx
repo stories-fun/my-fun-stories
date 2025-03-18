@@ -2,7 +2,7 @@ import React from "react";
 import { useWallet } from "@jup-ag/wallet-adapter";
 import { api } from "~/trpc/react";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
-import { WalletChildrenProvider } from "../../context/wallet";
+import { WalletChildrenProvider } from "../../context/WalletProvider";
 import Image from "next/image";
 import ShareModal from "./CommentsShareModal";
 import dynamic from "next/dynamic";

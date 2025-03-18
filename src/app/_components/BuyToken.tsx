@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Input } from "./ui/input";
 import { useWallet } from "@jup-ag/wallet-adapter";
-import { usePresale } from "~/context/PresaleContext";
+import { usePresale } from "~/context/PresaleProvider";
 import { useConnection } from "@solana/wallet-adapter-react";
 import { useMemo, useEffect } from "react";
 import { Button } from "./ui/button";

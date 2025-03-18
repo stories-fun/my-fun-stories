@@ -1,13 +1,13 @@
 "use client";
 import React, { useEffect } from "react";
-import StoriesCard from "./_components/StoriesCard";
+import StoriesCard from "./StoriesCard";
 import PreLoginSide from "~/app/_components/PreLoginSide";
 import { useWallet } from "@jup-ag/wallet-adapter";
 import { useStoriesStore } from "~/store/useStoriesStore";
 import HasnotInvestedSide from "~/app/_components/HasNotInvestedSide";
 import { api } from "~/trpc/react";
 
-const HomePage = () => {
+const Stories = () => {
   const wallet = useWallet();
   const walletAddress = wallet.publicKey?.toString();
   const { getStories, isLoading } = useStoriesStore();
@@ -20,10 +20,10 @@ const HomePage = () => {
 
   const { data: user } = api.user.get.useQuery(
     {
-      walletAddress: walletAddress!, // '!' assets walletAddress is defined
+      walletAddress: walletAddress!,
     },
     {
-      enabled: !!wallet.connected && !!walletAddress, //only run the query when wallet is connected and  address exists
+      enabled: !!wallet.connected && !!walletAddress,
     },
   );
 
@@ -42,14 +42,11 @@ const HomePage = () => {
     <div className="bg-white-50 min-h-screen">
       <div className="container mx-auto px-4 py-6 lg:px-8 lg:py-10">
         <div className="flex flex-col gap-6 lg:flex-row">
-          {/* Main stories section */}
           <div className="w-full lg:w-3/4">
             <div className="rounded-xl bg-white shadow-sm">
               <StoriesCard />
             </div>
           </div>
-
-          {/* Right section - hidden on mobile */}
           <div className="lg:hidden">
             <div className="mt-4">{rightSidebarContent}</div>
           </div>
@@ -62,4 +59,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default Stories;

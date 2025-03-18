@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-// Define the input type that matches the raw data shape
 export interface CommentInput {
   id: string;
   content: string;
@@ -12,7 +11,6 @@ export interface CommentInput {
   replies?: CommentInput[];
 }
 
-// Define the output type with proper Date
 export interface Comment {
   id: string;
   content: string;
@@ -40,7 +38,6 @@ const baseSchema = z.object({
     .transform((arr) => arr ?? []),
 });
 
-// Create the recursive schema with proper input/output types
 export const commentSchema: z.ZodType<Comment, z.ZodTypeDef, CommentInput> =
   z.lazy(() =>
     baseSchema

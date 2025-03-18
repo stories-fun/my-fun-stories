@@ -187,7 +187,6 @@ const ShareModalContent = ({
   );
 };
 
-// Export a client-side only version of the modal
 const ShareModal = dynamic(() => Promise.resolve(ShareModalContent), {
   ssr: false,
 });

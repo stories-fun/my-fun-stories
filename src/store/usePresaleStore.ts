@@ -27,7 +27,6 @@ export const usePresaleStore = create<PresaleState>((set) => ({
 
   loadPresaleData: async () => {
     try {
-      // Check if server is running first
       const isServerHealthy = await checkServerHealth();
       if (!isServerHealthy) {
         return;
@@ -55,7 +54,6 @@ export const usePresaleStore = create<PresaleState>((set) => ({
   },
 }));
 
-// Helper function
 async function checkServerHealth() {
   try {
     const response = await fetch("http://localhost:3001/health");

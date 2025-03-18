@@ -5,7 +5,6 @@ import React from "react";
 import { useRightSidebarStore } from "~/store/useRightSidebarStore";
 
 const RightSidebar = ({ username }: { username: string }) => {
-  // Define the custom tiers with their prices and descriptions
   const tiers = [
     {
       price: 5,
@@ -30,12 +29,10 @@ const RightSidebar = ({ username }: { username: string }) => {
     },
   ];
 
-  // Get expanded tiers state from Zustand
   const { expandedTiers, toggleTier } = useRightSidebarStore();
 
   return (
     <div className="overflow-hidden rounded-md border bg-white">
-      {/* Space/Planets banner */}
       <div className="">
         <Image
           src={"/images/banner.png"}
@@ -47,10 +44,8 @@ const RightSidebar = ({ username }: { username: string }) => {
         />
       </div>
 
-      {/* Profile section */}
       <div className="border-b pb-4">
         <div className="relative flex items-center justify-between p-4">
-          {/* Profile image and name */}
           <div className="flex items-center space-x-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-pink-200">
               <svg
@@ -92,7 +87,6 @@ const RightSidebar = ({ username }: { username: string }) => {
           </div>
         </div>
 
-        {/* Bio text */}
         <div className="px-4 pb-2">
           <p className="text-gray-800">
             Your personal frontpage. a short discription to understand you and
@@ -100,13 +94,11 @@ const RightSidebar = ({ username }: { username: string }) => {
           </p>
         </div>
 
-        {/* Show more link */}
         <div className="flex items-center justify-center">
           <button className="p-2 font-medium text-gray-500">Show more</button>
         </div>
       </div>
 
-      {/* Action buttons */}
       <div className="space-y-3 p-4">
         <button className="w-full rounded-full bg-blue-500 py-3 font-medium text-white">
           Invest Now
@@ -115,8 +107,6 @@ const RightSidebar = ({ username }: { username: string }) => {
           Chat with creator
         </button>
       </div>
-
-      {/* Stats section */}
       <div className="flex justify-between border-b border-t px-4 py-6">
         <div className="text-center">
           <div className="text-xl font-bold">26k</div>
@@ -146,15 +136,12 @@ const RightSidebar = ({ username }: { username: string }) => {
         </div>
       </div>
 
-      {/* Utilities section */}
       <div className="px-4 pb-2 pt-4">
         <div className="mb-2 font-bold text-gray-700">UTILITIES</div>
       </div>
 
-      {/* Custom tier dropdowns */}
       {tiers.map((tier, index) => (
         <div key={index} className="border-t">
-          {/* Tier header - clickable */}
           <div
             className="flex cursor-pointer items-center justify-between px-4 py-4"
             onClick={() => toggleTier(index)}
@@ -173,7 +160,6 @@ const RightSidebar = ({ username }: { username: string }) => {
               />
             </svg>
           </div>
-          {/* Dropdown content */}
           {expandedTiers[index] && (
             <div className="border-t bg-gray-50 px-4 py-3">
               <p className="text-gray-600">{tier.description}</p>

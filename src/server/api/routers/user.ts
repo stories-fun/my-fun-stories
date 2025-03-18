@@ -77,7 +77,6 @@ export const userRouter = createTRPCRouter({
           expiresIn: 3600,
         });
 
-        // Get the public URL for the uploaded file
         const publicUrl = `https://${userStorage.getBucketName()}.r2.cloudflarestorage.com/${key}`;
 
         console.log("Generated presigned URL:", {
@@ -90,7 +89,7 @@ export const userRouter = createTRPCRouter({
 
         return {
           uploadUrl: url,
-          key: publicUrl, // Return the public URL as the key
+          key: publicUrl,
         };
       } catch (error) {
         console.error("Error generating upload URL:", error);

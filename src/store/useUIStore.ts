@@ -1,65 +1,89 @@
 import { create } from "zustand";
 
+interface PostUIState {
+  showShareModal: boolean;
+  showBuyDialog: boolean;
+}
+
 interface UIState {
-  // ShareModal state
   copied: boolean;
   setCopied: (value: boolean) => void;
 
-  // NavBar state
   menuOpen: boolean;
   setMenuOpen: (value: boolean) => void;
   mounted: boolean;
   setMounted: (value: boolean) => void;
 
-  // User dialog state
   showUserDialog: boolean;
   setShowUserDialog: (value: boolean) => void;
   hasCheckedUser: boolean;
   setHasCheckedUser: (value: boolean) => void;
 
-  // BuyToken state
   loading: boolean;
   setLoading: (value: boolean) => void;
 
-  // Post actions state
-  showShareModal: boolean;
-  setShowShareModal: (value: boolean) => void;
-  showBuyDialog: boolean;
-  setShowBuyDialog: (value: boolean) => void;
+  postUIStates: Record<string, PostUIState>;
+  setShowShareModal: (postId: string, value: boolean) => void;
+  setShowBuyDialog: (postId: string, value: boolean) => void;
+  getShowShareModal: (postId: string) => boolean;
+  getShowBuyDialog: (postId: string) => boolean;
 
-  // Story page state
   hasScrolled: boolean;
   setHasScrolled: (value: boolean) => void;
 }
 
-export const useUIStore = create<UIState>((set) => ({
-  // ShareModal state
+const getDefaultPostUIState = (): PostUIState => ({
+  showShareModal: false,
+  showBuyDialog: false,
+});
+
+export const useUIStore = create<UIState>((set, get) => ({
   copied: false,
   setCopied: (value) => set({ copied: value }),
 
-  // NavBar state
   menuOpen: false,
   setMenuOpen: (value) => set({ menuOpen: value }),
   mounted: false,
   setMounted: (value) => set({ mounted: value }),
 
-  // User dialog state
   showUserDialog: false,
   setShowUserDialog: (value) => set({ showUserDialog: value }),
   hasCheckedUser: false,
   setHasCheckedUser: (value) => set({ hasCheckedUser: value }),
 
-  // BuyToken state
   loading: false,
   setLoading: (value) => set({ loading: value }),
 
-  // Post actions state
-  showShareModal: false,
-  setShowShareModal: (value) => set({ showShareModal: value }),
-  showBuyDialog: false,
-  setShowBuyDialog: (value) => set({ showBuyDialog: value }),
+  postUIStates: {},
+  setShowShareModal: (postId, value) =>
+    set((state) => ({
+      postUIStates: {
+        ...state.postUIStates,
+        [postId]: {
+          ...(state.postUIStates[postId] ?? getDefaultPostUIState()),
+          showShareModal: value,
+        },
+      },
+    })),
+  setShowBuyDialog: (postId, value) =>
+    set((state) => ({
+      postUIStates: {
+        ...state.postUIStates,
+        [postId]: {
+          ...(state.postUIStates[postId] ?? getDefaultPostUIState()),
+          showBuyDialog: value,
+        },
+      },
+    })),
+  getShowShareModal: (postId) => {
+    const state = get().postUIStates[postId];
+    return state?.showShareModal ?? false;
+  },
+  getShowBuyDialog: (postId) => {
+    const state = get().postUIStates[postId];
+    return state?.showBuyDialog ?? false;
+  },
 
-  // Story page state
   hasScrolled: false,
   setHasScrolled: (value) => set({ hasScrolled: value }),
 }));

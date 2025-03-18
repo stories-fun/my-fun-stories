@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import PostActions from "./PostActions";
 import "draft-js/dist/Draft.css";
 import { useStoriesStore } from "~/store/useStoriesStore";
-import { StoryVideo } from "../pages/homepage/_components/StoryVideo";
+import { StoryVideo } from "./StoryVideo";
 import AdhiStory from "../stories/AdhiStory";
 // import TTSButton from "./TTSButton";
 // import { useStoryVideoStore } from "~/store/useStoryVideoStore";
@@ -144,7 +144,7 @@ const PostCard = ({ storyId }: { storyId: string }) => {
       </div> */}
 
       <div className="bg-[#F6F7F8]">
-        <StoryVideo src="https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/adhi_sample_video.MP4" />
+        <StoryVideo src="https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/assets/adhi_sample_video.MP4" />
       </div>
 
       <div className="mt-4">

@@ -32,7 +32,6 @@ const WalletConnectHandler = () => {
     },
   );
 
-  // Handle query completion
   useEffect(() => {
     if (isSuccess) {
       setHasCheckedUser(true);
@@ -54,7 +53,6 @@ const WalletConnectHandler = () => {
     setShowUserDialog,
   ]);
 
-  // Reset state when wallet changes
   useEffect(() => {
     if (!wallet.connected) {
       setShowUserDialog(false);
@@ -62,13 +60,11 @@ const WalletConnectHandler = () => {
     }
   }, [wallet.connected, setShowUserDialog, setHasCheckedUser]);
 
-  // Memoize wallet address for dependency array
   const walletAddress = useMemo(
     () => wallet.publicKey?.toString(),
     [wallet.publicKey],
   );
 
-  // Reset state when wallet address changes
   useEffect(() => {
     setHasCheckedUser(false);
   }, [walletAddress, setHasCheckedUser]);

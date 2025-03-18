@@ -14,14 +14,30 @@ interface PostActionsProps {
 }
 
 const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
-  const { showShareModal, setShowShareModal, showBuyDialog, setShowBuyDialog } =
-    useUIStore();
-  const { userWallet, setUserWallet, isLiked, setIsLiked, count, setCount } =
-    usePostActionsStore();
+  const {
+    setShowShareModal,
+    setShowBuyDialog,
+    getShowShareModal,
+    getShowBuyDialog,
+  } = useUIStore();
+
+  const {
+    userWallet,
+    setUserWallet,
+    setIsLiked,
+    setCount,
+    getIsLiked,
+    getCount,
+  } = usePostActionsStore();
+
   const router = useRouter();
 
   const { like, stories, likeCounts } = useStoriesStore();
   const wallet = useWallet();
+
+  // Get current UI state for this specific post
+  const showShareModal = getShowShareModal(storyKey);
+  const showBuyDialog = getShowBuyDialog(storyKey);
 
   useEffect(() => {
     if (wallet.connected && wallet.publicKey) {
@@ -40,11 +56,11 @@ const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
 
   useEffect(() => {
     if (userWallet) {
-      setIsLiked(likesArray.includes(userWallet));
+      setIsLiked(storyKey, likesArray.includes(userWallet));
     } else {
-      setIsLiked(false);
+      setIsLiked(storyKey, false);
     }
-    setCount(likeCounts[storyKey] ?? story?.likeCount ?? 0);
+    setCount(storyKey, likeCounts[storyKey] ?? story?.likeCount ?? 0);
   }, [
     storyKey,
     likeCounts,
@@ -54,6 +70,10 @@ const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
     setIsLiked,
     setCount,
   ]);
+
+  // Get current state for this specific post
+  const isLiked = getIsLiked(storyKey);
+  const count = getCount(storyKey);
 
   const handleLikeClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -69,13 +89,13 @@ const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
     }
 
     try {
-      setIsLiked(true);
-      setCount((prev) => prev + 1);
+      setIsLiked(storyKey, true);
+      setCount(storyKey, (prev) => prev + 1);
       await like(storyKey, userWallet);
     } catch (error) {
       console.error("Error liking post:", error);
-      setIsLiked(false);
-      setCount((prev) => prev - 1);
+      setIsLiked(storyKey, false);
+      setCount(storyKey, (prev) => prev - 1);
     }
   };
 
@@ -101,7 +121,7 @@ const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
         </button>
         <div
           className="flex cursor-pointer items-center space-x-2 rounded-full text-sm font-bold"
-          onClick={() => setShowBuyDialog(true)}
+          onClick={() => setShowBuyDialog(storyKey, true)}
         >
           <Image
             src={"/images/advertise.png"}
@@ -115,7 +135,7 @@ const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
         {showBuyDialog && (
           <BuyTokensDialog
             open={showBuyDialog}
-            onClose={() => setShowBuyDialog(false)}
+            onClose={() => setShowBuyDialog(storyKey, false)}
           />
         )}
         <button
@@ -132,7 +152,7 @@ const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
           />
           <span>Comment</span>
         </button>
-        <button onClick={() => setShowShareModal(true)}>
+        <button onClick={() => setShowShareModal(storyKey, true)}>
           <div className="flex items-center space-x-2 rounded-full text-sm font-bold">
             <Image
               src={"/images/share.png"}
@@ -148,7 +168,7 @@ const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
 
       <ShareModal
         isOpen={showShareModal}
-        onClose={() => setShowShareModal(false)}
+        onClose={() => setShowShareModal(storyKey, false)}
         postId={storyKey}
       />
     </div>

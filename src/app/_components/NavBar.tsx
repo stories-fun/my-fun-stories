@@ -13,7 +13,7 @@ import {
   FiInfo,
 } from "react-icons/fi";
 import Link from "next/link";
-import { WalletProvider } from "../../context/wallet";
+import { WalletProvider } from "../../context/WalletProvider";
 import { useUIStore } from "~/store/useUIStore";
 
 interface MobileMenuItemProps {

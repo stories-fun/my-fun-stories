@@ -133,14 +133,13 @@ const StoriesCard = () => {
 
           <div className="flex flex-col space-y-3 lg:flex-row lg:space-x-6 lg:space-y-0">
             <div className="w-full lg:w-1/3">
-              {/* Image Section */}
               <div
                 className="relative aspect-video w-full cursor-pointer bg-gray-100"
                 onClick={() => handleCardClick(story.id)}
               >
                 {index === 0 ? (
                   <Image
-                    src="https://firebasestorage.googleapis.com/v0/b/himgagic.appspot.com/o/1%2F1.jpg?alt=media&token=7bc531d0-e507-40f6-a97d-f3d26a0fdd7a"
+                    src="https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/assets/1.jpg"
                     alt="Story image"
                     width={400}
                     height={300}
@@ -148,7 +147,7 @@ const StoriesCard = () => {
                   />
                 ) : index === 1 ? (
                   <Image
-                    src="https://firebasestorage.googleapis.com/v0/b/himgagic.appspot.com/o/E61D02C0-AE00-48B5-958D-006EC41B570A.webp?alt=media&token=d2401a28-7505-4723-9b42-aa942a5fd2b9"
+                    src="https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/assets/2.webp"
                     alt="Story image"
                     width={400}
                     height={300}
@@ -170,7 +169,6 @@ const StoriesCard = () => {
             >
               <div className="space-y-2">
                 <h2 className="font-lg text-xl font-[IBM_Plex_Sans] leading-tight sm:text-2xl">
-                  {/* {index === 1 ? hardcodedStory.title : story.title} */}
                   Wrote a Bestseller, TEDx went viral, Disappeared from the
                   public sphere Lived in a Monastery, Met God & Got Into Crypto
                 </h2>
@@ -201,10 +199,9 @@ const StoriesCard = () => {
 
         <div className="flex flex-col space-y-3 lg:flex-row lg:space-x-6 lg:space-y-0">
           <div className="w-full lg:w-1/3">
-            {/* Image Section */}
             <div className="relative aspect-video w-full cursor-pointer bg-gray-100">
               <Image
-                src="https://firebasestorage.googleapis.com/v0/b/himgagic.appspot.com/o/E61D02C0-AE00-48B5-958D-006EC41B570A.webp?alt=media&token=d2401a28-7505-4723-9b42-aa942a5fd2b9"
+                src="https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/assets/2.webp"
                 alt="Story image"
                 width={400}
                 height={300}
@@ -236,9 +233,7 @@ const StoriesCard = () => {
         </div>
       </article>
 
-      {/* Coming soon contents */}
       <article className="relative mb-4 overflow-hidden bg-white p-3">
-        {/* Coming Soon overlay covering entire article */}
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-100/95">
           <h2 className="text-2xl font-bold text-black sm:text-[32px]">
             Coming Soon
@@ -249,7 +244,6 @@ const StoriesCard = () => {
 
         <div className="relative flex flex-col space-y-3 lg:flex-row lg:space-x-6 lg:space-y-0">
           <div className="w-full lg:w-1/3">
-            {/* Image Section */}
             <div className="relative aspect-video w-full cursor-pointer bg-gray-100">
               <ImageSlider />
             </div>
@@ -276,7 +270,6 @@ const StoriesCard = () => {
       </article>
 
       <article className="relative mb-4 overflow-hidden bg-white p-3">
-        {/* Coming Soon overlay covering entire article */}
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-100/95">
           <h2 className="text-2xl font-bold text-black sm:text-[32px]">
             Coming Soon
@@ -287,7 +280,6 @@ const StoriesCard = () => {
 
         <div className="relative flex flex-col space-y-3 lg:flex-row lg:space-x-6 lg:space-y-0">
           <div className="w-full lg:w-1/3">
-            {/* Image Section */}
             <div className="relative aspect-video w-full cursor-pointer bg-gray-100">
               <ImageSlider />
             </div>
@@ -314,7 +306,6 @@ const StoriesCard = () => {
       </article>
 
       <article className="relative mb-4 overflow-hidden bg-white p-3">
-        {/* Coming Soon overlay covering entire article */}
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-100/95">
           <h2 className="text-2xl font-bold text-black sm:text-[32px]">
             Coming Soon
@@ -325,7 +316,6 @@ const StoriesCard = () => {
 
         <div className="relative flex flex-col space-y-3 lg:flex-row lg:space-x-6 lg:space-y-0">
           <div className="w-full lg:w-1/3">
-            {/* Image Section */}
             <div className="relative aspect-video w-full cursor-pointer bg-gray-100">
               <ImageSlider />
             </div>

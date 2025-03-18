@@ -22,7 +22,7 @@ export const StoryVideo = ({ src }: { src: string }) => {
         videoRef.current.pause();
       } else {
         try {
-          await videoRef.current.play(); // Await the promise
+          await videoRef.current.play();
         } catch (error) {
           console.error("Error playing video:", error);
         }
@@ -32,7 +32,7 @@ export const StoryVideo = ({ src }: { src: string }) => {
   };
 
   const toggleMute = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent triggering togglePlay
+    e.stopPropagation();
     if (videoRef.current) {
       videoRef.current.muted = !isMuted;
       setIsMuted(!isMuted);
@@ -40,7 +40,7 @@ export const StoryVideo = ({ src }: { src: string }) => {
   };
 
   const toggleFullscreen = async (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent triggering togglePlay
+    e.stopPropagation();
 
     if (!containerRef.current) return;
 
@@ -69,7 +69,6 @@ export const StoryVideo = ({ src }: { src: string }) => {
     }
   };
 
-  // Listen for fullscreen change event
   React.useEffect(() => {
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
@@ -192,7 +191,6 @@ export const StoryVideo = ({ src }: { src: string }) => {
         </button>
       </div>
 
-      {/* Play/Pause indicator overlay */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
         {!isPlaying && (
           <div className="rounded-full bg-black/50 p-3">

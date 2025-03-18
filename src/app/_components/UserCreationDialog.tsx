@@ -49,7 +49,6 @@ export const UserCreationDialog = ({
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        // 5MB limit
         toast.error("Image size should be less than 5MB");
         return;
       }
@@ -81,7 +80,6 @@ export const UserCreationDialog = ({
         headers: {
           "Content-Type": file.type,
         },
-        // Remove mode: "cors" as it's not needed for presigned URLs
       });
 
       if (!response.ok) {
@@ -94,7 +92,7 @@ export const UserCreationDialog = ({
         throw new Error(`Upload failed: ${response.statusText}`);
       }
 
-      return key; // This is now the public URL
+      return key;
     } catch (error) {
       console.error("Upload error:", error);
       throw error;

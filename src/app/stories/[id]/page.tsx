@@ -31,7 +31,6 @@ const Page = () => {
   if (isLoading) {
     rightSidebarContent = <p className="text-gray-500">Loading...</p>;
   } else if (!wallet.connected) {
-    // rightSidebarContent = <PreLoginSide />;
     rightSidebarContent = <RightSidebar username={user?.username ?? "User"} />;
   } else {
     rightSidebarContent = (
@@ -49,7 +48,7 @@ const Page = () => {
       const scrollToComments = () => {
         const commentsSection = document.getElementById("comments");
         if (commentsSection) {
-          const headerHeight = 80; // Adjust this value based on your header height
+          const headerHeight = 80;
           const elementPosition = commentsSection.getBoundingClientRect().top;
           const offsetPosition =
             elementPosition + window.pageYOffset - headerHeight;
@@ -62,7 +61,6 @@ const Page = () => {
         }
       };
 
-      // Try scrolling multiple times to ensure it works
       const scrollAttempts = [0, 100, 500, 1000];
       scrollAttempts.forEach((delay) => {
         setTimeout(scrollToComments, delay);
@@ -70,7 +68,6 @@ const Page = () => {
     }
   }, [isLoading, stories, hasScrolled, setHasScrolled]);
 
-  // Reset hasScrolled when navigating to a new story
   useEffect(() => {
     setHasScrolled(false);
   }, [id, setHasScrolled]);
@@ -81,7 +78,6 @@ const Page = () => {
       <div className="bg-white-50 min-h-screen">
         <div className="container mx-auto px-4 py-6 lg:px-8 lg:py-10">
           <div className="flex flex-col gap-14 lg:flex-row">
-            {/* Main stories section */}
             <div className="w-full lg:w-3/4">
               <div className="rounded-xl bg-white shadow-sm">
                 <PostCard storyId={id as string} />
@@ -91,10 +87,8 @@ const Page = () => {
               </div>
             </div>
 
-            {/* Right section - shows at bottom on mobile */}
             <div className="w-full lg:w-1/4">
               <div className="">{rightSidebarContent}</div>
-              {/* <RightSidebar /> */}
             </div>
           </div>
         </div>

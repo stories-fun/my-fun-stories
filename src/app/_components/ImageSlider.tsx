@@ -15,7 +15,6 @@ export const ImageSlider = () => {
         pagination={{ clickable: true }}
         className="h-full w-full rounded-lg"
       >
-        {/* Replace these with your images */}
         <SwiperSlide>
           <Image
             src="/images/profile.png"
