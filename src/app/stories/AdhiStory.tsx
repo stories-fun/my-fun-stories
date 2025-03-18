@@ -50,6 +50,7 @@ const AdhiStory = () => {
             alt="Cafe Einstein"
             fill
             className="object-contain"
+            sizes="(max-width: 768px) 100vw, 75vw"
           />
         </div>
         <p className="mb-6">
@@ -93,6 +94,7 @@ const AdhiStory = () => {
               alt="Cafe Einstein"
               fill
               className="object-contain"
+              sizes="(max-width: 768px) 50vw, 33vw"
             />
           </div>
           <div className="relative h-full w-1/2">
@@ -101,6 +103,7 @@ const AdhiStory = () => {
               alt="Cafe Einstein"
               fill
               className="object-contain"
+              sizes="(max-width: 768px) 50vw, 33vw"
             />
           </div>
         </div>
@@ -110,6 +113,7 @@ const AdhiStory = () => {
             alt="Cafe Einstein"
             fill
             className="object-contain"
+            sizes="(max-width: 768px) 100vw, 75vw"
           />
         </div>
         <p className="mb-6">
@@ -124,6 +128,7 @@ const AdhiStory = () => {
             alt="Cafe Einstein"
             fill
             className="object-contain"
+            sizes="(max-width: 768px) 100vw, 75vw"
           />
         </div>
 
@@ -154,6 +159,7 @@ const AdhiStory = () => {
             alt="Cafe Einstein"
             fill
             className="object-contain"
+            sizes="(max-width: 768px) 100vw, 75vw"
           />
         </div>
       </section>
@@ -268,6 +274,7 @@ const AdhiStory = () => {
             alt="Cafe Einstein"
             fill
             className="object-contain"
+            sizes="(max-width: 768px) 100vw, 75vw"
           />
         </div>
       </section>
@@ -362,6 +369,7 @@ const AdhiStory = () => {
             alt="Cafe Einstein"
             fill
             className="object-contain"
+            sizes="(max-width: 768px) 100vw, 75vw"
           />
         </div>
         <div className="relative mb-6 h-64 w-full md:h-96 lg:h-[500px]">
@@ -372,6 +380,7 @@ const AdhiStory = () => {
             alt="Cafe Einstein"
             fill
             className="object-contain"
+            sizes="(max-width: 768px) 100vw, 75vw"
           />
         </div>
       </section>
@@ -437,6 +446,7 @@ const AdhiStory = () => {
             alt="Cafe Einstein"
             fill
             className="object-contain"
+            sizes="(max-width: 768px) 100vw, 75vw"
           />
         </div>
         <p className="mb-6">
@@ -485,6 +495,7 @@ const AdhiStory = () => {
             alt="Cafe Einstein"
             fill
             className="object-contain"
+            sizes="(max-width: 768px) 100vw, 75vw"
           />
         </div>
         <p className="mb-4">
@@ -575,6 +586,7 @@ const AdhiStory = () => {
             alt="Cafe Einstein"
             fill
             className="object-contain"
+            sizes="(max-width: 768px) 100vw, 75vw"
           />
         </div>
         <p className="mb-4">

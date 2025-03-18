@@ -23,6 +23,7 @@ export const ImageSlider = () => {
             priority
             alt="Slide 1"
             className="object-cover"
+            sizes="(max-width: 768px) 100vw, 50vw"
           />
         </SwiperSlide>
         <SwiperSlide>
@@ -31,6 +32,7 @@ export const ImageSlider = () => {
             fill
             alt="Slide 2"
             className="overflow-hidden object-cover"
+            sizes="(max-width: 768px) 100vw, 50vw"
           />
         </SwiperSlide>
         <SwiperSlide>
@@ -39,6 +41,7 @@ export const ImageSlider = () => {
             fill
             alt="Slide 3"
             className="overflow-hidden object-cover"
+            sizes="(max-width: 768px) 100vw, 50vw"
           />
         </SwiperSlide>
       </Swiper>

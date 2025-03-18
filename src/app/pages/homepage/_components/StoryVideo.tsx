@@ -1,11 +1,18 @@
 /* eslint-disable */
 // @ts-nocheck
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
+import { useStoryVideoStore } from "~/store/useStoryVideoStore";
 
 export const StoryVideo = ({ src }: { src: string }) => {
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [isMuted, setIsMuted] = useState(true);
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const {
+    isPlaying,
+    setIsPlaying,
+    isMuted,
+    setIsMuted,
+    isFullscreen,
+    setIsFullscreen,
+  } = useStoryVideoStore();
+
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 

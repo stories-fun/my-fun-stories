@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import PostCard from "~/app/_components/PostCard";
 import { useParams } from "next/navigation";
 import RightSidebar from "~/app/_components/RightSidebar";
@@ -8,12 +8,13 @@ import Comments from "~/app/_components/Comments";
 import { useStoriesStore } from "~/store/useStoriesStore";
 import { useWallet } from "@jup-ag/wallet-adapter";
 import { api } from "~/trpc/react";
+import { useUIStore } from "~/store/useUIStore";
 
 const Page = () => {
   const params = useParams();
   const id = params?.id;
   const { stories, isLoading } = useStoriesStore();
-  const [hasScrolled, setHasScrolled] = useState(false);
+  const { hasScrolled, setHasScrolled } = useUIStore();
   const wallet = useWallet();
   const walletAddress = wallet.publicKey?.toString();
 
@@ -67,12 +68,12 @@ const Page = () => {
         setTimeout(scrollToComments, delay);
       });
     }
-  }, [isLoading, stories, hasScrolled]);
+  }, [isLoading, stories, hasScrolled, setHasScrolled]);
 
   // Reset hasScrolled when navigating to a new story
   useEffect(() => {
     setHasScrolled(false);
-  }, [id]);
+  }, [id, setHasScrolled]);
 
   return (
     <>

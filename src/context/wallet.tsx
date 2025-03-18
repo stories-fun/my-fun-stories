@@ -4,9 +4,9 @@ import { UnifiedWalletProvider } from "@jup-ag/wallet-adapter";
 import { ConnectionProvider } from "@solana/wallet-adapter-react";
 import { clusterApiUrl, type Cluster } from "@solana/web3.js";
 import { WalletNotification } from "../app/_components/ui/wallet-notification";
-import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
 import { useMemo } from "react";
 import WalletConnectHandler from "../app/_components/WalletConnectHandler";
+import type { Adapter } from "@solana/wallet-adapter-base";
 
 export const WALLET_CONFIG = {
   autoConnect: true,
@@ -22,7 +22,7 @@ export const WALLET_CONFIG = {
   lang: "en" as const,
 };
 
-const wallets = [new PhantomWalletAdapter()];
+const wallets: Adapter[] = [];
 
 export function WalletProvider() {
   const endpoint = useMemo(() => clusterApiUrl("devnet"), []);

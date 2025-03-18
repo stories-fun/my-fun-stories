@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import PostActions from "~/app/_components/PostActions";
 import ProgressBar from "~/app/_components/ProgressBar";
@@ -7,6 +7,7 @@ import { useStoriesStore } from "~/store/useStoriesStore";
 import { useRouter } from "next/navigation";
 import Loading from "./Loading";
 import { ImageSlider } from "./ImageSlider";
+import { useStoryVideoStore } from "~/store/useStoryVideoStore";
 
 const LiveIndicator = ({ index }: { index: number }) => (
   <div className="flex items-center space-x-1">
@@ -54,7 +55,7 @@ const truncateContent = (content: string, wordLimit: number) => {
 };
 
 const ProfileImage = ({ src, alt }: { src: string; alt: string }) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const { isLoading, setIsLoading } = useStoryVideoStore();
 
   return (
     <div className="relative h-10 w-10 overflow-hidden rounded-full bg-gray-100">
@@ -65,8 +66,9 @@ const ProfileImage = ({ src, alt }: { src: string; alt: string }) => {
           isLoading ? "opacity-0" : "opacity-100"
         }`}
         alt={alt}
-        onLoadingComplete={() => setIsLoading(false)}
+        onLoad={() => setIsLoading(false)}
         priority={true}
+        sizes="40px"
       />
     </div>
   );
@@ -80,6 +82,7 @@ const VerificationBadge = () => (
       className="object-contain"
       alt="verified"
       priority={true}
+      sizes="16px"
     />
   </div>
 );

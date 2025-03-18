@@ -6,11 +6,12 @@ const PreLoginSide = () => {
     <div className="overflow-hidden rounded-md border bg-white">
       <div className="">
         <Image
-          src={"/images/Image.png"}
+          src={"/images/banner.png"}
           alt="cover image"
           className="h-[60px] w-full"
           width={500}
           height={100}
+          sizes="(max-width: 768px) 100%, 500px"
         />
       </div>
       <div className="space-y-4 border-b p-4 pb-6">

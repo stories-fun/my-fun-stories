@@ -1,10 +1,12 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import Image from "next/image";
 import ShareModal from "./ShareModal";
 import { useRouter } from "next/navigation";
 import { useStoriesStore } from "~/store/useStoriesStore";
 import { BuyTokensDialog } from "./BuyToken";
 import { useWallet } from "@jup-ag/wallet-adapter";
+import { useUIStore } from "~/store/useUIStore";
+import { usePostActionsStore } from "~/store/usePostActionsStore";
 
 interface PostActionsProps {
   storyKey: string;
@@ -12,9 +14,10 @@ interface PostActionsProps {
 }
 
 const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
-  const [showShareModal, setShowShareModal] = useState(false);
-  const [showBuyDialog, setShowBuyDialog] = useState(false);
-  const [userWallet, setUserWallet] = useState<string | null>(null);
+  const { showShareModal, setShowShareModal, showBuyDialog, setShowBuyDialog } =
+    useUIStore();
+  const { userWallet, setUserWallet, isLiked, setIsLiked, count, setCount } =
+    usePostActionsStore();
   const router = useRouter();
 
   const { like, stories, likeCounts } = useStoriesStore();
@@ -29,25 +32,28 @@ const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
       setUserWallet(null);
       console.log("Wallet not connected");
     }
-  }, [wallet.connected, wallet.publicKey]);
+  }, [wallet.connected, wallet.publicKey, setUserWallet]);
 
   const story = stories.find((s) => s.id === storyKey);
 
   const likesArray = useMemo(() => story?.likes ?? [], [story?.likes]);
 
-  const [isLiked, setIsLiked] = useState<boolean>(
-    userWallet ? likesArray.includes(userWallet) : false,
-  );
-  const [count, setCount] = useState<number>(
-    likeCounts[storyKey] ?? story?.likeCount ?? 0,
-  );
-
   useEffect(() => {
-    if (story && userWallet) {
+    if (userWallet) {
       setIsLiked(likesArray.includes(userWallet));
-      setCount(likeCounts[storyKey] ?? story.likeCount ?? 0);
+    } else {
+      setIsLiked(false);
     }
-  }, [storyKey, likeCounts, story, userWallet, likesArray]);
+    setCount(likeCounts[storyKey] ?? story?.likeCount ?? 0);
+  }, [
+    storyKey,
+    likeCounts,
+    story,
+    userWallet,
+    likesArray,
+    setIsLiked,
+    setCount,
+  ]);
 
   const handleLikeClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -84,14 +90,26 @@ const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
           className="flex cursor-pointer items-center space-x-1 rounded-full text-sm font-bold"
           onClick={handleLikeClick}
         >
-          <Image src={"/images/flower.png"} width={20} height={20} alt="" />
+          <Image
+            src={"/images/flower.png"}
+            width={20}
+            height={20}
+            alt=""
+            style={{ width: "auto", height: "auto" }}
+          />
           <span>{count}</span>
         </button>
         <div
           className="flex cursor-pointer items-center space-x-2 rounded-full text-sm font-bold"
           onClick={() => setShowBuyDialog(true)}
         >
-          <Image src={"/images/advertise.png"} width={20} height={20} alt="" />
+          <Image
+            src={"/images/advertise.png"}
+            width={20}
+            height={20}
+            alt=""
+            style={{ width: "auto", height: "auto" }}
+          />
           <span>Invest</span>
         </div>
         {showBuyDialog && (
@@ -110,12 +128,19 @@ const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
             width={25}
             height={25}
             alt="comment"
+            style={{ width: "auto", height: "auto" }}
           />
           <span>Comment</span>
         </button>
         <button onClick={() => setShowShareModal(true)}>
           <div className="flex items-center space-x-2 rounded-full text-sm font-bold">
-            <Image src={"/images/share.png"} width={25} height={25} alt="" />
+            <Image
+              src={"/images/share.png"}
+              width={25}
+              height={25}
+              alt=""
+              style={{ width: "auto", height: "auto" }}
+            />
             <span>Share</span>
           </div>
         </button>

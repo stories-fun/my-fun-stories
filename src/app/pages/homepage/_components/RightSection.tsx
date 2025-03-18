@@ -49,11 +49,12 @@ const RightSection = () => {
       {/* Banner Image with gradient overlay */}
       <div className="">
         <Image
-          src={"/images/Image.png"}
+          src={"/images/banner.png"}
           alt="cover image"
           className="h-[60px] w-full"
           width={500}
           height={100}
+          sizes="(max-width: 768px) 100%, 500px"
         />
       </div>
 

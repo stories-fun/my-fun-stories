@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useWallet } from "@jup-ag/wallet-adapter";
 import { api } from "~/trpc/react";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
@@ -6,6 +6,7 @@ import { WalletChildrenProvider } from "../../context/wallet";
 import Image from "next/image";
 import ShareModal from "./CommentsShareModal";
 import dynamic from "next/dynamic";
+import { useCommentsStore } from "~/store/useCommentsStore";
 
 interface Comment {
   id: string;
@@ -18,7 +19,7 @@ interface Comment {
   replies: Comment[];
 }
 
-const COMMENTS_PER_PAGE = 5;
+// const COMMENTS_PER_PAGE = 5;
 
 const CommentComponentWithNoSSR = dynamic(
   () =>
@@ -32,10 +33,25 @@ const CommentComponentWithNoSSR = dynamic(
         postId: string;
         level?: number;
       }) => {
-        const [isCollapsed, setIsCollapsed] = useState(true);
-        const [showReplyInput, setShowReplyInput] = useState(false);
-        const [replyContent, setReplyContent] = useState("");
-        const [showShareModal, setShowShareModal] = useState(false);
+        const {
+          commentStates,
+          setCommentCollapsed,
+          setCommentReplyInput,
+          setCommentReplyContent,
+          setCommentShareModal,
+        } = useCommentsStore();
+
+        // Get this comment's state or use default values
+        const commentState = commentStates[comment.id] ?? {
+          isCollapsed: true,
+          showReplyInput: false,
+          replyContent: "",
+          showShareModal: false,
+        };
+
+        const { isCollapsed, showReplyInput, replyContent, showShareModal } =
+          commentState;
+
         const { publicKey } = useWallet();
         const walletAddress = publicKey?.toBase58();
         const utils = api.useUtils();
@@ -65,8 +81,8 @@ const CommentComponentWithNoSSR = dynamic(
         const addCommentMutation = api.story.addComment.useMutation({
           onSuccess: async () => {
             await utils.story.getComments.invalidate({ storyKey: postId });
-            setReplyContent("");
-            setShowReplyInput(false);
+            setCommentReplyContent(comment.id, "");
+            setCommentReplyInput(comment.id, false);
           },
         });
 
@@ -161,6 +177,7 @@ const CommentComponentWithNoSSR = dynamic(
                               height={14}
                               alt="upvote"
                               className="sm:h-4 sm:w-4"
+                              style={{ width: "auto", height: "auto" }}
                             />
                             <span>{comment.upvotes.length}</span>
                           </button>
@@ -185,7 +202,9 @@ const CommentComponentWithNoSSR = dynamic(
                         </div>
 
                         <button
-                          onClick={() => setShowReplyInput(!showReplyInput)}
+                          onClick={() =>
+                            setCommentReplyInput(comment.id, !showReplyInput)
+                          }
                           className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700 sm:text-sm"
                         >
                           <Image
@@ -194,12 +213,13 @@ const CommentComponentWithNoSSR = dynamic(
                             height={14}
                             alt="reply"
                             className="sm:h-4 sm:w-4"
+                            style={{ width: "auto", height: "auto" }}
                           />
                           <span>Reply</span>
                         </button>
 
                         <button
-                          onClick={() => setShowShareModal(true)}
+                          onClick={() => setCommentShareModal(comment.id, true)}
                           className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700 sm:text-sm"
                         >
                           <Image
@@ -208,13 +228,16 @@ const CommentComponentWithNoSSR = dynamic(
                             height={14}
                             alt="share"
                             className="sm:h-4 sm:w-4"
+                            style={{ width: "auto", height: "auto" }}
                           />
                           <span>Share</span>
                         </button>
 
                         {comment.replies && comment.replies.length > 0 && (
                           <button
-                            onClick={() => setIsCollapsed(!isCollapsed)}
+                            onClick={() =>
+                              setCommentCollapsed(comment.id, !isCollapsed)
+                            }
                             className="text-xs text-gray-500 hover:text-gray-700 sm:text-sm"
                           >
                             {isCollapsed
@@ -232,13 +255,17 @@ const CommentComponentWithNoSSR = dynamic(
                         <div className="mt-3 sm:mt-4">
                           <textarea
                             value={replyContent}
-                            onChange={(e) => setReplyContent(e.target.value)}
+                            onChange={(e) =>
+                              setCommentReplyContent(comment.id, e.target.value)
+                            }
                             className="min-h-[80px] w-full rounded border border-gray-200 p-2 text-xs focus:border-gray-300 focus:outline-none sm:min-h-[100px] sm:p-3 sm:text-sm"
                             placeholder="Write a reply..."
                           />
                           <div className="mt-2 flex justify-end gap-2">
                             <button
-                              onClick={() => setShowReplyInput(false)}
+                              onClick={() =>
+                                setCommentReplyInput(comment.id, false)
+                              }
                               className="rounded px-3 py-1 text-xs text-gray-500 hover:bg-gray-100 sm:px-4 sm:text-sm"
                             >
                               Cancel
@@ -261,7 +288,7 @@ const CommentComponentWithNoSSR = dynamic(
 
                       <ShareModal
                         isOpen={showShareModal}
-                        onClose={() => setShowShareModal(false)}
+                        onClose={() => setCommentShareModal(comment.id, false)}
                         postId={postId}
                         commentId={comment.id}
                         content={comment.content}
@@ -294,8 +321,13 @@ const CommentComponentWithNoSSR = dynamic(
 );
 
 const CommentsInner = ({ postId }: { postId: string }) => {
-  const [newComment, setNewComment] = useState("");
-  const [visibleComments, setVisibleComments] = useState(COMMENTS_PER_PAGE);
+  const {
+    newComment,
+    setNewComment,
+    visibleComments,
+    setVisibleComments,
+    COMMENTS_PER_PAGE,
+  } = useCommentsStore();
   const { publicKey } = useWallet();
   const walletAddress = publicKey?.toBase58();
 
@@ -370,7 +402,7 @@ const CommentsInner = ({ postId }: { postId: string }) => {
         <div className="p-3 sm:p-4">
           <button
             onClick={() =>
-              setVisibleComments((prev) => prev + COMMENTS_PER_PAGE)
+              setVisibleComments(visibleComments + COMMENTS_PER_PAGE)
             }
             className="w-full rounded-full border border-gray-200 py-1.5 text-xs text-blue-500 hover:border-gray-300 hover:text-blue-600 sm:py-2 sm:text-sm"
           >

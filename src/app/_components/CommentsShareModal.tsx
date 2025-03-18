@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Copy, Check, Twitter, Facebook, Link } from "lucide-react";
 import dynamic from "next/dynamic";
+import { useCommentsStore } from "~/store/useCommentsStore";
 
 interface ShareModalProps {
   isOpen: boolean;
@@ -17,12 +18,20 @@ const ShareModalContent = ({
   commentId,
   content,
 }: ShareModalProps) => {
-  const [copied, setCopied] = useState(false);
-  const [activeTab, setActiveTab] = useState("link");
-  const [commentUrl, setCommentUrl] = useState("");
-  const [twitterShareUrl, setTwitterShareUrl] = useState("");
-  const [facebookShareUrl, setFacebookShareUrl] = useState("");
-  const [embedCode, setEmbedCode] = useState("");
+  const {
+    copied,
+    setCopied,
+    activeTab,
+    setActiveTab,
+    commentUrl,
+    setCommentUrl,
+    twitterShareUrl,
+    setTwitterShareUrl,
+    facebookShareUrl,
+    setFacebookShareUrl,
+    embedCode,
+    setEmbedCode,
+  } = useCommentsStore();
 
   useEffect(() => {
     // Generate URLs only on client side
@@ -43,7 +52,15 @@ const ShareModalContent = ({
   frameborder="0" 
   scrolling="no">
 </iframe>`);
-  }, [postId, commentId, content]);
+  }, [
+    postId,
+    commentId,
+    content,
+    setCommentUrl,
+    setTwitterShareUrl,
+    setFacebookShareUrl,
+    setEmbedCode,
+  ]);
 
   if (!isOpen) return null;
 

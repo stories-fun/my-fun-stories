@@ -14,12 +14,10 @@ const HasnotInvestedSide: React.FC<HasnotInvestedSideProps> = ({
     <div className="mt-12 w-full overflow-hidden rounded-lg border bg-[#F6F7F8] shadow-md">
       <div className="bg-navy-900 relative h-20 w-full">
         <Image
-          src={"/images/Image.png"}
-          layout="fill"
-          // objectFit="cover"
+          src={"/images/banner.png"}
+          fill={true}
+          sizes="(max-width: 768px) 100%, 100%"
           alt="Space theme with planets"
-          // width={40}
-          // height={40}
         />
       </div>
 

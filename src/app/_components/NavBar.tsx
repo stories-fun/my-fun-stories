@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   FiMenu,
   FiX,
@@ -14,6 +14,7 @@ import {
 } from "react-icons/fi";
 import Link from "next/link";
 import { WalletProvider } from "../../context/wallet";
+import { useUIStore } from "~/store/useUIStore";
 
 interface MobileMenuItemProps {
   icon: React.ElementType;
@@ -31,6 +32,7 @@ const NavLogo = () => (
         className="object-contain"
         alt="logo"
         priority
+        sizes="(max-width: 640px) 30px, (max-width: 768px) 40px, 50px"
       />
     </div>
     <div className="font-mont whitespace-nowrap text-lg font-bold text-black transition-colors group-hover:text-gray-700 sm:text-xl md:text-2xl">
@@ -90,12 +92,11 @@ const MobileMenuItem = ({
 };
 
 const NavBar = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const { menuOpen, setMenuOpen, mounted, setMounted } = useUIStore();
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+  }, [setMounted]);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -109,7 +110,7 @@ const NavBar = () => {
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [menuOpen]);
+  }, [menuOpen, setMenuOpen]);
 
   useEffect(() => {
     if (menuOpen) {

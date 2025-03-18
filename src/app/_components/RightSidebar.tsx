@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState } from "react";
+import React from "react";
+import { useRightSidebarStore } from "~/store/useRightSidebarStore";
 
 const RightSidebar = ({ username }: { username: string }) => {
   // Define the custom tiers with their prices and descriptions
@@ -29,29 +30,20 @@ const RightSidebar = ({ username }: { username: string }) => {
     },
   ];
 
-  // State to track which tiers are expanded
-  const [expandedTiers, setExpandedTiers] = useState<Record<number, boolean>>(
-    {},
-  );
-
-  // Function to toggle a tier's expanded state
-  const toggleTier = (tierIndex: number) => {
-    setExpandedTiers((prev: Record<number, boolean>) => ({
-      ...prev,
-      [tierIndex]: !prev[tierIndex],
-    }));
-  };
+  // Get expanded tiers state from Zustand
+  const { expandedTiers, toggleTier } = useRightSidebarStore();
 
   return (
     <div className="overflow-hidden rounded-md border bg-white">
       {/* Space/Planets banner */}
       <div className="">
         <Image
-          src={"/images/Image.png"}
+          src={"/images/banner.png"}
           alt="cover image"
           className="h-[60px] w-full"
           width={500}
           height={100}
+          sizes="(max-width: 768px) 100%, 500px"
         />
       </div>
 
