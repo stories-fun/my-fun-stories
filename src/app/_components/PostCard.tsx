@@ -7,7 +7,6 @@ import { StoryVideo } from "../pages/homepage/_components/StoryVideo";
 import AdhiStory from "../stories/AdhiStory";
 import TTSButton from "./TTSButton";
 
-// AdhiStory text content extracted directly for TTS
 const ADHI_STORY_TEXT = `# How I Met God & Got Into Crypto: Based on a True Story
 
 The following is an exclusive preview of the Intro & Preface of my book How I Met God & Got Into Crypto: Based on a True Story
@@ -96,13 +95,13 @@ const HARDCODED_CONTENT = {
   id: "1740725593742_pDHykt",
   walletAddres: "6zpDHykt19QBN3VKpZpV9jEAMtYJKwkkYMgiEix8sVky",
   title: "How I Met God and Got Into Crypto",
-  content: ADHI_STORY_TEXT, // Now using the directly extracted text
+  content: ADHI_STORY_TEXT,
   writerName: "Admin",
 };
 
 const PostCard = ({ storyId }: { storyId: string }) => {
   const { getById, stories, isLoading, error } = useStoriesStore();
-  const [isContentReady] = useState(true); // Always ready since we have the content directly
+  const [isContentReady] = useState(true);
 
   useEffect(() => {
     if (storyId && storyId !== "1740050375765_ffqB3s") {

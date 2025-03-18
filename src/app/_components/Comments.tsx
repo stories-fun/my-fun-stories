@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useWallet } from "@jup-ag/wallet-adapter";
 import { api } from "~/trpc/react";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
-import { WalletChildrenProvider } from "./wallet";
+import { WalletChildrenProvider } from "../../context/wallet";
 import Image from "next/image";
 import ShareModal from "./CommentsShareModal";
 import dynamic from "next/dynamic";
@@ -111,7 +111,6 @@ const CommentComponentWithNoSSR = dynamic(
         return (
           <div className="group relative">
             <div className="flex">
-              {/* Thread line container - hidden on mobile */}
               <div className="relative mr-2 hidden w-[24px] flex-shrink-0 sm:mr-4 sm:block">
                 {level > 0 && (
                   <>
@@ -121,7 +120,6 @@ const CommentComponentWithNoSSR = dynamic(
                 )}
               </div>
 
-              {/* Comment content */}
               <div className="flex-1">
                 <div className="flex items-start">
                   <div
@@ -158,7 +156,7 @@ const CommentComponentWithNoSSR = dynamic(
                             }`}
                           >
                             <Image
-                              src="/images/Flower.png"
+                              src="/images/flower.png"
                               width={14}
                               height={14}
                               alt="upvote"
@@ -205,7 +203,7 @@ const CommentComponentWithNoSSR = dynamic(
                           className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700 sm:text-sm"
                         >
                           <Image
-                            src="/images/Share.png"
+                            src="/images/share.png"
                             width={14}
                             height={14}
                             alt="share"

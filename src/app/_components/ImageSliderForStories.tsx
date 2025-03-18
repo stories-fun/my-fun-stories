@@ -15,7 +15,6 @@ export const ImageSliderForStories = () => {
         pagination={{ clickable: true }}
         className="rounded-lg"
       >
-        {/* Replace these with your images */}
         <SwiperSlide>
           <div className="relative aspect-[16/9] w-full">
             <Image

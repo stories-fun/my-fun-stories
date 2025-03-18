@@ -8,12 +8,10 @@ interface HasnotInvestedSideProps {
 const HasnotInvestedSide: React.FC<HasnotInvestedSideProps> = ({
   username,
 }) => {
-  // Create an array of placeholder items to match the image
   const storyItems = Array(5).fill(null);
 
   return (
     <div className="mt-12 w-full overflow-hidden rounded-lg border bg-[#F6F7F8] shadow-md">
-      {/* Space-themed header image */}
       <div className="bg-navy-900 relative h-20 w-full">
         <Image
           src={"/images/Image.png"}
@@ -26,7 +24,6 @@ const HasnotInvestedSide: React.FC<HasnotInvestedSideProps> = ({
       </div>
 
       <div className="space-y-6 p-4">
-        {/* Welcome text section */}
         <div>
           <h2 className="text-xl font-bold">Hello, {username}!</h2>
           <p className="mt-4 text-gray-800">
@@ -38,13 +35,11 @@ const HasnotInvestedSide: React.FC<HasnotInvestedSideProps> = ({
           </p>
         </div>
 
-        {/* Stories section */}
         <div className="space-y-4">
           <h2 className="text-xs font-bold uppercase tracking-wide text-gray-900">
             EXPLORE & INVEST IN THE FOLLOWING LIVE STORIES
           </h2>
 
-          {/* Story items */}
           <div className="space-y-3">
             {storyItems.map((_, index) => (
               <div key={index} className="flex items-center justify-between">

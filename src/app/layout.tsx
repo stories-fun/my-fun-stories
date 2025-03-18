@@ -2,7 +2,7 @@ import "~/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
-import { WalletChildrenProvider } from "./_components/wallet";
+import { WalletChildrenProvider } from "../context/wallet";
 import { TRPCReactProvider } from "~/trpc/react";
 import { PresaleProvider } from "~/context/PresaleContext";
 

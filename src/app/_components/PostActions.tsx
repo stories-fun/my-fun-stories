@@ -84,14 +84,14 @@ const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
           className="flex cursor-pointer items-center space-x-1 rounded-full text-sm font-bold"
           onClick={handleLikeClick}
         >
-          <Image src={"/images/Flower.png"} width={20} height={20} alt="" />
+          <Image src={"/images/flower.png"} width={20} height={20} alt="" />
           <span>{count}</span>
         </button>
         <div
           className="flex cursor-pointer items-center space-x-2 rounded-full text-sm font-bold"
           onClick={() => setShowBuyDialog(true)}
         >
-          <Image src={"/images/Advertise.png"} width={20} height={20} alt="" />
+          <Image src={"/images/advertise.png"} width={20} height={20} alt="" />
           <span>Invest</span>
         </div>
         {showBuyDialog && (
@@ -115,7 +115,7 @@ const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
         </button>
         <button onClick={() => setShowShareModal(true)}>
           <div className="flex items-center space-x-2 rounded-full text-sm font-bold">
-            <Image src={"/images/Share.png"} width={25} height={25} alt="" />
+            <Image src={"/images/share.png"} width={25} height={25} alt="" />
             <span>Share</span>
           </div>
         </button>

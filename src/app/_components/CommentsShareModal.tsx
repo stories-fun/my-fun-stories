@@ -10,7 +10,6 @@ interface ShareModalProps {
   content: string;
 }
 
-// Create a client-side only modal component
 const ShareModalContent = ({
   isOpen,
   onClose,

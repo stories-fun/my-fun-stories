@@ -2,15 +2,6 @@ import React from "react";
 import Image from "next/image";
 
 const PreLoginSide = () => {
-  // Wallet variable removed since it's not used
-
-  // const handleLogin = () => {
-  //   // Connect to the first available wallet
-  //   if (wallet.wallets.length > 0) {
-  //     await wallet.connect();
-  //   }
-  // };
-
   return (
     <div className="overflow-hidden rounded-md border bg-white">
       <div className="">
@@ -31,14 +22,6 @@ const PreLoginSide = () => {
           <br />
           Leave your story on-chain—your legacy, forever etched in time.
         </p>
-        <div className="pt-2">
-          <button
-            // onClick={handleLogin}
-            className="w-full rounded-full bg-blue-500 py-3 font-medium text-white transition-colors hover:bg-blue-600"
-          >
-            Login
-          </button>
-        </div>
       </div>
     </div>
   );

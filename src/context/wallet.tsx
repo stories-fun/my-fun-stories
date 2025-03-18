@@ -3,10 +3,10 @@
 import { UnifiedWalletProvider } from "@jup-ag/wallet-adapter";
 import { ConnectionProvider } from "@solana/wallet-adapter-react";
 import { clusterApiUrl, type Cluster } from "@solana/web3.js";
-import { WalletNotification } from "./wallet-notification";
+import { WalletNotification } from "../app/_components/ui/wallet-notification";
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
 import { useMemo } from "react";
-import WalletConnectHandler from "./WalletConnectHandler";
+import WalletConnectHandler from "../app/_components/WalletConnectHandler";
 
 export const WALLET_CONFIG = {
   autoConnect: true,
