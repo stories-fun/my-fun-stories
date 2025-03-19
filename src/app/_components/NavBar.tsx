@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   FiMenu,
   FiX,
@@ -13,7 +13,8 @@ import {
   FiInfo,
 } from "react-icons/fi";
 import Link from "next/link";
-import { WalletProvider } from "./wallet";
+import { WalletProvider } from "../../context/WalletProvider";
+import { useUIStore } from "~/store/useUIStore";
 
 interface MobileMenuItemProps {
   icon: React.ElementType;
@@ -31,6 +32,7 @@ const NavLogo = () => (
         className="object-contain"
         alt="logo"
         priority
+        sizes="(max-width: 640px) 30px, (max-width: 768px) 40px, 50px"
       />
     </div>
     <div className="font-mont whitespace-nowrap text-lg font-bold text-black transition-colors group-hover:text-gray-700 sm:text-xl md:text-2xl">
@@ -49,7 +51,7 @@ const SearchBar = ({
   <div className={`relative ${className}`}>
     <div className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 transform sm:h-6 sm:w-6">
       <Image
-        src="/images/Search.png"
+        src="/images/search.png"
         fill
         className="object-contain"
         alt="search"
@@ -90,14 +92,12 @@ const MobileMenuItem = ({
 };
 
 const NavBar = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const { menuOpen, setMenuOpen, mounted, setMounted } = useUIStore();
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+  }, [setMounted]);
 
-  // Handle click outside to close mobile menu
   useEffect(() => {
     if (!menuOpen) return;
 
@@ -110,9 +110,8 @@ const NavBar = () => {
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [menuOpen]);
+  }, [menuOpen, setMenuOpen]);
 
-  // Prevent scroll when mobile menu is open
   useEffect(() => {
     if (menuOpen) {
       document.body.style.overflow = "hidden";
@@ -140,9 +139,7 @@ const NavBar = () => {
           <NavLogo />
         </div>
 
-        {/* Navigation Links and Icons */}
         <div className="ml-auto flex items-center">
-          {/* What's your story link - always visible but smaller on mobile */}
           <Link
             href="/"
             className="font-mont mr-2 whitespace-nowrap text-xs font-bold font-semibold text-black decoration-2 transition-colors hover:text-gray-700 sm:mr-4 sm:text-sm md:text-base"
@@ -150,7 +147,6 @@ const NavBar = () => {
             what&apos;s your story?
           </Link>
 
-          {/* About us link - hidden on small mobile, visible on medium screens */}
           <Link
             href="/aboutus"
             className="font-mont mr-2 hidden whitespace-nowrap text-xs font-semibold text-gray-700 transition-colors hover:text-gray-700 sm:mr-4 sm:block sm:text-sm md:text-base"
@@ -158,7 +154,6 @@ const NavBar = () => {
             about us
           </Link>
 
-          {/* Desktop Navigation Icons */}
           <div className="hidden md:flex md:items-center md:space-x-2">
             <button
               className="rounded-lg p-2 text-lg text-gray-700 transition-colors hover:bg-gray-100 sm:text-xl"
@@ -193,7 +188,6 @@ const NavBar = () => {
             </button>
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="menu-button ml-1 rounded-lg p-1 text-xl text-gray-700 transition-colors hover:bg-gray-100 sm:p-2 md:hidden"
@@ -204,7 +198,6 @@ const NavBar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {menuOpen && (
         <div className="mobile-menu fixed inset-x-0 top-[57px] z-50 h-[calc(100vh-57px)] overflow-y-auto bg-white shadow-lg sm:top-[73px] sm:h-[calc(100vh-73px)] md:hidden">
           <div className="container mx-auto space-y-4 p-4">
@@ -233,7 +226,7 @@ const NavBar = () => {
                 icon={FiBell}
                 label="Notifications"
                 onClick={() => {
-                  // Handle notifications
+                  //TODO: Handle notifications
                   setMenuOpen(false);
                 }}
               />
@@ -241,7 +234,7 @@ const NavBar = () => {
                 icon={FiPlus}
                 label="Create New"
                 onClick={() => {
-                  // Handle create new
+                  //TODO: Handle create new
                   setMenuOpen(false);
                 }}
               />
@@ -249,7 +242,7 @@ const NavBar = () => {
                 icon={FiMessageSquare}
                 label="Messages"
                 onClick={() => {
-                  // Handle messages
+                  //TODO: Handle messages
                   setMenuOpen(false);
                 }}
               />
@@ -257,7 +250,7 @@ const NavBar = () => {
                 icon={FiUser}
                 label="Profile"
                 onClick={() => {
-                  // Handle profile
+                  //TODO: Handle profile
                   setMenuOpen(false);
                 }}
               />

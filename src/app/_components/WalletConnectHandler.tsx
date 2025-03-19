@@ -1,15 +1,20 @@
 "use client";
 
 import { UnifiedWalletButton, useWallet } from "@jup-ag/wallet-adapter";
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { api } from "~/trpc/react";
 import { UserCreationDialog } from "./UserCreationDialog";
+import { useUIStore } from "~/store/useUIStore";
 
 const WalletConnectHandler = () => {
   const { publicKey } = useWallet();
   const wallet = useWallet();
-  const [showUserDialog, setShowUserDialog] = useState(false);
-  const [hasCheckedUser, setHasCheckedUser] = useState(false);
+  const {
+    showUserDialog,
+    setShowUserDialog,
+    hasCheckedUser,
+    setHasCheckedUser,
+  } = useUIStore();
 
   useEffect(() => {
     if (publicKey) {
@@ -27,7 +32,6 @@ const WalletConnectHandler = () => {
     },
   );
 
-  // Handle query completion
   useEffect(() => {
     if (isSuccess) {
       setHasCheckedUser(true);
@@ -40,26 +44,30 @@ const WalletConnectHandler = () => {
       setHasCheckedUser(true);
       setShowUserDialog(true);
     }
-  }, [isSuccess, isError, error, wallet.connected]);
+  }, [
+    isSuccess,
+    isError,
+    error,
+    wallet.connected,
+    setHasCheckedUser,
+    setShowUserDialog,
+  ]);
 
-  // Reset state when wallet changes
   useEffect(() => {
     if (!wallet.connected) {
       setShowUserDialog(false);
       setHasCheckedUser(false);
     }
-  }, [wallet.connected]);
+  }, [wallet.connected, setShowUserDialog, setHasCheckedUser]);
 
-  // Memoize wallet address for dependency array
   const walletAddress = useMemo(
     () => wallet.publicKey?.toString(),
     [wallet.publicKey],
   );
 
-  // Reset state when wallet address changes
   useEffect(() => {
     setHasCheckedUser(false);
-  }, [walletAddress]);
+  }, [walletAddress, setHasCheckedUser]);
 
   return (
     <>

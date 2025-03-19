@@ -1,13 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import PostActions from "./PostActions";
 import "draft-js/dist/Draft.css";
 import { useStoriesStore } from "~/store/useStoriesStore";
-import { StoryVideo } from "../pages/homepage/_components/StoryVideo";
+import { StoryVideo } from "./StoryVideo";
 import AdhiStory from "../stories/AdhiStory";
-import TTSButton from "./TTSButton";
+// import TTSButton from "./TTSButton";
+// import { useStoryVideoStore } from "~/store/useStoryVideoStore";
 
-// AdhiStory text content extracted directly for TTS
 const ADHI_STORY_TEXT = `# How I Met God & Got Into Crypto: Based on a True Story
 
 The following is an exclusive preview of the Intro & Preface of my book How I Met God & Got Into Crypto: Based on a True Story
@@ -96,13 +96,13 @@ const HARDCODED_CONTENT = {
   id: "1740725593742_pDHykt",
   walletAddres: "6zpDHykt19QBN3VKpZpV9jEAMtYJKwkkYMgiEix8sVky",
   title: "How I Met God and Got Into Crypto",
-  content: ADHI_STORY_TEXT, // Now using the directly extracted text
+  content: ADHI_STORY_TEXT,
   writerName: "Admin",
 };
 
 const PostCard = ({ storyId }: { storyId: string }) => {
   const { getById, stories, isLoading, error } = useStoriesStore();
-  const [isContentReady] = useState(true); // Always ready since we have the content directly
+  // const { isContentReady } = useStoryVideoStore();
 
   useEffect(() => {
     if (storyId && storyId !== "1740050375765_ffqB3s") {
@@ -133,7 +133,7 @@ const PostCard = ({ storyId }: { storyId: string }) => {
         {story.title}
       </h1>
 
-      <div className="mb-4">
+      {/* <div className="mb-4">
         {isContentReady ? (
           <TTSButton text={ADHI_STORY_TEXT} />
         ) : (
@@ -141,10 +141,10 @@ const PostCard = ({ storyId }: { storyId: string }) => {
             <span className="animate-pulse">Preparing audio content...</span>
           </div>
         )}
-      </div>
+      </div> */}
 
       <div className="bg-[#F6F7F8]">
-        <StoryVideo src="https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/adhi_sample_video.MP4" />
+        <StoryVideo src="https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/assets/adhi_sample_video.MP4" />
       </div>
 
       <div className="mt-4">

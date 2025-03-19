@@ -46,10 +46,11 @@ const AdhiStory = () => {
         </p>
         <div className="relative mb-6 h-64 w-full md:h-96 lg:h-[500px]">
           <Image
-            src="https://firebasestorage.googleapis.com/v0/b/himgagic.appspot.com/o/IntroPreface%2Fi.1.jpeg?alt=media&token=a22e3cdc-88d7-47df-a456-b649b1e41850"
+            src="https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/assets/3.jpeg"
             alt="Cafe Einstein"
             fill
             className="object-contain"
+            sizes="(max-width: 768px) 100vw, 75vw"
           />
         </div>
         <p className="mb-6">
@@ -89,27 +90,30 @@ const AdhiStory = () => {
         <div className="mb-6 flex h-64 w-full gap-4 md:h-96 lg:h-[200px]">
           <div className="relative h-full w-1/2">
             <Image
-              src="https://firebasestorage.googleapis.com/v0/b/himgagic.appspot.com/o/IntroPreface%2Fi.2.jpeg?alt=media&token=87eaba82-0e7f-4a1b-8787-5bb19f5e6b46"
+              src="https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/assets/4.jpeg"
               alt="Cafe Einstein"
               fill
               className="object-contain"
+              sizes="(max-width: 768px) 50vw, 33vw"
             />
           </div>
           <div className="relative h-full w-1/2">
             <Image
-              src="https://firebasestorage.googleapis.com/v0/b/himgagic.appspot.com/o/IntroPreface%2Fi.3.jpeg?alt=media&token=419600f2-ed95-4d22-bd4b-cbb2984d61ce"
+              src="https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/assets/5.jpeg"
               alt="Cafe Einstein"
               fill
               className="object-contain"
+              sizes="(max-width: 768px) 50vw, 33vw"
             />
           </div>
         </div>
         <div className="relative mb-6 h-64 w-full md:h-96 lg:h-[400px]">
           <Image
-            src="https://firebasestorage.googleapis.com/v0/b/himgagic.appspot.com/o/IntroPreface%2Fi.4.jpeg?alt=media&token=77898bf2-105e-4cdf-b29e-df1f64d96936"
+            src="https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/assets/6.jpeg"
             alt="Cafe Einstein"
             fill
             className="object-contain"
+            sizes="(max-width: 768px) 100vw, 75vw"
           />
         </div>
         <p className="mb-6">
@@ -118,12 +122,11 @@ const AdhiStory = () => {
         </p>
         <div className="relative mb-6 h-64 w-full md:h-96 lg:h-[300px]">
           <Image
-            src={
-              "https://firebasestorage.googleapis.com/v0/b/himgagic.appspot.com/o/IntroPreface%2Fi_5.jpeg?alt=media&token=3cc2f4c3-4add-4b12-bad3-7105b1866a83"
-            }
+            src="https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/assets/7.jpeg"
             alt="Cafe Einstein"
             fill
             className="object-contain"
+            sizes="(max-width: 768px) 100vw, 75vw"
           />
         </div>
 
@@ -148,12 +151,11 @@ const AdhiStory = () => {
         </p>
         <div className="relative mb-6 h-64 w-full md:h-96 lg:h-[400px]">
           <Image
-            src={
-              "https://firebasestorage.googleapis.com/v0/b/himgagic.appspot.com/o/IntroPreface%2Fi_6.png?alt=media&token=21e990b7-2250-4ca1-99b2-2ab2911fc8dc"
-            }
+            src="https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/assets/8.png"
             alt="Cafe Einstein"
             fill
             className="object-contain"
+            sizes="(max-width: 768px) 100vw, 75vw"
           />
         </div>
       </section>
@@ -262,12 +264,11 @@ const AdhiStory = () => {
         </p>
         <div className="relative mb-6 h-64 w-full md:h-96 lg:h-[500px]">
           <Image
-            src={
-              "https://firebasestorage.googleapis.com/v0/b/himgagic.appspot.com/o/IntroPreface%2Fi_7.jpeg?alt=media&token=36a4cdf4-f699-427c-8400-3dc88d88ce4e"
-            }
+            src="https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/assets/9.jpeg"
             alt="Cafe Einstein"
             fill
             className="object-contain"
+            sizes="(max-width: 768px) 100vw, 75vw"
           />
         </div>
       </section>
@@ -356,22 +357,20 @@ const AdhiStory = () => {
         </p>
         <div className="relative mb-6 h-64 w-full md:h-96 lg:h-[500px]">
           <Image
-            src={
-              "https://firebasestorage.googleapis.com/v0/b/himgagic.appspot.com/o/IntroPreface%2Fi.10.jpeg?alt=media&token=fe6214b1-798e-4a46-aaeb-9104ff649eb1"
-            }
+            src="https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/assets/10.jpeg"
             alt="Cafe Einstein"
             fill
             className="object-contain"
+            sizes="(max-width: 768px) 100vw, 75vw"
           />
         </div>
         <div className="relative mb-6 h-64 w-full md:h-96 lg:h-[500px]">
           <Image
-            src={
-              "https://firebasestorage.googleapis.com/v0/b/himgagic.appspot.com/o/IntroPreface%2Fi9.jpeg?alt=media&token=f9632ad9-7743-42d4-9478-d8dca5c51a4e"
-            }
+            src="https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/assets/11.jpeg"
             alt="Cafe Einstein"
             fill
             className="object-contain"
+            sizes="(max-width: 768px) 100vw, 75vw"
           />
         </div>
       </section>
@@ -431,12 +430,11 @@ const AdhiStory = () => {
         </p>
         <div className="relative mb-6 h-64 w-full md:h-96 lg:h-[500px]">
           <Image
-            src={
-              "https://firebasestorage.googleapis.com/v0/b/himgagic.appspot.com/o/IntroPreface%2Fi.8.jpeg?alt=media&token=7bc09910-0911-407a-af56-0e1d05c614c3"
-            }
+            src="https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/assets/12.jpeg"
             alt="Cafe Einstein"
             fill
             className="object-contain"
+            sizes="(max-width: 768px) 100vw, 75vw"
           />
         </div>
         <p className="mb-6">
@@ -479,12 +477,11 @@ const AdhiStory = () => {
         </p>
         <div className="relative mb-6 h-64 w-full md:h-96 lg:h-[500px]">
           <Image
-            src={
-              "https://firebasestorage.googleapis.com/v0/b/himgagic.appspot.com/o/IntroPreface%2Fi.11.jpg?alt=media&token=f0fef90c-f0b0-4d57-b4c4-bcba55b67fb7"
-            }
+            src="https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/assets/13.jpg"
             alt="Cafe Einstein"
             fill
             className="object-contain"
+            sizes="(max-width: 768px) 100vw, 75vw"
           />
         </div>
         <p className="mb-4">
@@ -569,12 +566,11 @@ const AdhiStory = () => {
         </p>
         <div className="relative mb-6 h-64 w-full md:h-96 lg:h-[500px]">
           <Image
-            src={
-              "https://firebasestorage.googleapis.com/v0/b/himgagic.appspot.com/o/IntroPreface%2Fi.12.jpeg?alt=media&token=2d68b080-d381-452b-aba0-af82e5801ccb"
-            }
+            src="https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/assets/14.jpeg"
             alt="Cafe Einstein"
             fill
             className="object-contain"
+            sizes="(max-width: 768px) 100vw, 75vw"
           />
         </div>
         <p className="mb-4">

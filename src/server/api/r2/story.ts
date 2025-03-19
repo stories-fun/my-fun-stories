@@ -66,7 +66,6 @@ export class StoryStorage {
       const rawData = await response.Body!.transformToString();
       const data = JSON.parse(rawData) as unknown;
 
-      // If the id is missing, derive it from the key string
       if (
         typeof data === "object" &&
         data !== null &&
@@ -77,7 +76,6 @@ export class StoryStorage {
         (data as Record<string, unknown>).id = derivedId;
       }
 
-      // Convert createdAt from string to Date if necessary
       if (
         data &&
         typeof data === "object" &&

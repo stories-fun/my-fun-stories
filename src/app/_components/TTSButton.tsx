@@ -1,5 +1,6 @@
 "use client";
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect, useCallback } from "react";
+import { useTTSStore } from "~/store/useTTSStore";
 
 function base64ToUint8Array(base64: string) {
   const binaryString = atob(base64);
@@ -94,25 +95,38 @@ const splitTextIntoChunks = (text: string, chunkSize = 3000) => {
 };
 
 const TTSButton = ({ text }: { text: string }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [audioQueue, setAudioQueue] = useState<string[]>([]);
-  const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
-  const [totalChunks, setTotalChunks] = useState(0);
+  const {
+    isLoading,
+    setIsLoading,
+    currentChunkIndex,
+    setCurrentChunkIndex,
+    totalChunks,
+    setTotalChunks,
+    isPlaying,
+    setIsPlaying,
+    playbackProgress,
+    setPlaybackProgress,
+    error,
+    setError,
+    audioQueue,
+    setAudioQueue,
+  } = useTTSStore();
+
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
   const generationId = useRef(Date.now().toString());
-  const [playbackProgress, setPlaybackProgress] = useState(0);
   const retryCountRef = useRef<Record<number, number>>({});
   const maxRetries = 3;
   const processingRef = useRef(false);
   const playbackQueueRef = useRef<string[]>([]);
   const isPlayingRef = useRef(false);
 
-  const setPlayingState = (playing: boolean) => {
-    setIsPlaying(playing);
-    isPlayingRef.current = playing;
-  };
+  const setPlayingState = useCallback(
+    (playing: boolean) => {
+      setIsPlaying(playing);
+      isPlayingRef.current = playing;
+    },
+    [setIsPlaying],
+  );
 
   const processTextChunks = async (chunks: string[]) => {
     if (processingRef.current) return;
@@ -380,7 +394,13 @@ const TTSButton = ({ text }: { text: string }) => {
     generationId.current = Date.now().toString();
     retryCountRef.current = {};
     playbackQueueRef.current = [];
-  }, [audioQueue]);
+  }, [
+    audioQueue,
+    setAudioQueue,
+    setCurrentChunkIndex,
+    setPlaybackProgress,
+    setPlayingState,
+  ]);
 
   const handlePlayPause = async () => {
     if (!text) {

@@ -2,9 +2,8 @@ import "~/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
-import { WalletChildrenProvider } from "./_components/wallet";
+import { WalletChildrenProvider } from "../context/WalletProvider";
 import { TRPCReactProvider } from "~/trpc/react";
-import { PresaleProvider } from "~/context/PresaleContext";
 
 export const metadata: Metadata = {
   title: "Stories.fun",
@@ -20,9 +19,7 @@ export default function RootLayout({
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
         <TRPCReactProvider>
-          <WalletChildrenProvider>
-            <PresaleProvider>{children}</PresaleProvider>
-          </WalletChildrenProvider>
+          <WalletChildrenProvider>{children}</WalletChildrenProvider>
         </TRPCReactProvider>
       </body>
     </html>
