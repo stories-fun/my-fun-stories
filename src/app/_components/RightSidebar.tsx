@@ -3,6 +3,7 @@
 import Image from "next/image";
 import React from "react";
 import { useRightSidebarStore } from "~/store/useRightSidebarStore";
+import { useChatStore } from "~/store/useChatStore";
 
 const RightSidebar = ({ username }: { username: string }) => {
   const tiers = [
@@ -30,6 +31,11 @@ const RightSidebar = ({ username }: { username: string }) => {
   ];
 
   const { expandedTiers, toggleTier } = useRightSidebarStore();
+  const { openChat } = useChatStore();
+
+  const handleOpenChat = () => {
+    openChat(username);
+  };
 
   return (
     <div className="overflow-hidden rounded-md border bg-white">
@@ -103,7 +109,10 @@ const RightSidebar = ({ username }: { username: string }) => {
         <button className="w-full rounded-full bg-blue-500 py-3 font-medium text-white">
           Invest Now
         </button>
-        <button className="w-full rounded-full border-2 border-blue-500 bg-white py-3 font-medium text-blue-500">
+        <button
+          className="w-full rounded-full border-2 border-blue-500 bg-white py-3 font-medium text-blue-500"
+          onClick={handleOpenChat}
+        >
           Chat with creator
         </button>
       </div>
