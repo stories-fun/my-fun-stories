@@ -35,7 +35,8 @@ const MessageIndicator = () => {
   return (
     <button
       onClick={handleClick}
-      className="relative flex h-10 w-10 items-center justify-center rounded-full hover:bg-gray-100"
+      className="relative flex h-9 w-9 items-center justify-center rounded-full bg-gray-50 transition-colors hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-300 sm:h-10 sm:w-10"
+      aria-label="Open messages"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -43,7 +44,7 @@ const MessageIndicator = () => {
         fill="none"
         strokeWidth="2"
         stroke="currentColor"
-        className="h-6 w-6"
+        className="h-5 w-5 text-gray-700 sm:h-6 sm:w-6"
       >
         <path
           strokeLinecap="round"
@@ -53,7 +54,7 @@ const MessageIndicator = () => {
       </svg>
 
       {unreadCount > 0 && (
-        <div className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+        <div className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-r from-red-500 to-pink-500 text-xs font-bold text-white shadow-sm">
           {unreadCount > 9 ? "9+" : unreadCount}
         </div>
       )}
