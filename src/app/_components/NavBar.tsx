@@ -7,7 +7,6 @@ import {
   FiX,
   FiBell,
   FiPlus,
-  FiMessageSquare,
   FiUser,
   FiHome,
   FiInfo,
@@ -15,6 +14,9 @@ import {
 import Link from "next/link";
 import { WalletProvider } from "../../context/WalletProvider";
 import { useUIStore } from "~/store/useUIStore";
+import MessageIndicator from "./MessageIndicator";
+import ChatModal from "./ChatModal";
+import { useChatStore } from "~/store/useChatStore";
 
 interface MobileMenuItemProps {
   icon: React.ElementType;
@@ -93,6 +95,7 @@ const MobileMenuItem = ({
 
 const NavBar = () => {
   const { menuOpen, setMenuOpen, mounted, setMounted } = useUIStore();
+  const { openChat } = useChatStore();
 
   useEffect(() => {
     setMounted(true);
@@ -133,138 +136,125 @@ const NavBar = () => {
   }
 
   return (
-    <nav className="sticky top-0 z-50 bg-white shadow-sm">
-      <div className="container mx-auto flex items-center justify-between px-2 py-2 sm:px-4 sm:py-3">
-        <div className="flex flex-shrink-0 items-center space-x-2 sm:space-x-4">
-          <NavLogo />
-        </div>
-
-        <div className="ml-auto flex items-center">
-          <Link
-            href="/"
-            className="font-mont mr-2 whitespace-nowrap text-xs font-bold font-semibold text-black decoration-2 transition-colors hover:text-gray-700 sm:mr-4 sm:text-sm md:text-base"
-          >
-            what&apos;s your story?
-          </Link>
-
-          <Link
-            href="/aboutus"
-            className="font-mont mr-2 hidden whitespace-nowrap text-xs font-semibold text-gray-700 transition-colors hover:text-gray-700 sm:mr-4 sm:block sm:text-sm md:text-base"
-          >
-            about us
-          </Link>
-
-          <div className="hidden md:flex md:items-center md:space-x-2">
-            <button
-              className="rounded-lg p-2 text-lg text-gray-700 transition-colors hover:bg-gray-100 sm:text-xl"
-              aria-label="Notifications"
-            >
-              <FiBell />
-            </button>
-
-            <button
-              className="rounded-lg p-2 text-lg text-gray-700 transition-colors hover:bg-gray-100 sm:text-xl"
-              aria-label="Create new"
-            >
-              <FiPlus />
-            </button>
-
-            <button
-              className="rounded-lg p-2 text-lg text-gray-700 transition-colors hover:bg-gray-100 sm:text-xl"
-              aria-label="Messages"
-            >
-              <FiMessageSquare />
-            </button>
-
-            <div className="hidden md:block">
-              <WalletProvider />
-            </div>
-
-            <button
-              className="rounded-lg p-2 text-lg text-gray-700 transition-colors hover:bg-gray-100 sm:text-xl"
-              aria-label="Profile"
-            >
-              <FiUser />
-            </button>
+    <>
+      <nav className="sticky top-0 z-50 bg-white shadow-sm">
+        <div className="container mx-auto flex items-center justify-between px-2 py-2 sm:px-4 sm:py-3">
+          <div className="flex flex-shrink-0 items-center space-x-2 sm:space-x-4">
+            <NavLogo />
           </div>
 
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="menu-button ml-1 rounded-lg p-1 text-xl text-gray-700 transition-colors hover:bg-gray-100 sm:p-2 md:hidden"
-            aria-label="Toggle menu"
-          >
-            {menuOpen ? <FiX /> : <FiMenu />}
-          </button>
-        </div>
-      </div>
+          <div className="ml-auto flex items-center">
+            <Link
+              href="/"
+              className="font-mont mr-2 whitespace-nowrap text-xs font-bold font-semibold text-black decoration-2 transition-colors hover:text-gray-700 sm:mr-4 sm:text-sm md:text-base"
+            >
+              what&apos;s your story?
+            </Link>
 
-      {menuOpen && (
-        <div className="mobile-menu fixed inset-x-0 top-[57px] z-50 h-[calc(100vh-57px)] overflow-y-auto bg-white shadow-lg sm:top-[73px] sm:h-[calc(100vh-73px)] md:hidden">
-          <div className="container mx-auto space-y-4 p-4">
-            <SearchBar onSearch={handleSearch} />
+            <Link
+              href="/aboutus"
+              className="font-mont mr-2 hidden whitespace-nowrap text-xs font-semibold text-gray-700 transition-colors hover:text-gray-700 sm:mr-4 sm:block sm:text-sm md:text-base"
+            >
+              about us
+            </Link>
 
-            <div className="space-y-2">
-              <MobileMenuItem
-                icon={FiHome}
-                label="Home"
-                href="/"
-                onClick={() => setMenuOpen(false)}
-              />
-              <MobileMenuItem
-                icon={FiHome}
-                label="What's your story"
-                href="/"
-                onClick={() => setMenuOpen(false)}
-              />
-              <MobileMenuItem
-                icon={FiInfo}
-                label="About Us"
-                href="/aboutus"
-                onClick={() => setMenuOpen(false)}
-              />
-              <MobileMenuItem
-                icon={FiBell}
-                label="Notifications"
-                onClick={() => {
-                  //TODO: Handle notifications
-                  setMenuOpen(false);
-                }}
-              />
-              <MobileMenuItem
-                icon={FiPlus}
-                label="Create New"
-                onClick={() => {
-                  //TODO: Handle create new
-                  setMenuOpen(false);
-                }}
-              />
-              <MobileMenuItem
-                icon={FiMessageSquare}
-                label="Messages"
-                onClick={() => {
-                  //TODO: Handle messages
-                  setMenuOpen(false);
-                }}
-              />
-              <MobileMenuItem
-                icon={FiUser}
-                label="Profile"
-                onClick={() => {
-                  //TODO: Handle profile
-                  setMenuOpen(false);
-                }}
-              />
+            <div className="hidden md:flex md:items-center md:space-x-2">
+              <button
+                className="rounded-lg p-2 text-lg text-gray-700 transition-colors hover:bg-gray-100 sm:text-xl"
+                aria-label="Notifications"
+              >
+                <FiBell />
+              </button>
+
+              <button
+                className="rounded-lg p-2 text-lg text-gray-700 transition-colors hover:bg-gray-100 sm:text-xl"
+                aria-label="Create new"
+              >
+                <FiPlus />
+              </button>
+
+              <div className="rounded-lg text-lg text-gray-700 transition-colors hover:bg-gray-100 sm:text-xl">
+                <MessageIndicator />
+              </div>
+
+              <div className="hidden md:block">
+                <WalletProvider />
+              </div>
+
+              <button
+                className="rounded-lg p-2 text-lg text-gray-700 transition-colors hover:bg-gray-100 sm:text-xl"
+                aria-label="Profile"
+              >
+                <FiUser />
+              </button>
             </div>
 
-            <div className="pt-4">
-              <div className="flex justify-center border-t border-gray-200 pt-4">
-                <WalletProvider />
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="menu-button ml-1 rounded-lg p-1 text-xl text-gray-700 transition-colors hover:bg-gray-100 sm:p-2 md:hidden"
+              aria-label="Toggle menu"
+            >
+              {menuOpen ? <FiX /> : <FiMenu />}
+            </button>
+          </div>
+        </div>
+
+        {menuOpen && (
+          <div className="mobile-menu fixed inset-x-0 top-[57px] z-50 h-[calc(100vh-57px)] overflow-y-auto bg-white shadow-lg sm:top-[73px] sm:h-[calc(100vh-73px)] md:hidden">
+            <div className="container mx-auto space-y-4 p-4">
+              <SearchBar onSearch={handleSearch} />
+
+              <div className="space-y-2">
+                <MobileMenuItem
+                  icon={FiHome}
+                  label="Home"
+                  href="/"
+                  onClick={() => setMenuOpen(false)}
+                />
+                <MobileMenuItem
+                  icon={FiHome}
+                  label="What's your story"
+                  href="/"
+                  onClick={() => setMenuOpen(false)}
+                />
+                <MobileMenuItem
+                  icon={FiInfo}
+                  label="About Us"
+                  href="/aboutus"
+                  onClick={() => setMenuOpen(false)}
+                />
+                <MobileMenuItem
+                  icon={FiBell}
+                  label="Notifications"
+                  onClick={() => {
+                    //TODO: Handle notifications
+                    setMenuOpen(false);
+                  }}
+                />
+                <MobileMenuItem
+                  icon={FiPlus}
+                  label="Create New"
+                  onClick={() => {
+                    //TODO: Handle create new
+                    setMenuOpen(false);
+                  }}
+                />
+                <MobileMenuItem
+                  icon={MessageIndicator}
+                  label="Messages"
+                  onClick={() => {
+                    openChat();
+                    setMenuOpen(false);
+                  }}
+                />
               </div>
             </div>
           </div>
-        </div>
-      )}
-    </nav>
+        )}
+      </nav>
+
+      <ChatModal />
+    </>
   );
 };
 
