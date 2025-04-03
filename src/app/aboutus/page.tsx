@@ -7,75 +7,60 @@ const AboutUs = () => {
   return (
     <div className="min-h-screen bg-white">
       <NavBar />
-
-      {/* Hero Image Section */}
       <div className="relative h-[200px] w-full sm:h-[250px] md:h-[300px] lg:h-[300px]">
-        <div className="bg-[#007AFF] flex h-[70%] w-full items-center justify-center font-bold text-white sm:text-3xl md:text-5xl lg:text-7xl">
+        <div className="flex h-[70%] w-full items-center justify-center bg-[#007AFF] font-bold text-white sm:text-3xl md:text-5xl lg:text-7xl">
           <p>Believe In Stories</p>
           <p className="text-black">.</p>
         </div>
       </div>
 
-      {/* Content Section */}
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-prose">
           <div className="space-y-4 text-base leading-relaxed text-gray-700 sm:text-lg">
             <p className="text-lg font-medium sm:text-xl">
-              Traditional social media is broken. It&apos;s all about followers,
-              fake personas, and superficial connections.
+              Traditional social media is busted—fake personas, shallow likes,
+              and follower counts that mean nothing.
             </p>
 
             <p className="text-lg font-medium sm:text-xl">
               At <strong className="text-gray-900">stories.fun</strong>,
-              we&apos;re flipping the script.
+              we&apos;re rewriting the rules.
             </p>
 
             <p>
-              Here, genuine connections are built on{" "}
-              <strong className="text-gray-900">true, authentic</strong>{" "}
-              stories. No filters, no facades—just real people sharing real
-              journeys.
+              This is a SocialFi platform where you share your true story,
+              tokenize it, and build a community that invests in you—literally.
+              No filters, no facades—just real journeys turned into assets via
+              presale drops and DEX trading.
             </p>
 
             <p>
-              <strong className="text-gray-900">stories.fun</strong> is where
-              authentic stories are tokenized, empowering creators to monetize
-              their journeys and communities to invest in meaningful
-              connections.
+              Your <strong className="text-gray-900">stories.fun</strong> link?
+              It&apos;s your new intro for dating, networking, or flexing your
+              life—raw, personal, and on-chain forever.
             </p>
 
             <p>
-              Whether you&apos;re dating, networking, or just sharing your life,
-              your <strong className="text-gray-900">stories.fun</strong> link
-              becomes the ultimate way to introduce yourself. It&apos;s like a
-              digital handshake, but way more personal.
-            </p>
-
-            <p>We&apos;re bringing the world&apos;s stories on-chain.</p>
-
-            <p>
-              Hold tokens of your favorite stories for future airdrops,
-              exclusive perks, and premium features (coming soon).{" "}
-              <strong className="text-gray-900">You&apos;re EARLY</strong>.
+              We&apos;re bringing the world&apos;s stories to the blockchain.
             </p>
 
             <p>
-              Remember: Keep your story{" "}
-              <strong className="text-gray-900">genuine and honest</strong>.
-              This is the place to show a side of yourself you can&apos;t share
-              anywhere else.
+              Hold tokens from your favourite creators for airdrops, premium
+              access, and exclusive perks (dropping soon). Communities co-own
+              the ride—think live streams, books, even OTT hits—coming in hot on
+              our roadmap.
             </p>
-
-            <p>More announcements coming soon.</p>
 
             <p>
-              Follow us for updates. Let&apos;s make storytelling fun again.
+              <strong className="text-gray-900">You&lsquo;re early</strong>.
+              Keep it real—this is where your story becomes your legacy.
             </p>
+
+            <p>What&apos;s Your Story?</p>
           </div>
         </div>
       </div>
 
-      {/* Social Links Section */}
       <div className="mx-auto my-12 flex flex-col items-center justify-center space-y-4 px-4 text-center">
         <h2 className="text-xl font-bold text-gray-900 sm:text-2xl">
           Follow us to stay updated

@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { IoMdClose } from "react-icons/io";
 import { FaWhatsapp, FaFacebook, FaXTwitter } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
+import { useUIStore } from "~/store/useUIStore";
 
 interface ShareModalProps {
   isOpen: boolean;
@@ -10,8 +11,11 @@ interface ShareModalProps {
 }
 
 const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, postId }) => {
-  const [copied, setCopied] = useState(false);
-  const shareUrl = `${window.location.origin}/story/${postId}`;
+  const { copied, setCopied } = useUIStore();
+  const shareUrl =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/story/${postId}`
+      : "";
 
   const handleCopy = async () => {
     try {

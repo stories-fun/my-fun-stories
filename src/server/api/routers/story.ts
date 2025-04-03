@@ -78,7 +78,6 @@ export const storyRouter = createTRPCRouter({
                   console.log("Object has no Key:", obj);
                   return null;
                 }
-                // Remove both the prefix and the .json extension
                 const key = obj.Key.replace(/^stories\//, "").replace(
                   /\.json$/,
                   "",

@@ -9,6 +9,9 @@ const config = {
   eslint: {
     ignoreDuringBuilds: false,
   },
+  images: {
+    domains: ["pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev"],
+  },
 };
 
 export default config;

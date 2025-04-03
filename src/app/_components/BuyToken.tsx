@@ -1,12 +1,14 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Input } from "./ui/input";
 import { useWallet } from "@jup-ag/wallet-adapter";
-import { usePresale } from "~/context/PresaleContext";
+import { usePresale } from "~/context/PresaleProvider";
 import { useConnection } from "@solana/wallet-adapter-react";
-import { useState, useMemo, useEffect } from "react";
+import { useMemo, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Transaction, PublicKey } from "@solana/web3.js";
 import { getMint } from "@solana/spl-token";
+import { useUIStore } from "~/store/useUIStore";
+import { useBuyTokenStore } from "~/store/useBuyTokenStore";
 
 interface BuyTokensDialogProps {
   open: boolean;
@@ -25,9 +27,9 @@ export const BuyTokensDialog = ({ open, onClose }: BuyTokensDialogProps) => {
   const { publicKey, signTransaction } = useWallet();
   const { pricePerToken, tokenMint, loadPresaleData } = usePresale();
   const { connection } = useConnection();
-  const [solAmount, setSolAmount] = useState<string>("");
-  const [loading, setLoading] = useState(false);
-  const [errorState, setError] = useState<string | null>(null);
+  const { solAmount, setSolAmount, errorState, setErrorState } =
+    useBuyTokenStore();
+  const { loading, setLoading } = useUIStore();
 
   useEffect(() => {
     if (open && !tokenMint) {
@@ -118,7 +120,7 @@ export const BuyTokensDialog = ({ open, onClose }: BuyTokensDialogProps) => {
       console.error("Buy error:", err);
       const errorMessage =
         err instanceof Error ? err.message : "Failed to process transaction";
-      setError(errorMessage);
+      setErrorState(errorMessage);
       alert(errorMessage);
     } finally {
       setLoading(false);

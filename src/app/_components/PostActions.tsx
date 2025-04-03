@@ -1,10 +1,12 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import Image from "next/image";
 import ShareModal from "./ShareModal";
 import { useRouter } from "next/navigation";
 import { useStoriesStore } from "~/store/useStoriesStore";
 import { BuyTokensDialog } from "./BuyToken";
 import { useWallet } from "@jup-ag/wallet-adapter";
+import { useUIStore } from "~/store/useUIStore";
+import { usePostActionsStore } from "~/store/usePostActionsStore";
 
 interface PostActionsProps {
   storyKey: string;
@@ -12,13 +14,30 @@ interface PostActionsProps {
 }
 
 const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
-  const [showShareModal, setShowShareModal] = useState(false);
-  const [showBuyDialog, setShowBuyDialog] = useState(false);
-  const [userWallet, setUserWallet] = useState<string | null>(null);
+  const {
+    setShowShareModal,
+    setShowBuyDialog,
+    getShowShareModal,
+    getShowBuyDialog,
+  } = useUIStore();
+
+  const {
+    userWallet,
+    setUserWallet,
+    setIsLiked,
+    setCount,
+    getIsLiked,
+    getCount,
+  } = usePostActionsStore();
+
   const router = useRouter();
 
   const { like, stories, likeCounts } = useStoriesStore();
   const wallet = useWallet();
+
+  // Get current UI state for this specific post
+  const showShareModal = getShowShareModal(storyKey);
+  const showBuyDialog = getShowBuyDialog(storyKey);
 
   useEffect(() => {
     if (wallet.connected && wallet.publicKey) {
@@ -29,25 +48,32 @@ const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
       setUserWallet(null);
       console.log("Wallet not connected");
     }
-  }, [wallet.connected, wallet.publicKey]);
+  }, [wallet.connected, wallet.publicKey, setUserWallet]);
 
   const story = stories.find((s) => s.id === storyKey);
 
   const likesArray = useMemo(() => story?.likes ?? [], [story?.likes]);
 
-  const [isLiked, setIsLiked] = useState<boolean>(
-    userWallet ? likesArray.includes(userWallet) : false,
-  );
-  const [count, setCount] = useState<number>(
-    likeCounts[storyKey] ?? story?.likeCount ?? 0,
-  );
-
   useEffect(() => {
-    if (story && userWallet) {
-      setIsLiked(likesArray.includes(userWallet));
-      setCount(likeCounts[storyKey] ?? story.likeCount ?? 0);
+    if (userWallet) {
+      setIsLiked(storyKey, likesArray.includes(userWallet));
+    } else {
+      setIsLiked(storyKey, false);
     }
-  }, [storyKey, likeCounts, story, userWallet, likesArray]);
+    setCount(storyKey, likeCounts[storyKey] ?? story?.likeCount ?? 0);
+  }, [
+    storyKey,
+    likeCounts,
+    story,
+    userWallet,
+    likesArray,
+    setIsLiked,
+    setCount,
+  ]);
+
+  // Get current state for this specific post
+  const isLiked = getIsLiked(storyKey);
+  const count = getCount(storyKey);
 
   const handleLikeClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -63,13 +89,13 @@ const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
     }
 
     try {
-      setIsLiked(true);
-      setCount((prev) => prev + 1);
+      setIsLiked(storyKey, true);
+      setCount(storyKey, (prev) => prev + 1);
       await like(storyKey, userWallet);
     } catch (error) {
       console.error("Error liking post:", error);
-      setIsLiked(false);
-      setCount((prev) => prev - 1);
+      setIsLiked(storyKey, false);
+      setCount(storyKey, (prev) => prev - 1);
     }
   };
 
@@ -79,26 +105,37 @@ const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
 
   return (
     <div className="relative mt-8 pb-4">
-      <div className="flex items-center space-x-6">
+      <div className="flex items-center space-x-3">
         <button
-          className="flex cursor-pointer items-center space-x-2 rounded-full text-sm font-bold"
+          className="flex cursor-pointer items-center space-x-1 rounded-full text-sm font-bold"
           onClick={handleLikeClick}
         >
-          <Image src={"/images/Flower.png"} width={20} height={20} alt="" />
-
+          <Image
+            src={"/images/flower.png"}
+            width={20}
+            height={20}
+            alt=""
+            style={{ width: "auto", height: "auto" }}
+          />
           <span>{count}</span>
         </button>
         <div
           className="flex cursor-pointer items-center space-x-2 rounded-full text-sm font-bold"
-          onClick={() => setShowBuyDialog(true)}
+          onClick={() => setShowBuyDialog(storyKey, true)}
         >
-          <Image src={"/images/Advertise.png"} width={20} height={20} alt="" />
+          <Image
+            src={"/images/advertise.png"}
+            width={20}
+            height={20}
+            alt=""
+            style={{ width: "auto", height: "auto" }}
+          />
           <span>Invest</span>
         </div>
         {showBuyDialog && (
           <BuyTokensDialog
             open={showBuyDialog}
-            onClose={() => setShowBuyDialog(false)}
+            onClose={() => setShowBuyDialog(storyKey, false)}
           />
         )}
         <button
@@ -111,12 +148,19 @@ const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
             width={25}
             height={25}
             alt="comment"
+            style={{ width: "auto", height: "auto" }}
           />
           <span>Comment</span>
         </button>
-        <button onClick={() => setShowShareModal(true)}>
+        <button onClick={() => setShowShareModal(storyKey, true)}>
           <div className="flex items-center space-x-2 rounded-full text-sm font-bold">
-            <Image src={"/images/Share.png"} width={25} height={25} alt="" />
+            <Image
+              src={"/images/share.png"}
+              width={25}
+              height={25}
+              alt=""
+              style={{ width: "auto", height: "auto" }}
+            />
             <span>Share</span>
           </div>
         </button>
@@ -124,7 +168,7 @@ const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
 
       <ShareModal
         isOpen={showShareModal}
-        onClose={() => setShowShareModal(false)}
+        onClose={() => setShowShareModal(storyKey, false)}
         postId={storyKey}
       />
     </div>

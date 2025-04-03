@@ -50,13 +50,11 @@ interface StoriesActions {
 }
 
 type StoriesState = StoriesSlice & StoriesActions;
-// toDate
 const toDate = (date: string | Date) => {
   if (!date) return new Date();
   return typeof date === "string" ? new Date(date) : date;
 };
 
-// Helper function
 const transformStory = (story: {
   id?: string;
   key?: string;
@@ -76,7 +74,7 @@ const transformStory = (story: {
   createdAt: toDate(story.createdAt),
   likeCount: Array.isArray(story.likes) ? story.likes.length : 0,
   likes: story.likes ?? [],
-  comments: story.comments ?? [], // Initialize empty comments array since comments don't exist in input type
+  comments: story.comments ?? [],
 });
 
 export const useStoriesStore = create<StoriesState>((set, get) => ({
@@ -118,7 +116,6 @@ export const useStoriesStore = create<StoriesState>((set, get) => ({
     set({ isLoading: true });
     const result = await getByIdFromServer(storyKey);
     if (result?.story) {
-      // Instead of replacing stories, append or update the specific story
       const currentStories = get().stories;
       const storyExists = currentStories.some((s) => s.id === result.story.id);
 

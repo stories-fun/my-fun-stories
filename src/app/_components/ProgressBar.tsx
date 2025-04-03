@@ -1,14 +1,15 @@
 import React from "react";
-import { usePresale } from "~/context/PresaleContext";
+// import { usePresale } from "~/context/PresaleContext";
 
 const ProgressBar = () => {
-  const { tokensSold, hardcap } = usePresale();
-  const progress = (tokensSold / hardcap) * 100;
+  // const {} = usePresale();
+  // const progress = (tokensSold / hardcap) * 100;
+  const progress = 50;
 
   return (
     <div>
-      <div className="mb-3 font-bold">
-        <span>Participate in presale of this token now!</span>
+      <div className="mb-3 text-sm font-bold">
+        <span>Participate in Presale of this token now!</span>
       </div>
       <div className="w-[100%]">
         <div className="h-2 rounded-full bg-[#00000099]">
