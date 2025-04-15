@@ -24,6 +24,11 @@ interface AIResponseData {
   conversationId?: string;
 }
 
+interface ErrorWithMessage {
+  message?: string;
+  error?: string;
+}
+
 export const VoiceRecorder = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -34,7 +39,6 @@ export const VoiceRecorder = () => {
   const [showBanIcon, setShowBanIcon] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [liveTranscript, setLiveTranscript] = useState<string>("");
-  const [transcriptHistory, setTranscriptHistory] = useState<string[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [showTranscript, setShowTranscript] = useState(false);
   const [finalStoryReady, setFinalStoryReady] = useState(false);
@@ -445,10 +449,10 @@ export const VoiceRecorder = () => {
       // If there's a server error, try to get detailed error message
       if (!response.ok) {
         const contentType = response.headers.get("content-type");
-        if (contentType && contentType.includes("application/json")) {
-          const errorData = await response.json();
+        if (contentType?.includes("application/json")) {
+          const errorData = (await response.json()) as ErrorWithMessage;
           throw new Error(
-            errorData.error || `Server error: ${response.status}`,
+            errorData?.error ?? `Server error: ${response.status}`,
           );
         } else {
           const textError = await response.text();
@@ -470,9 +474,6 @@ export const VoiceRecorder = () => {
         return newTranscript;
       });
 
-      setTranscriptHistory((prev) => [...prev, data.transcription]);
-
-      // Make sure transcript is visible
       setShowTranscript(true);
 
       const audio = new Audio(`data:audio/mp3;base64,${data.audioResponse}`);
@@ -518,16 +519,16 @@ export const VoiceRecorder = () => {
         setShowContinuePrompt(true);
       }
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Unknown error";
-      console.error("Error processing audio:", errorMessage);
-      toast.error(errorMessage);
+      console.error("Error submitting audio:", error);
+      const typedError = error as ErrorWithMessage;
+      toast.error(`Error: ${typedError?.message ?? "Failed to process audio"}`);
       setIsProcessing(false);
-      setIsAiSpeaking(false);
+      setIsRecording(false);
       setAudioData(undefined);
-      // Show transcript panel so user can see what they have so far
       setShowTranscript(true);
       setShowContinuePrompt(true);
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -586,7 +587,6 @@ export const VoiceRecorder = () => {
       } else {
         // If no transcript, just reset everything
         setLiveTranscript("");
-        setTranscriptHistory([]);
         toast.success("Voice session ended.");
       }
     } catch (error) {
@@ -631,54 +631,53 @@ export const VoiceRecorder = () => {
   };
 
   const submitFinalStory = async () => {
-    if (!liveTranscript.trim()) {
-      toast.error("Cannot submit an empty story");
-      return;
-    }
-
     if (!publicKey) {
-      toast.error("Wallet not connected. Please connect your wallet first.");
+      toast.error("Wallet not connected.");
       return;
     }
+    setIsProcessing(true);
+    toast.loading("Submitting final story...");
+
+    const finalContent = liveTranscript;
 
     try {
-      setIsProcessing(true);
-
-      // Call the API to save the story
       const response = await fetch("/api/submit-story", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          userId: publicKey.toString(),
-          content: liveTranscript,
-          title: "My Voice Story", // You could add a title input field as well
+          userId: publicKey.toBase58(),
+          content: finalContent,
+          title: `Voice Story - ${new Date().toLocaleDateString()}`,
         }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to submit story");
+      // Define a type for the expected response structure
+      interface SubmitResponse {
+        success?: boolean;
+        storyKey?: string;
+        error?: string;
       }
 
-      const result = await response.json();
+      const responseData = (await response.json()) as SubmitResponse;
 
-      setFinalStoryReady(true);
-      setShowTranscript(false);
-      setIsProcessing(false);
-      toast.success("Your story has been submitted successfully!");
+      if (!response.ok) {
+        throw new Error(responseData?.error ?? "Failed to submit story");
+      }
 
-      // Reset state
+      toast.dismiss();
+      toast.success("Story submitted successfully!");
+      setFinalStoryReady(false);
       setLiveTranscript("");
-      setTranscriptHistory([]);
-      setIsEditing(false);
       setConversationId(null);
+      setShowTranscript(false);
     } catch (error) {
-      console.error("Error submitting story:", error);
-      toast.error(
-        error instanceof Error ? error.message : "Failed to submit your story",
-      );
+      toast.dismiss();
+      const typedError = error as ErrorWithMessage;
+      toast.error(`Error: ${typedError?.message ?? "Submission failed"}`);
+      console.error("Failed to submit final story:", error);
+    } finally {
       setIsProcessing(false);
     }
   };
@@ -697,19 +696,6 @@ export const VoiceRecorder = () => {
   // Function to continue the conversation
   const continueConversation = () => {
     setShowContinuePrompt(false);
-    void startRecording().catch((error) => {
-      console.error("Error starting recording:", error);
-      toast.error("Failed to start recording");
-    });
-  };
-
-  const resumeRecording = () => {
-    setIsEditing(false);
-    setShowContinuePrompt(false);
-    void startRecording().catch((error) => {
-      console.error("Error resuming recording:", error);
-      toast.error("Failed to resume recording");
-    });
   };
 
   const waveformVariant = getWaveformVariant();
@@ -805,7 +791,8 @@ export const VoiceRecorder = () => {
             !isEditing &&
             !isRecording &&
             !isAiSpeaking &&
-            !isProcessing && (
+            !isProcessing &&
+            conversationId && (
               <button
                 onClick={continueConversation}
                 className="mt-2 flex w-full items-center justify-center gap-2 rounded-md bg-blue-500 py-2 text-sm font-medium text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"

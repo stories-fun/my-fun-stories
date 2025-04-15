@@ -114,7 +114,7 @@ export async function POST(req: Request) {
     let fileName = audioFile.name;
 
     // Default to mp3 if no type is detected
-    if (!fileType || !fileType.startsWith("audio/")) {
+    if (!fileType?.startsWith("audio/")) {
       fileType = "audio/mp3";
       fileName = "audio.mp3";
     }
