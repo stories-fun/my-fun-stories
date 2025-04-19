@@ -2,6 +2,8 @@ import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 import { userRouter } from "./routers/user";
 import { storyRouter } from "./routers/story";
 import { messageRouter } from "./routers/message";
+import { promptingRouter } from "./routers/prompting";
+import { linktreepromptRouter } from "./routers/linktreeprompt";
 
 /**
  * This is the primary router for your server.
@@ -12,6 +14,8 @@ export const appRouter = createTRPCRouter({
   user: userRouter,
   story: storyRouter,
   message: messageRouter,
+  prompting: promptingRouter,
+  linktreeprompt: linktreepromptRouter,
 });
 
 // export type definition of API
