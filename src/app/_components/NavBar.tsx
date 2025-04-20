@@ -17,6 +17,7 @@ import { useUIStore } from "~/store/useUIStore";
 import MessageIndicator from "./MessageIndicator";
 import ChatModal from "./ChatModal";
 import { useChatStore } from "~/store/useChatStore";
+import ExpandableSearch from "~/components/ExpandableSearch";
 
 interface MobileMenuItemProps {
   icon: React.ElementType;
@@ -138,15 +139,19 @@ const NavBar = () => {
   return (
     <>
       <nav className="sticky top-0 z-50 bg-white shadow-sm">
-        <div className="container mx-auto flex items-center justify-between px-2 py-2 sm:px-4 sm:py-3">
+        <div className="container mx-auto flex items-center justify-between gap-4 px-2 py-2 sm:px-4 sm:py-3">
           <div className="flex flex-shrink-0 items-center space-x-2 sm:space-x-4">
             <NavLogo />
           </div>
 
-          <div className="ml-auto flex items-center">
+          <div className="ml-auto flex flex-1 items-center justify-end gap-3 sm:gap-4">
+            <div className="w-full max-w-sm">
+              <ExpandableSearch />
+            </div>
+
             <Link
               href="/"
-              className="font-mont mr-2 whitespace-nowrap text-xs font-bold font-semibold text-black decoration-2 transition-colors hover:text-gray-700 sm:mr-4 sm:text-sm md:text-base"
+              className="font-mont whitespace-nowrap text-xs font-semibold text-black decoration-2 transition-colors hover:text-gray-700 sm:text-sm md:text-base"
             >
               what&apos;s your story?
             </Link>
