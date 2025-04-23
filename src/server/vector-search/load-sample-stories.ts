@@ -51,6 +51,7 @@ export async function loadSampleStories(): Promise<void> {
 
       // Create metadata
       const metadata: StoryMetadata = {
+        id: story.id,
         title: story.title,
         content: story.content,
         username: story.username,

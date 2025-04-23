@@ -7,6 +7,7 @@ export interface EmbeddingResponse {
 }
 
 export interface StoryMetadata {
+  id: string;
   title: string;
   content: string;
   username: string;
@@ -25,9 +26,9 @@ export interface StoryMetadata {
     location?: string;
     relationshipStatus?: string;
     education?: string;
-    topics?: string[];
+    topics: string[];
     genres?: string[];
-    summary?: string;
+    summary: string[];
     narrativeStyle?: string;
     themes?: string[];
     charactersDescription?: string;

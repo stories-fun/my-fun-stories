@@ -26,7 +26,7 @@ export class MetadataExtractor {
 
   constructor() {
     // Check if we're in debug mode
-    this.debugMode = process.env.VECTOR_SEARCH_DEBUG === "true";
+    this.debugMode = false;
 
     if (!VECTOR_SEARCH_CONFIG.openaiApiKey && !this.debugMode) {
       throw new Error("OpenAI API key is not configured");
@@ -57,15 +57,18 @@ export class MetadataExtractor {
         profession: secondWord,
         interests: [firstWord],
         topics: [firstWord],
-        summary: `This is a debug summary for ${title}`,
+        summary: [`This is a debug summary for ${title}`],
         genres: ["debug"],
         emotionalTone: ["neutral"],
       };
     }
 
     // Real OpenAI implementation would go here
-    // Returning empty object for now as this is just a placeholder
-    return {};
+    // Returning object with required fields
+    return {
+      topics: [title.split(" ")[0] ?? "General"],
+      summary: [`This is a placeholder summary for ${title}`],
+    };
   }
 
   async extractQueryParams(query: string): Promise<{

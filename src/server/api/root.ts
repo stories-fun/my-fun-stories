@@ -3,12 +3,14 @@ import { userRouter } from "./routers/user";
 import { storyRouter } from "./routers/story";
 import { messageRouter } from "./routers/message";
 import { vectorSearchRouter } from "./routers/vectorSearch";
+import { patchVectorRouter } from "./routers/patch-vector-router";
 
 export const appRouter = createTRPCRouter({
   user: userRouter,
   story: storyRouter,
   message: messageRouter,
   vectorSearch: vectorSearchRouter,
+  patchVector: patchVectorRouter,
 });
 
 // export type definition of API

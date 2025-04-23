@@ -3,12 +3,12 @@ import { MetadataExtractor } from "./metadata-extraction";
 import { VECTOR_SEARCH_CONFIG } from "./config";
 import { QdrantService } from "./qdrant";
 import type {
-  SearchResult,
   StoryVector,
   VectorSearchOptions,
   SearchParams,
   StoryMetadata,
 } from "./types";
+import { SearchResult } from "./local-vector-service";
 
 export class VectorSearchService {
   private vectors: Map<string, StoryVector>;
@@ -21,7 +21,7 @@ export class VectorSearchService {
 
   constructor() {
     // Check if we're in debug mode
-    this.debugMode = process.env.VECTOR_SEARCH_DEBUG === "true";
+    this.debugMode = false;
 
     if (!VECTOR_SEARCH_CONFIG.openaiApiKey && !this.debugMode) {
       throw new Error("OpenAI API key is not configured");
@@ -64,7 +64,7 @@ export class VectorSearchService {
       const charCode = text.charCodeAt(i);
       const index = (charCode * 17) % this.config.dimension;
       if (index >= 0 && index < embedding.length) {
-        embedding[index] = (embedding[index] + charCode / 255) % 1;
+        embedding[index] = ((embedding[index] ?? 0) + charCode / 255) % 1;
       }
     }
 
@@ -153,13 +153,13 @@ export class VectorSearchService {
           if (this.debugMode) {
             // Generate basic metadata in debug mode
             const title = story.metadata.title || "Untitled";
-            const firstWord = title.split(" ")[0] || "Story";
+            const firstWord = title.split(" ")[0] ?? "Story";
             story.metadata = {
               ...story.metadata,
               extractedMetadata: {
                 topics: [firstWord],
-                summary: `This is a summary of ${title}`,
                 genres: ["debug"],
+                summary: [`This is a summary of ${title}`],
               },
             };
             console.log(`Generated fake metadata for story: "${title}"`);
@@ -181,12 +181,13 @@ export class VectorSearchService {
           );
           // Provide basic metadata even if extraction fails
           const title = story.metadata.title || "Untitled";
-          const firstWord = title.split(" ")[0] || "Story";
+          const firstWord = title.split(" ")[0] ?? "Story";
           story.metadata = {
             ...story.metadata,
             extractedMetadata: {
               topics: [firstWord],
               genres: ["debug"],
+              summary: [`This is a fallback summary for ${title}`],
             },
           };
         }
@@ -248,9 +249,12 @@ export class VectorSearchService {
     // Use Qdrant for search if enabled
     if (this.useQdrant && this.qdrantService) {
       try {
+        // Cast searchParams to include index signature for compatibility
+        const searchParamsWithIndex = searchParams as Record<string, unknown>;
+
         const results = await this.qdrantService.search(
           queryEmbedding.embedding,
-          searchParams,
+          searchParamsWithIndex,
           limit,
           similarityThreshold,
         );
@@ -272,13 +276,29 @@ export class VectorSearchService {
         // Fall back to in-memory search
       }
     }
-
     // In-memory search (as fallback or when Qdrant is not enabled)
     const results: SearchResult[] = Array.from(this.vectors.values())
-      .map((story) => ({
-        ...story,
-        score: this.cosineSimilarity(queryEmbedding.embedding, story.embedding),
-      }))
+      .map((story) => {
+        const { extractedMetadata, ...metadata } = story.metadata;
+        return {
+          ...story,
+          metadata: {
+            ...metadata,
+            extractedMetadata: extractedMetadata
+              ? {
+                  topics: extractedMetadata.topics || [],
+                  summary: Array.isArray(extractedMetadata.summary)
+                    ? extractedMetadata.summary
+                    : [extractedMetadata.summary || ""],
+                }
+              : undefined,
+          },
+          score: this.cosineSimilarity(
+            queryEmbedding.embedding,
+            story.embedding,
+          ),
+        };
+      })
       .filter((story) => story.score >= similarityThreshold);
 
     console.log(
@@ -326,12 +346,16 @@ export class VectorSearchService {
       if (!metadata) return true;
 
       // Handle profession filter with improved matching
-      if (searchParams.profession && metadata.profession) {
-        const profession = metadata.profession.toLowerCase();
+      if (searchParams.profession && metadata.topics) {
+        const professionTopics = metadata.topics.map((t) => t.toLowerCase());
 
         if (typeof searchParams.profession === "string") {
           if (
-            !this.fuzzyMatch(profession, searchParams.profession.toLowerCase())
+            !professionTopics.some(
+              (topic) =>
+                typeof searchParams.profession === "string" &&
+                this.fuzzyMatch(topic, searchParams.profession.toLowerCase()),
+            )
           ) {
             return false;
           }
@@ -342,7 +366,9 @@ export class VectorSearchService {
           const hasMatchingProfession = searchParams.profession.some(
             (p) =>
               typeof p === "string" &&
-              this.fuzzyMatch(profession, p.toLowerCase()),
+              professionTopics.some((topic) =>
+                this.fuzzyMatch(topic, p.toLowerCase()),
+              ),
           );
           if (!hasMatchingProfession) return false;
         }
@@ -355,9 +381,9 @@ export class VectorSearchService {
         searchParams.interests.length > 0
       ) {
         // Look in primary interests
-        const hasMatchingInterest = metadata.interests?.some((i) =>
+        const hasMatchingInterest = metadata.topics?.some((topic) =>
           searchParams.interests?.some((interest) =>
-            this.fuzzyMatch(i.toLowerCase(), interest.toLowerCase()),
+            this.fuzzyMatch(topic.toLowerCase(), interest.toLowerCase()),
           ),
         );
 
@@ -368,14 +394,15 @@ export class VectorSearchService {
           ),
         );
 
-        const hasMatchingTheme = metadata.themes?.some((theme) =>
+        // Check summary field which is now a string array
+        const hasMatchingSummary = metadata.summary?.some((theme) =>
           searchParams.interests?.some((interest) =>
             this.fuzzyMatch(theme.toLowerCase(), interest.toLowerCase()),
           ),
         );
 
         // If we found no matches in any fields, filter out this result
-        if (!hasMatchingInterest && !hasMatchingTopic && !hasMatchingTheme) {
+        if (!hasMatchingInterest && !hasMatchingTopic && !hasMatchingSummary) {
           return false;
         }
       }
@@ -515,7 +542,7 @@ export class VectorSearchService {
         const allKeywordsMatch = searchParams.keywords.every((keyword) => {
           // Check in string fields
           const matchesStringField = fieldsToCheck.some((field) =>
-            field
+            field && typeof field === "string"
               ? this.fuzzyMatch(field.toLowerCase(), keyword.toLowerCase())
               : false,
           );

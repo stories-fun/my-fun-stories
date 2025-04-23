@@ -4,6 +4,14 @@ const config = {
   "parserOptions": {
     "project": true
   },
+  "overrides": [
+    {
+      "files": ["confetti.js"],
+      "parserOptions": {
+        "project": null
+      }
+    }
+  ],
   "plugins": [
     "@typescript-eslint"
   ],

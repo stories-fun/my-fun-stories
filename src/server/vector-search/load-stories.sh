@@ -12,9 +12,11 @@ else
 fi
 
 # Set debug mode for vector search
-export VECTOR_SEARCH_DEBUG=true
+export VECTOR_SEARCH_DEBUG=false
 
 echo "Starting story loading process..."
+# Run from the project root directory
+cd ../../../
 npx tsx src/server/vector-search/load-sample-stories.ts
 
 # Check exit status

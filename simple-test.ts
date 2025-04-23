@@ -3,6 +3,13 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
+// Define the Story interface
+interface Story {
+  title: string;
+  content: string;
+  [key: string]: unknown; // For any additional properties
+}
+
 // Get current directory
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -12,35 +19,37 @@ process.env.VECTOR_SEARCH_DEBUG = "true";
 
 // Load sample stories from JSON
 const storiesPath = path.join(__dirname, "sample-stories.json");
-const storiesData = JSON.parse(fs.readFileSync(storiesPath, "utf-8"));
-const stories = storiesData.stories;
+const storiesData = JSON.parse(fs.readFileSync(storiesPath, "utf-8")) as { stories: Story[] };
+const stories: Story[] = storiesData.stories;
 
 // Simple fuzzy matching function similar to one in vectorSearch.ts
 function fuzzyMatch(text: string, query: string): boolean {
   if (!text || !query) return false;
 
   // Convert both to lowercase for case-insensitive matching
-  text = text.toLowerCase();
-  query = query.toLowerCase();
+  const textLower: string = text.toLowerCase();
+  const queryLower: string = query.toLowerCase();
+  
+  // Use the lowercase versions for matching
 
   // Exact match
-  if (text.includes(query)) return true;
+  if (textLower.includes(queryLower)) return true;
 
   // Word boundary match
-  const words = text.split(/\s+/);
+  const words = textLower.split(/\s+/);
   for (const word of words) {
-    if (word.includes(query) || query.includes(word)) return true;
+    if (word.includes(queryLower) || queryLower.includes(word)) return true;
   }
 
   return false;
 }
 
 // Search function that simulates vector search
-function simpleSearch(query: string): any[] {
+function simpleSearch(query: string): (Story & { score: number; matchesTitle: boolean; matchesContent: boolean })[] {
   console.log(`Searching for: "${query}"`);
 
   // Keywords to look for
-  const keywords = query.toLowerCase().split(/\s+/);
+  const keywords: string[] = query.toLowerCase().split(/\s+/);
 
   // Priorities for different fields
   const weights = {
@@ -49,7 +58,7 @@ function simpleSearch(query: string): any[] {
   };
 
   // Score each story
-  const results = stories.map((story) => {
+  const results = stories.map((story: Story) => {
     let score = 0;
     let matchesTitle = false;
     let matchesContent = false;

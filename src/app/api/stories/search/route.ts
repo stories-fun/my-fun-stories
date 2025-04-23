@@ -10,6 +10,7 @@ const sampleStories: StoryVector[] = [
     id: "1",
     embedding: [], // Will be filled by OpenAI
     metadata: {
+      id: "1",
       title: "How I Switched from Finance to Product Management at 35",
       content: `After spending 12 years in investment banking, I finally admitted to myself that I was deeply unhappy with my career path. The money was great, but the 80-hour weeks had taken a toll on my health and relationships. I was 35 years old and felt trapped in a golden cage.
 
@@ -37,6 +38,7 @@ To anyone considering a major career change in their 30s or beyond: it's not too
     id: "2",
     embedding: [], // Will be filled by OpenAI
     metadata: {
+      id: "2",
       title: "My Journey Through Grief and Meditation",
       content: `When my wife died unexpectedly three years ago, I thought my life was over. We'd been together for 17 years, and suddenly I was alone, trying to raise our two children while processing a grief so overwhelming that some days I couldn't even get out of bed.
 
@@ -66,6 +68,7 @@ I will always miss my wife. The grief hasn't disappeared - it has transformed. M
     id: "3",
     embedding: [], // Will be filled by OpenAI
     metadata: {
+      id: "3",
       title: "From Homeless to Software Engineer at 25",
       content: `At 19, I was homeless, sleeping on friends' couches when I could and in my car when I couldn't. My parents had kicked me out after a series of bad decisions - dropping out of high school, hanging with the wrong crowd, and developing a substance abuse problem. I don't blame them now; they'd tried everything they could to help me, and I'd rejected it all.
 
@@ -97,6 +100,7 @@ If there's anything I've learned, it's that resilience isn't about never falling
     id: "4",
     embedding: [], // Will be filled by OpenAI
     metadata: {
+      id: "4",
       title: "Building My Design Agency While Battling Chronic Illness",
       content: `When I was diagnosed with Multiple Sclerosis at 28, my neurologist told me I needed to find a "less stressful" career than my job as a graphic designer at a high-pressure advertising agency. The long hours, tight deadlines, and constant client demands were making my symptoms worse. But design wasn't just my career - it was my passion, my identity.
 
@@ -126,6 +130,7 @@ If you're facing a health challenge that's affecting your career, know this: som
     id: "5",
     embedding: [], // Will be filled by OpenAI
     metadata: {
+      id: "5",
       title: "Finding Love After 40 in the Digital Age",
       content: `When my 15-year marriage ended at 42, I felt like I'd been catapulted into an alternate universe. The dating landscape had completely transformed during my years of marriage. Apps, swiping, texting etiquette - it all seemed designed for a generation much younger than mine. Add to that being a single dad with two teenagers and having a demanding job as a construction project manager, and dating seemed nearly impossible.
 
@@ -153,6 +158,7 @@ For others finding themselves dating at midlife, I'd offer this: the landscape m
     id: "6",
     embedding: [], // Will be filled by OpenAI
     metadata: {
+      id: "6",
       title: "From Corporate Lawyer to Sustainable Farmer at 40",
       content: `After fifteen years as a corporate attorney in Manhattan, I found myself staring out my corner office window wondering how I'd ended up so far from the environmental idealist I'd been in law school. I was 40, successful by conventional metrics, but deeply unfulfilled.
   
@@ -174,6 +180,7 @@ For others finding themselves dating at midlife, I'd offer this: the landscape m
     id: "7",
     embedding: [], // Will be filled by OpenAI
     metadata: {
+      id: "7",
       title:
         "Rebuilding Life After Incarceration: My Path to Software Engineering",
       content: `I spent seven years in prison for a non-violent drug offense I committed at 19. While inside, I was determined to use every minute preparing for a different life upon release. The prison had a limited educational program that offered basic computer skills classes. I took every course available, then convinced the instructor to bring in more advanced materials.
@@ -196,6 +203,7 @@ For others finding themselves dating at midlife, I'd offer this: the landscape m
     id: "8",
     embedding: [], // Will be filled by OpenAI
     metadata: {
+      id: "8",
       title: "How Learning to Dance at 60 Saved Me After My Husband's Death",
       content: `When Robert died after 37 years of marriage, I thought my life was essentially over. At 60, I found myself utterly alone for the first time. Our children lived across the country with families of their own. Friends tried to help, but their lives revolved around couple activities that only emphasized my new solitude.
   
@@ -219,6 +227,7 @@ For others finding themselves dating at midlife, I'd offer this: the landscape m
     id: "9",
     embedding: [], // Will be filled by OpenAI
     metadata: {
+      id: "9",
       title: "Trading My Silicon Valley Career for Rural Education",
       content: `By age 32, I had checked all the boxes for success in Silicon Valley. Stanford CS degree, early employee at a unicorn startup, enough stock options after our IPO to buy a small condo in the astronomically expensive Bay Area. I worked 70-hour weeks developing algorithms to maximize user engagement on our platform. The technical challenges were interesting, but something felt increasingly hollow about optimizing click-through rates to sell more ads.
   
@@ -242,6 +251,7 @@ For others finding themselves dating at midlife, I'd offer this: the landscape m
     id: "10",
     embedding: [], // Will be filled by OpenAI
     metadata: {
+      id: "10",
       title: "Becoming a Paralympic Athlete After a Workplace Accident",
       content: `The industrial accident that crushed my legs at 27 should have killed me. I was a construction foreman, used to being physically dominant, taking risks, pushing limits. After the twenty-foot fall and the machinery collapse, doctors said I was lucky to be alive. I didn't feel lucky. I felt destroyed.
   
@@ -265,6 +275,7 @@ For others finding themselves dating at midlife, I'd offer this: the landscape m
     id: "11",
     embedding: [], // Will be filled by OpenAI
     metadata: {
+      id: "11",
       title: "Starting Over in a New Country at 45",
       content: `I was a respected literature professor in my home country, with tenure, publications, and a comfortable middle-class life. Then came the political changes, the crackdown on academics, the choice between compromising my principles or facing consequences. At 45, with my teenage daughter, I fled with two suitcases and my doctoral diploma – a document that proved worthless in the country that granted us asylum.
   
@@ -290,6 +301,7 @@ For others finding themselves dating at midlife, I'd offer this: the landscape m
     id: "12",
     embedding: [], // Will be filled by OpenAI
     metadata: {
+      id: "12",
       title: "Overcoming Addiction Through Wilderness Therapy",
       content: `By 29, I had lost everything to opioid addiction – my job as a registered nurse, my apartment, my relationships with family, and nearly my life after two overdoses. When the court mandated treatment after my arrest for possession, I viewed it as just another hurdle in a life that had become an endless series of obstacles.
   
@@ -315,6 +327,7 @@ For others finding themselves dating at midlife, I'd offer this: the landscape m
     id: "13",
     embedding: [], // Will be filled by OpenAI
     metadata: {
+      id: "13",
       title: "Reinventing My Career After Industry Collapse",
       content: `For twenty-three years, I worked at the same newspaper, rising from cub reporter to managing editor. Journalism wasn't just my career – it was my identity, my community, my purpose. When digitization and declining ad revenue hit the industry, our staff shrank from 150 to 35 over five years. I survived eight rounds of layoffs, taking on more responsibilities for the same salary, watching younger colleagues leave for digital media startups or corporate communications.
   
@@ -340,6 +353,7 @@ For others finding themselves dating at midlife, I'd offer this: the landscape m
     id: "14",
     embedding: [], // Will be filled by OpenAI
     metadata: {
+      id: "14",
       title: "Finding My Voice After Decades of Selective Mutism",
       content: `Until age 42, I spoke to fewer than ten people in my life. Diagnosed with selective mutism as a child in the 1980s, I received little effective treatment in our small rural community. Teachers labeled me "painfully shy" or "stubborn," not recognizing the severe anxiety disorder preventing me from speaking outside my immediate family.
   
@@ -365,6 +379,7 @@ For others finding themselves dating at midlife, I'd offer this: the landscape m
     id: "15",
     embedding: [], // Will be filled by OpenAI
     metadata: {
+      id: "15",
       title: "Pursuing Art After Retirement: My Late-Blooming Creative Journey",
       content: `I spent forty-two years as an accountant – a good one, methodical and precise. Art was something I appreciated in museums but never considered creating myself. My own mother had discouraged my childhood drawing, steering me toward "practical" pursuits. By retirement at 67, I had a solid pension, a paid-off house, and absolutely no idea what to do with myself.
   

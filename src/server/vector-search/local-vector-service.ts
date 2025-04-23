@@ -1,11 +1,10 @@
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+import * as fs from "fs";
+import * as path from "path";
 import { loadedStories } from "./loaded-stories";
+import type { StoryMetadata as TypesStoryMetadata } from "./types";
 
-// Get current directory
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Using process.cwd() instead of import.meta.url
+const __dirname = process.cwd();
 
 // Interfaces
 export interface StoryVector {
@@ -14,13 +13,9 @@ export interface StoryVector {
   metadata: StoryMetadata;
 }
 
-export interface StoryMetadata {
-  title: string;
-  content: string;
-  username: string;
-  createdAt: Date;
-  walletAddress: string;
-  extractedMetadata?: Record<string, string[]>;
+// Extend the TypesStoryMetadata to ensure compatibility
+export interface StoryMetadata extends TypesStoryMetadata {
+  id: string;
 }
 
 export interface SearchResult extends StoryVector {
@@ -35,7 +30,7 @@ export interface SearchOptions {
 }
 
 // Generate embeddings - local implementation
-function generateEmbedding(text: string, dimension: number = 1536): number[] {
+function generateEmbedding(text: string, dimension = 1536): number[] {
   const embedding = new Array(dimension).fill(0);
   const words = text.toLowerCase().split(/\s+/);
 
@@ -95,9 +90,9 @@ function generateEmbedding(text: string, dimension: number = 1536): number[] {
 
   // Normalize the embedding
   const magnitude = Math.sqrt(
-    embedding.reduce((sum, val) => sum + val * val, 0),
+    embedding.reduce<number>((sum, val) => sum + val * val, 0),
   );
-  return embedding.map((val) => (magnitude > 0 ? val / magnitude : 0));
+  return embedding.map((val): number => (magnitude > 0 ? val / magnitude : 0));
 }
 
 // Simple string hash function
@@ -139,11 +134,11 @@ function cosineSimilarity(vec1: number[], vec2: number[]): number {
 let instance: LocalVectorSearchService | null = null;
 
 export class LocalVectorSearchService {
-  private vectors: Map<string, StoryVector> = new Map();
+  private vectors: Map<string, StoryVector> = new Map<string, StoryVector>();
 
   constructor() {
     console.log("LocalVectorSearchService initialized");
-    this.loadStoriesFromMemory();
+    void this.loadStoriesFromMemory();
   }
 
   static getInstance(): LocalVectorSearchService {
@@ -153,12 +148,12 @@ export class LocalVectorSearchService {
     return instance;
   }
 
-  private loadStoriesFromMemory(): void {
+  private async loadStoriesFromMemory(): Promise<void> {
     console.log(
       `Loading ${loadedStories.length} stories into vector search...`,
     );
     for (const story of loadedStories) {
-      this.addStory({
+      await this.addStory({
         id: story.id,
         title: story.title,
         content: story.content,
@@ -183,8 +178,8 @@ export class LocalVectorSearchService {
         ...metadata,
         extractedMetadata: {
           topics: [metadata.title.split(" ")[0]],
-          summary: `This is a story about ${metadata.title}`,
-        },
+          summary: [`This is a story about ${metadata.title}`],
+        } as { topics: string[]; summary: string[] },
       },
     };
 
@@ -204,7 +199,7 @@ export class LocalVectorSearchService {
 
     const results: SearchResult[] = [];
 
-    for (const vector of this.vectors.values()) {
+    for (const vector of Array.from(this.vectors.values())) {
       const score = cosineSimilarity(queryEmbedding, vector.embedding);
       if (score >= threshold) {
         results.push({

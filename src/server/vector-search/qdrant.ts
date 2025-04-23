@@ -1,6 +1,16 @@
 import { QdrantClient } from "@qdrant/js-client-rest";
 import { VECTOR_SEARCH_CONFIG } from "./config";
-import type { StoryVector, SearchResult } from "./types";
+import type { StoryVector } from "./types";
+import { StoryMetadata, SearchResult } from "./local-vector-service";
+
+// Define search params interface for better typing
+interface SearchParamsFilter {
+  profession?: string | string[];
+  interests?: string[];
+  gender?: string;
+  age?: number | { min?: number; max?: number };
+  [key: string]: unknown;
+}
 
 /**
  * Service for interacting with Qdrant vector database
@@ -8,7 +18,7 @@ import type { StoryVector, SearchResult } from "./types";
 export class QdrantService {
   private client: QdrantClient;
   private collectionName: string;
-  private initialized: boolean = false;
+  private initialized = false;
   private dimension: number;
 
   constructor() {
@@ -139,7 +149,7 @@ export class QdrantService {
    */
   async search(
     queryVector: number[],
-    searchParams: any = {},
+    searchParams: SearchParamsFilter = {},
     limit = VECTOR_SEARCH_CONFIG.maxResults,
     threshold = VECTOR_SEARCH_CONFIG.similarityThreshold,
   ): Promise<SearchResult[]> {
@@ -158,16 +168,37 @@ export class QdrantService {
 
       // Map results to SearchResult type
       return searchResult.map((result) => {
-        const metadata = result.payload.metadata;
+        // Add typing for payload.metadata with proper fallbacks
+        const payload = result.payload ?? {};
+        const metadata = (payload.metadata || {}) as Partial<StoryMetadata>;
+
+        const storyMetadata: StoryMetadata = {
+          id: String(result.id),
+          title: metadata.title ?? "Unknown Title",
+          content: metadata.content ?? "No content available",
+          username: metadata.username ?? "anonymous",
+          walletAddress: metadata.walletAddress ?? "",
+          createdAt:
+            metadata.createdAt instanceof Date
+              ? metadata.createdAt
+              : metadata.createdAt && typeof metadata.createdAt === "string"
+                ? new Date(metadata.createdAt)
+                : new Date(),
+          extractedMetadata: {
+            topics: Array.isArray(metadata.extractedMetadata?.topics)
+              ? metadata.extractedMetadata.topics
+              : [],
+            summary: Array.isArray(metadata.extractedMetadata?.summary)
+              ? metadata.extractedMetadata.summary
+              : [`Information about ${metadata.title ?? "this story"}`],
+          },
+        };
+
         return {
           id: String(result.id),
           score: result.score,
           embedding: queryVector, // We don't get the vector back from Qdrant search
-          metadata: {
-            ...metadata,
-            // Convert ISO string back to Date
-            createdAt: new Date(metadata.createdAt),
-          },
+          metadata: storyMetadata,
         };
       });
     } catch (error) {
@@ -218,7 +249,7 @@ export class QdrantService {
       const collectionInfo = await this.client.getCollection(
         this.collectionName,
       );
-      return collectionInfo.points_count;
+      return collectionInfo.points_count ?? 0;
     } catch (error) {
       console.error("Failed to get vector count from Qdrant:", error);
       return 0;
@@ -228,8 +259,11 @@ export class QdrantService {
   /**
    * Convert search parameters to Qdrant filter format
    */
-  private buildFilterFromSearchParams(searchParams: any): Record<string, any> {
-    const filter: Record<string, any> = { must: [] };
+  private buildFilterFromSearchParams(
+    searchParams: SearchParamsFilter,
+  ): Record<string, unknown> {
+    const filter: Record<string, unknown> = { must: [] };
+    const must = filter.must as Array<unknown>;
 
     if (!searchParams || Object.keys(searchParams).length === 0) {
       return {};
@@ -238,7 +272,7 @@ export class QdrantService {
     // Add profession filter
     if (searchParams.profession) {
       if (typeof searchParams.profession === "string") {
-        filter.must.push({
+        must.push({
           key: "metadata.extractedMetadata.profession",
           match: {
             text: searchParams.profession.toLowerCase(),
@@ -248,7 +282,7 @@ export class QdrantService {
         Array.isArray(searchParams.profession) &&
         searchParams.profession.length > 0
       ) {
-        filter.must.push({
+        must.push({
           any: searchParams.profession.map((p: string) => ({
             key: "metadata.extractedMetadata.profession",
             match: {
@@ -265,7 +299,7 @@ export class QdrantService {
       Array.isArray(searchParams.interests) &&
       searchParams.interests.length > 0
     ) {
-      filter.must.push({
+      must.push({
         any: searchParams.interests.map((interest: string) => ({
           key: "metadata.extractedMetadata.interests",
           match: {
@@ -277,7 +311,7 @@ export class QdrantService {
 
     // Add gender filter
     if (searchParams.gender) {
-      filter.must.push({
+      must.push({
         key: "metadata.extractedMetadata.gender",
         match: {
           text: searchParams.gender.toLowerCase(),
@@ -288,7 +322,7 @@ export class QdrantService {
     // Add other filters as needed...
 
     // Return empty filter if no conditions were added
-    if (filter.must.length === 0) {
+    if (must.length === 0) {
       return {};
     }
 
