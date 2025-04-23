@@ -11,6 +11,7 @@ import {
   FiHome,
   FiInfo,
 } from "react-icons/fi";
+import { FiMic } from "react-icons/fi";
 import Link from "next/link";
 import { useUIStore } from "~/store/useUIStore";
 import MessageIndicator from "./MessageIndicator";
@@ -154,6 +155,13 @@ const NavBar = () => {
         <div className="flex items-center space-x-4">
           <UnifiedWalletButton />
           <MessageIndicator />
+          <Link
+            href="/voice-llm"
+            className="rounded-full bg-purple-500 p-2 text-white hover:bg-purple-600"
+            title="Voice to Story"
+          >
+            <FiMic className="h-5 w-5" />
+          </Link>
           <button
             className="rounded-full bg-primary p-2 text-white hover:bg-primary/90"
             onClick={() => openChat()}
@@ -184,6 +192,11 @@ const NavBar = () => {
           <div className="space-y-1 px-4 py-2">
             <MobileMenuItem icon={FiHome} label="Home" href="/" />
             <MobileMenuItem icon={FiInfo} label="About" href="/aboutus" />
+            <MobileMenuItem
+              icon={FiMic}
+              label="Voice to Story"
+              href="/voice-llm"
+            />
             <MobileMenuItem
               icon={FiBell}
               label="Notifications"
