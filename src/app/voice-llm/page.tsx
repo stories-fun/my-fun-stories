@@ -1,12 +1,11 @@
 "use client";
 
 import NavBar from "../_components/NavBar";
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { VoiceRecorder } from "~/components/VoiceRecorder";
-import { Mic, MicOff, Loader2, Info } from "lucide-react";
+import { Mic, Info } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useWallet } from "@jup-ag/wallet-adapter";
-import { toast } from "react-hot-toast";
 
 export default function VoiceLLMPage() {
   const [showInstructions, setShowInstructions] = useState(false);

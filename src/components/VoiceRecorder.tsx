@@ -560,39 +560,6 @@ export const VoiceRecorder = () => {
     }
   };
 
-  // Improved end conversation function for the cancel button
-  const endConversation = async () => {
-    console.log("Ending conversation completely");
-    try {
-      // Clean up all resources
-      await cleanupBeforeRecording();
-
-      // Reset all state to initial values
-      setShowTranscript(false);
-      setIsEditing(false);
-      setShowContinuePrompt(false);
-
-      // Clear conversation state and data
-      setConversationId(null);
-
-      // Keep the transcript for editing but clearly indicate conversation has ended
-      if (liveTranscript.trim()) {
-        setIsEditing(true);
-        setShowTranscript(true);
-        toast.success(
-          "Voice session ended. You can now edit your story before submitting.",
-        );
-      } else {
-        // If no transcript, just reset everything
-        setLiveTranscript("");
-        toast.success("Voice session ended.");
-      }
-    } catch (error) {
-      console.error("Error ending conversation:", error);
-      toast.error("Failed to end conversation properly");
-    }
-  };
-
   // Get current button content and state
   const getButtonLabel = (): string => {
     if (isRecording) return "Stop Recording";
@@ -694,6 +661,39 @@ export const VoiceRecorder = () => {
   // Function to continue the conversation
   const continueConversation = () => {
     setShowContinuePrompt(false);
+  };
+
+  // Improved end conversation function for the cancel button
+  const endConversation = async () => {
+    console.log("Ending conversation completely");
+    try {
+      // Clean up all resources
+      await cleanupBeforeRecording();
+
+      // Reset all state to initial values
+      setShowTranscript(false);
+      setIsEditing(false);
+      setShowContinuePrompt(false);
+
+      // Clear conversation state and data
+      setConversationId(null);
+
+      // Keep the transcript for editing but clearly indicate conversation has ended
+      if (liveTranscript.trim()) {
+        setIsEditing(true);
+        setShowTranscript(true);
+        toast.success(
+          "Voice session ended. You can now edit your story before submitting.",
+        );
+      } else {
+        // If no transcript, just reset everything
+        setLiveTranscript("");
+        toast.success("Voice session ended.");
+      }
+    } catch (error) {
+      console.error("Error ending conversation:", error);
+      toast.error("Failed to end conversation properly");
+    }
   };
 
   const waveformVariant = getWaveformVariant();
