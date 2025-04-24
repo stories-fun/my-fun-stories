@@ -4,6 +4,33 @@ const config = {
   parserOptions: {
     project: true,
   },
+
+  overrides: [
+    {
+      files: ["confetti.js,src/app/voice-llm/page.tsx", "src/components/VoiceRecorder.tsx"],
+      parserOptions: {
+        project: null,
+      },
+    },
+    {
+      files: ["src/env.js"],
+      parser: "espree",
+      parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: "module",
+      },
+      rules: {
+        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-misused-promises": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/consistent-type-imports": "off",
+        "@typescript-eslint/require-await": "off",
+        "@typescript-eslint/array-type": "off",
+        "@typescript-eslint/consistent-type-definitions": "off",
+      },
+    },
+  ],
+
   plugins: ["@typescript-eslint"],
   extends: [
     "next/core-web-vitals",
@@ -36,13 +63,6 @@ const config = {
       },
     ],
   },
-  overrides: [
-    {
-      files: ["src/app/voice-llm/page.tsx", "src/components/VoiceRecorder.tsx"],
-      rules: {
-        "@typescript-eslint/no-unused-vars": "off",
-      },
-    },
-  ],
+
 };
 module.exports = config;

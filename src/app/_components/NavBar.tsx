@@ -17,7 +17,11 @@ import { useUIStore } from "~/store/useUIStore";
 import MessageIndicator from "./MessageIndicator";
 import ChatModal from "./ChatModal";
 import { useChatStore } from "~/store/useChatStore";
+
+import ExpandableSearch from "~/components/ExpandableSearch";
+
 import { UnifiedWalletButton } from "@jup-ag/wallet-adapter";
+
 
 interface MobileMenuItemProps {
   icon: React.ElementType;
@@ -132,21 +136,52 @@ const NavBar = () => {
   if (!mounted) return null;
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-white shadow-sm">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center space-x-4">
-          <button
-            className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 lg:hidden"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            {menuOpen ? (
-              <FiX className="h-6 w-6" />
-            ) : (
-              <FiMenu className="h-6 w-6" />
-            )}
-          </button>
-          <NavLogo />
-        </div>
+
+    <>
+      <nav className="sticky top-0 z-50 bg-white shadow-sm">
+        <div className="container mx-auto flex items-center justify-between gap-4 px-2 py-2 sm:px-4 sm:py-3">
+          <div className="flex flex-shrink-0 items-center space-x-2 sm:space-x-4">
+            <NavLogo />
+          </div>
+
+          <div className="ml-auto flex flex-1 items-center justify-end gap-3 sm:gap-4">
+            <div className="w-full max-w-sm">
+              <ExpandableSearch />
+            </div>
+
+            <Link
+              href="/"
+              className="font-mont whitespace-nowrap text-xs font-semibold text-black decoration-2 transition-colors hover:text-gray-700 sm:text-sm md:text-base"
+            >
+              what&apos;s your story?
+            </Link>
+
+            <Link
+              href="/aboutus"
+              className="font-mont mr-2 hidden whitespace-nowrap text-xs font-semibold text-gray-700 transition-colors hover:text-gray-700 sm:mr-4 sm:block sm:text-sm md:text-base"
+            >
+              about us
+            </Link>
+
+            <div className="hidden md:flex md:items-center md:space-x-2">
+              <button
+                className="rounded-lg p-2 text-lg text-gray-700 transition-colors hover:bg-gray-100 sm:text-xl"
+                aria-label="Notifications"
+              >
+                <FiBell />
+              </button>
+
+              <button
+                className="rounded-lg p-2 text-lg text-gray-700 transition-colors hover:bg-gray-100 sm:text-xl"
+                aria-label="Create new"
+              >
+                <FiPlus />
+              </button>
+
+              <div className="rounded-lg text-lg text-gray-700 transition-colors hover:bg-gray-100 sm:text-xl">
+                <MessageIndicator />
+              </div>
+
 
         <div className="hidden flex-1 items-center justify-center px-4 lg:flex">
           <SearchBar className="max-w-xl" onSearch={handleSearch} />
