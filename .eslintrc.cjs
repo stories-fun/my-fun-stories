@@ -4,9 +4,10 @@ const config = {
   parserOptions: {
     project: true,
   },
+
   overrides: [
     {
-      files: ["confetti.js"],
+      files: ["confetti.js,src/app/voice-llm/page.tsx", "src/components/VoiceRecorder.tsx"],
       parserOptions: {
         project: null,
       },
@@ -29,6 +30,7 @@ const config = {
       },
     },
   ],
+
   plugins: ["@typescript-eslint"],
   extends: [
     "next/core-web-vitals",
@@ -61,5 +63,6 @@ const config = {
       },
     ],
   },
+
 };
 module.exports = config;

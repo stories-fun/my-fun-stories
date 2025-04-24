@@ -17,10 +17,12 @@ export const env = createEnv({
     CLOUDFLARE_BUCKET_NAME: z.string(),
     HUME_API_KEY: z.string(),
     OPENAI_API_KEY: z.string(),
+
     QDRANT_API_KEY: z.string().optional(),
     QDRANT_CLOUD_URL: z.string().optional(),
     QDRANT_URL: z.string().optional(),
     VECTOR_SEARCH_DEBUG: z.string().optional(),
+
   },
 
   /**
@@ -44,10 +46,12 @@ export const env = createEnv({
     CLOUDFLARE_BUCKET_NAME: process.env.CLOUDFLARE_BUCKET_NAME,
     HUME_API_KEY: process.env.HUME_API_KEY,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+
     QDRANT_API_KEY: process.env.QDRANT_API_KEY,
     QDRANT_CLOUD_URL: process.env.QDRANT_CLOUD_URL,
     QDRANT_URL: process.env.QDRANT_URL,
     VECTOR_SEARCH_DEBUG: process.env.VECTOR_SEARCH_DEBUG,
+
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**

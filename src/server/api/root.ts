@@ -2,15 +2,25 @@ import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 import { userRouter } from "./routers/user";
 import { storyRouter } from "./routers/story";
 import { messageRouter } from "./routers/message";
+
 import { vectorSearchRouter } from "./routers/vectorSearch";
 import { patchVectorRouter } from "./routers/patch-vector-router";
+
+import { promptingRouter } from "./routers/prompting";
+import { linktreepromptRouter } from "./routers/linktreeprompt";
+
 
 export const appRouter = createTRPCRouter({
   user: userRouter,
   story: storyRouter,
   message: messageRouter,
+
   vectorSearch: vectorSearchRouter,
   patchVector: patchVectorRouter,
+
+  prompting: promptingRouter,
+  linktreeprompt: linktreepromptRouter,
+
 });
 
 // export type definition of API
