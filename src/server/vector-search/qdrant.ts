@@ -1,7 +1,7 @@
 import { QdrantClient } from "@qdrant/js-client-rest";
 import { VECTOR_SEARCH_CONFIG } from "./config";
 import type { StoryVector } from "./types";
-import { StoryMetadata, SearchResult } from "./local-vector-service";
+import type { StoryMetadata, SearchResult } from "./local-vector-service";
 
 // Define search params interface for better typing
 interface SearchParamsFilter {

@@ -2,7 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import {
   LocalVectorSearchService,
-  SearchOptions,
+  type SearchOptions,
 } from "../../vector-search/local-vector-service";
 
 // Options schema for search - should match SearchOptions in LocalVectorSearchService

@@ -8,7 +8,8 @@ const getEnv = () => {
       qdrantApiKey: env.QDRANT_API_KEY,
       qdrantUrl: env.QDRANT_CLOUD_URL,
     };
-  } catch (e) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (_) {
     console.warn("Warning: Using process.env fallback due to env module error");
     return {
       openaiApiKey: process.env.OPENAI_API_KEY,

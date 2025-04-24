@@ -3,7 +3,8 @@ import { VECTOR_SEARCH_CONFIG } from "./config";
 import type { StoryMetadata, SearchParams } from "./types";
 
 // Interface for the response from the query analysis
-interface QueryAnalysisResult {
+// Commented out as it's not currently used
+/* interface QueryAnalysisResult {
   modifiedQuery?: string;
   intent?: SearchParams["intent"];
   profession?: string;
@@ -18,7 +19,7 @@ interface QueryAnalysisResult {
   searchDescription?: string;
   relationshipStatus?: string;
   education?: string;
-}
+} */
 
 export class MetadataExtractor {
   private client: OpenAI | null = null;

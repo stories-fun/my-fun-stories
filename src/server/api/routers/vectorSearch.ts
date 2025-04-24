@@ -20,13 +20,13 @@ interface DbPoint {
 async function getClient() {
   // Return a mock client
   return {
-    index: (name: string) => ({
+    index: (_name: string) => ({
       getPoints: async ({
-        ids,
-        includeMetadata,
+        _ids,
+        _includeMetadata,
       }: {
-        ids: string[];
-        includeMetadata: boolean;
+        _ids: string[];
+        _includeMetadata: boolean;
       }) => {
         // This is a mock implementation
         return {
@@ -93,8 +93,8 @@ export const vectorSearchRouter = createTRPCRouter({
         try {
           // Try to get the story directly by ID
           const result = await index.getPoints({
-            ids: [id],
-            includeMetadata: true,
+            _ids: [id],
+            _includeMetadata: true,
           });
 
           if (result.points.length > 0) {

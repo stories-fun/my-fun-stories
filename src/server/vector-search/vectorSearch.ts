@@ -2,13 +2,8 @@ import { OpenAIService } from "./openai";
 import { MetadataExtractor } from "./metadata-extraction";
 import { VECTOR_SEARCH_CONFIG } from "./config";
 import { QdrantService } from "./qdrant";
-import type {
-  StoryVector,
-  VectorSearchOptions,
-  SearchParams,
-  StoryMetadata,
-} from "./types";
-import { SearchResult } from "./local-vector-service";
+import type { StoryVector, VectorSearchOptions, SearchParams } from "./types";
+import type { SearchResult } from "./local-vector-service";
 
 export class VectorSearchService {
   private vectors: Map<string, StoryVector>;

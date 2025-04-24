@@ -1,10 +1,7 @@
 import { OpenAIEmbeddings } from "@langchain/openai";
-import { createClient } from "@supabase/supabase-js";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { ChatOpenAI } from "@langchain/openai";
 import { Document } from "langchain/document";
-import { ChatPromptTemplate } from "@langchain/core/prompts";
-import { StringOutputParser } from "@langchain/core/output_parsers";
 import { loadedStories } from "./loaded-stories";
 
 // Define interfaces
@@ -27,7 +24,8 @@ export interface StoryMetadata {
   };
 }
 
-export interface SearchResult extends StoryVector {}
+// Replace the empty interface with a type alias
+export type SearchResult = StoryVector;
 
 export interface SearchOptions {
   limit?: number;
@@ -72,7 +70,7 @@ export class LangchainVectorService {
     });
 
     // Initialize with loaded stories
-    this.loadStoriesAndCreateVectors();
+    void this.loadStoriesAndCreateVectors();
   }
 
   private async loadStoriesAndCreateVectors() {
@@ -213,7 +211,7 @@ export class LangchainVectorService {
     };
 
     // Add to loaded stories
-    (loadedStories as any).push(newStory);
+    loadedStories.push(newStory);
 
     // Create a document for the vector store
     const document = new Document({

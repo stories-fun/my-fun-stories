@@ -1,10 +1,7 @@
-import * as fs from "fs";
-import * as path from "path";
+// import * as fs from "fs";
+// import * as path from "path";
 import { loadedStories } from "./loaded-stories";
 import type { StoryMetadata as TypesStoryMetadata } from "./types";
-
-// Using process.cwd() instead of import.meta.url
-const __dirname = process.cwd();
 
 // Interfaces
 export interface StoryVector {

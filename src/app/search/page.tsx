@@ -1,10 +1,10 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import StorySearch from "~/components/StorySearch";
 
-export default function SearchPage() {
+function SearchPageContent() {
   const searchParams = useSearchParams();
   const [initialQuery, setInitialQuery] = useState("");
   const [autoExecute, setAutoExecute] = useState(false);
@@ -22,9 +22,17 @@ export default function SearchPage() {
     }
   }, [searchParams]);
 
+  return <StorySearch initialQuery={initialQuery} autoExecute={autoExecute} />;
+}
+
+export default function SearchPage() {
   return (
     <main className="min-h-screen bg-gray-50">
-      <StorySearch initialQuery={initialQuery} autoExecute={autoExecute} />
+      <Suspense
+        fallback={<div className="p-4 text-center">Loading search...</div>}
+      >
+        <SearchPageContent />
+      </Suspense>
     </main>
   );
 }
