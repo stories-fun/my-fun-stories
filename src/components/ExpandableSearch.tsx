@@ -9,13 +9,14 @@ export default function ExpandableSearch() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  
+
   // Search suggestions
   const searchSuggestions = [
     "I want to connect with some isha meditators in crypto space",
     "Tell me some romantic stories with sad endings",
-    "I want to learn programming and then build great products having exciting and useful UI/UX. Suggest me similar stories."
+    "I want to learn programming and then build great products having exciting and useful UI/UX. Suggest me similar stories.",
   ];
 
   // Focus input when expanded
@@ -37,6 +38,22 @@ export default function ExpandableSearch() {
     return () => window.removeEventListener("keydown", handleEscape);
   }, [isExpanded]);
 
+  // Close when clicking outside the search container
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        isExpanded &&
+        searchContainerRef.current &&
+        !searchContainerRef.current.contains(e.target as Node)
+      ) {
+        setIsExpanded(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isExpanded]);
+
   const handleSearch = () => {
     if (searchQuery.trim()) {
       router.push(
@@ -45,12 +62,10 @@ export default function ExpandableSearch() {
       setIsExpanded(false);
     }
   };
-  
+
   const handleSuggestionClick = (suggestion: string) => {
     setSearchQuery(suggestion);
-    router.push(
-      `/search?q=${encodeURIComponent(suggestion)}&autoExecute=true`,
-    );
+    router.push(`/search?q=${encodeURIComponent(suggestion)}&autoExecute=true`);
     setIsExpanded(false);
   };
 
@@ -80,12 +95,17 @@ export default function ExpandableSearch() {
       {/* ChatGPT-style bottom search panel */}
       {isExpanded && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black bg-opacity-40 backdrop-blur-sm transition-all duration-200">
-          <div className="animate-slideUp w-full max-w-3xl px-4 pb-4">
+          <div
+            className="animate-slideUp w-full max-w-3xl px-4 pb-4"
+            ref={searchContainerRef}
+          >
             <div className="relative rounded-2xl bg-white p-4 shadow-lg">
               {/* Search suggestions */}
               {!searchQuery.trim() && (
                 <div className="mb-4 space-y-2">
-                  <p className="text-sm font-medium text-gray-500">Try searching for:</p>
+                  <p className="text-sm font-medium text-gray-500">
+                    Try searching for:
+                  </p>
                   <div className="flex flex-wrap gap-2">
                     {searchSuggestions.map((suggestion, index) => (
                       <button
@@ -99,7 +119,7 @@ export default function ExpandableSearch() {
                   </div>
                 </div>
               )}
-              
+
               {/* Search input with integrated button */}
               <div className="flex items-center overflow-hidden rounded-xl border border-gray-200 bg-white">
                 <div className="flex flex-1 items-center px-4">
@@ -124,7 +144,7 @@ export default function ExpandableSearch() {
                     </button>
                   )}
                 </div>
-                
+
                 {/* Integrated search button */}
                 {searchQuery.trim() && (
                   <button
