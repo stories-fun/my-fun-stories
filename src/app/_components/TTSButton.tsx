@@ -152,7 +152,7 @@ const TTSButton = ({ text }: { text: string }) => {
             await new Promise((resolve) => setTimeout(resolve, 1500));
           }
 
-          const humeApiKey = process.env.HUME_API_KEY!;
+          // const humeApiKey = process.env.HUME_API_KEY!;
 
           if (!chunks[i]) {
             console.error(`Chunk ${i} is undefined or empty`);
@@ -175,7 +175,7 @@ const TTSButton = ({ text }: { text: string }) => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              "X-Hume-Api-Key": humeApiKey,
+              // "X-Hume-Api-Key": humeApiKey,
             },
             body: JSON.stringify({
               utterances: [

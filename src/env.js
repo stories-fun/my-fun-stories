@@ -15,7 +15,7 @@ export const env = createEnv({
     CLOUDFLARE_ACCESS_KEY_ID: z.string(),
     CLOUDFLARE_SECRET_ACCESS_KEY: z.string(),
     CLOUDFLARE_BUCKET_NAME: z.string(),
-    HUME_API_KEY: z.string(),
+    // HUME_API_KEY: z.string(),
     OPENAI_API_KEY: z.string(),
 
     QDRANT_API_KEY: z.string().optional(),

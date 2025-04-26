@@ -16,9 +16,8 @@
     "typecheck": "tsc --noEmit",
 
     "test:vector-search": "NODE_ENV=development node -r dotenv/config ./node_modules/.bin/tsx src/server/vector-search/run-test.ts dotenv_config_path=.env.test",
-    "test:vector-search:advanced": "NODE_ENV=development node -r dotenv/config ./node_modules/.bin/tsx src/server/vector-search/run-advanced-test.ts dotenv_config_path=.env.test"
-
-    "prepare": "husky",
+    "test:vector-search:advanced": "NODE_ENV=development node -r dotenv/config ./node_modules/.bin/tsx src/server/vector-search/run-advanced-test.ts dotenv_config_path=.env.test",
+    "prepare": "husky"
 
   },
   "dependencies": {
