@@ -135,119 +135,109 @@ const NavBar = () => {
 
   if (!mounted) return null;
 
-  return (
-
-    <>
-      <nav className="sticky top-0 z-50 bg-white shadow-sm">
-        <div className="container mx-auto flex items-center justify-between gap-4 px-2 py-2 sm:px-4 sm:py-3">
-          <div className="flex flex-shrink-0 items-center space-x-2 sm:space-x-4">
-            <NavLogo />
-          </div>
-
-          <div className="ml-auto flex flex-1 items-center justify-end gap-3 sm:gap-4">
-            <div className="w-full max-w-sm">
-              <ExpandableSearch />
-            </div>
-
-            <Link
-              href="/"
-              className="font-mont whitespace-nowrap text-xs font-semibold text-black decoration-2 transition-colors hover:text-gray-700 sm:text-sm md:text-base"
-            >
-              what&apos;s your story?
-            </Link>
-
-            <Link
-              href="/aboutus"
-              className="font-mont mr-2 hidden whitespace-nowrap text-xs font-semibold text-gray-700 transition-colors hover:text-gray-700 sm:mr-4 sm:block sm:text-sm md:text-base"
-            >
-              about us
-            </Link>
-
-            <div className="hidden md:flex md:items-center md:space-x-2">
-              <button
-                className="rounded-lg p-2 text-lg text-gray-700 transition-colors hover:bg-gray-100 sm:text-xl"
-                aria-label="Notifications"
-              >
-                <FiBell />
-              </button>
-
-              <button
-                className="rounded-lg p-2 text-lg text-gray-700 transition-colors hover:bg-gray-100 sm:text-xl"
-                aria-label="Create new"
-              >
-                <FiPlus />
-              </button>
-
-              <div className="rounded-lg text-lg text-gray-700 transition-colors hover:bg-gray-100 sm:text-xl">
-                <MessageIndicator />
-              </div>
-
-
-        <div className="hidden flex-1 items-center justify-center px-4 lg:flex">
-          <SearchBar className="max-w-xl" onSearch={handleSearch} />
-        </div>
-
-        <div className="flex items-center space-x-4">
-          <UnifiedWalletButton />
+  return <>
+  <nav className="sticky top-0 z-50 bg-white shadow-sm">
+  <div className="container mx-auto flex items-center justify-between gap-4 px-2 py-2 sm:px-4 sm:py-3">
+    <div className="flex flex-shrink-0 items-center space-x-2 sm:space-x-4">
+      <NavLogo />
+    </div>
+    <div className="ml-auto flex flex-1 items-center justify-end gap-3 sm:gap-4">
+      <div className="w-full max-w-sm">
+        <ExpandableSearch />
+      </div>
+      <Link
+        href="/"
+        className="font-mont whitespace-nowrap text-xs font-semibold text-black decoration-2 transition-colors hover:text-gray-700 sm:text-sm md:text-base"
+      >
+        what&apos;s your story?
+      </Link>
+      <Link
+        href="/aboutus"
+        className="font-mont mr-2 hidden whitespace-nowrap text-xs font-semibold text-gray-700 transition-colors hover:text-gray-700 sm:mr-4 sm:block sm:text-sm md:text-base"
+      >
+        about us
+      </Link>
+      <div className="hidden md:flex md:items-center md:space-x-2">
+        <button
+          className="rounded-lg p-2 text-lg text-gray-700 transition-colors hover:bg-gray-100 sm:text-xl"
+          aria-label="Notifications"
+        >
+          <FiBell />
+        </button>
+        <button
+          className="rounded-lg p-2 text-lg text-gray-700 transition-colors hover:bg-gray-100 sm:text-xl"
+          aria-label="Create new"
+        >
+          <FiPlus />
+        </button>
+        <div className="rounded-lg text-lg text-gray-700 transition-colors hover:bg-gray-100 sm:text-xl">
           <MessageIndicator />
-          <Link
-            href="/voice-llm"
-            className="rounded-full bg-purple-500 p-2 text-white hover:bg-purple-600"
-            title="Voice to Story"
-          >
-            <FiMic className="h-5 w-5" />
-          </Link>
-          <button
-            className="rounded-full bg-primary p-2 text-white hover:bg-primary/90"
-            onClick={() => openChat()}
-          >
-            <FiPlus className="h-5 w-5" />
-          </button>
-          <Link
-            href="/profile"
-            className="rounded-full bg-gray-100 p-2 text-gray-700 hover:bg-gray-200"
-          >
-            <FiUser className="h-5 w-5" />
-          </Link>
         </div>
       </div>
-
-      {/* Mobile menu */}
-      {menuOpen && (
-        <div className="mobile-menu fixed inset-0 z-50 bg-white lg:hidden">
-          <div className="flex h-16 items-center justify-between px-4">
-            <NavLogo />
-            <button
-              className="rounded-lg p-2 text-gray-500 hover:bg-gray-100"
-              onClick={() => setMenuOpen(false)}
-            >
-              <FiX className="h-6 w-6" />
-            </button>
-          </div>
-          <div className="space-y-1 px-4 py-2">
-            <MobileMenuItem icon={FiHome} label="Home" href="/" />
-            <MobileMenuItem icon={FiInfo} label="About" href="/aboutus" />
-            <MobileMenuItem
-              icon={FiMic}
-              label="Voice to Story"
-              href="/voice-llm"
-            />
-            <MobileMenuItem
-              icon={FiBell}
-              label="Notifications"
-              href="/notifications"
-            />
-            <MobileMenuItem icon={FiUser} label="Profile" href="/profile" />
-            <div className="px-3 py-2">
-              <UnifiedWalletButton />
-            </div>
-          </div>
+    </div>
+    <div className="hidden flex-1 items-center justify-center px-4 lg:flex">
+      <SearchBar className="max-w-xl" onSearch={handleSearch} />
+    </div>
+    <div className="flex items-center space-x-4">
+      <UnifiedWalletButton />
+      <MessageIndicator />
+      <Link
+        href="/voice-llm"
+        className="rounded-full bg-purple-500 p-2 text-white hover:bg-purple-600"
+        title="Voice to Story"
+      >
+        <FiMic className="h-5 w-5" />
+      </Link>
+      <button
+        className="rounded-full bg-primary p-2 text-white hover:bg-primary/90"
+        onClick={() => openChat()}
+      >
+        <FiPlus className="h-5 w-5" />
+      </button>
+      <Link
+        href="/profile"
+        className="rounded-full bg-gray-100 p-2 text-gray-700 hover:bg-gray-200"
+      >
+        <FiUser className="h-5 w-5" />
+      </Link>
+    </div>
+  </div>
+  
+  {/* Mobile menu */}
+  {menuOpen && (
+    <div className="mobile-menu fixed inset-0 z-50 bg-white lg:hidden">
+      <div className="flex h-16 items-center justify-between px-4">
+        <NavLogo />
+        <button
+          className="rounded-lg p-2 text-gray-500 hover:bg-gray-100"
+          onClick={() => setMenuOpen(false)}
+        >
+          <FiX className="h-6 w-6" />
+        </button>
+      </div>
+      <div className="space-y-1 px-4 py-2">
+        <MobileMenuItem icon={FiHome} label="Home" href="/" />
+        <MobileMenuItem icon={FiInfo} label="About" href="/aboutus" />
+        <MobileMenuItem
+          icon={FiMic}
+          label="Voice to Story"
+          href="/voice-llm"
+        />
+        <MobileMenuItem
+          icon={FiBell}
+          label="Notifications"
+          href="/notifications"
+        />
+        <MobileMenuItem icon={FiUser} label="Profile" href="/profile" />
+        <div className="px-3 py-2">
+          <UnifiedWalletButton />
         </div>
-      )}
-
-      <ChatModal />
-    </nav>
-  );
-};
+      </div>
+    </div>
+  )}
+  <ChatModal />
+</nav>
+  </>
+}
 
 export default NavBar;
