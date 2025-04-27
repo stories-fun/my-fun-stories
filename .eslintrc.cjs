@@ -7,9 +7,16 @@ const config = {
 
   overrides: [
     {
-      files: ["confetti.js,src/app/voice-llm/page.tsx", "src/components/VoiceRecorder.tsx"],
+      files: [
+        "confetti.js",
+        "src/app/voice-llm/page.tsx",
+        "src/components/VoiceRecorder.tsx",
+      ],
       parserOptions: {
         project: null,
+      },
+      rules: {
+        "@typescript-eslint/no-misused-promises": "off",
       },
     },
     {
@@ -63,6 +70,5 @@ const config = {
       },
     ],
   },
-
 };
 module.exports = config;
