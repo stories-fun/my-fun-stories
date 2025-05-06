@@ -159,7 +159,7 @@ const StoriesCard = () => {
               </div>
               <PostActions storyKey={story.id} />
               <div>
-                <ProgressBar />
+                {/* <ProgressBar /> this commenting is done within the ui-upgradation stage */}
               </div>
             </div>
 
