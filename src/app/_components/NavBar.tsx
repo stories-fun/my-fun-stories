@@ -154,7 +154,7 @@ const NavBar = () => {
           </div>
 
           <div className="flex items-center gap-1.5 sm:gap-3">
-            <div className="hidden sm:block">
+            <div className="hidden sm:block bg-[#FFE700] px-2.5 py-1 rounded-full">
               <Link
                 href="/"
                 className="font-mont whitespace-nowrap text-xs font-semibold text-black decoration-2 transition-colors hover:text-gray-700 sm:text-sm"
@@ -184,7 +184,8 @@ const NavBar = () => {
                 <CustomWalletButton />
               </div>
 
-              <MessageIndicator />
+              {/* In the second version the navbar design is changed. */}
+              {/* <MessageIndicator />
 
               <Link
                 href="/voice-llm"
@@ -199,7 +200,7 @@ const NavBar = () => {
                 onClick={() => openChat()}
               >
                 <FiPlus className="h-4 w-4 sm:h-5 sm:w-5" />
-              </button>
+              </button> */}
 
               <Link
                 href="/profile"
