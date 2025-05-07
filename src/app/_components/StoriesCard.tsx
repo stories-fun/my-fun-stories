@@ -1,8 +1,7 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import PostActions from "~/app/_components/PostActions";
-import ProgressBar from "~/app/_components/ProgressBar";
 import { useStoriesStore } from "~/store/useStoriesStore";
 import { useRouter } from "next/navigation";
 import Loading from "./Loading";
@@ -122,13 +121,8 @@ const StoriesCard = () => {
 
   return (
     <div className="mx-auto w-full">
-      {stories.map((story, index) => (
-        <article
-          key={story.id}
-          className={`relative mb-4 overflow-hidden bg-white p-3 ${
-            index >= 2 ? "opacity-50" : ""
-          }`}
-        >
+      {stories.slice(0, 2).map((story, index) => (
+        <article key={story.id} className="relative mb-4 overflow-hidden bg-white p-3">
           <StoryHeader username={story.username} index={index} />
 
           <div className="flex flex-col space-y-3 lg:flex-row lg:space-x-6 lg:space-y-0">
@@ -158,9 +152,6 @@ const StoriesCard = () => {
                 )}
               </div>
               <PostActions storyKey={story.id} />
-              <div>
-                {/* <ProgressBar /> this commenting is done within the ui-upgradation stage */}
-              </div>
             </div>
 
             <div
@@ -184,162 +175,9 @@ const StoriesCard = () => {
               </div>
             </div>
           </div>
-
-          {index >= 2 && (
-            <div className="absolute inset-0 flex items-center justify-center bg-white/50">
-              <span className="z-10 text-xl font-semibold text-black">
-                Coming Soon
-              </span>
-            </div>
-          )}
         </article>
       ))}
-      <article className="relative mb-4 overflow-hidden bg-white p-3">
-        <StoryHeader username={"Admin"} index={1} />
-
-        <div className="flex flex-col space-y-3 lg:flex-row lg:space-x-6 lg:space-y-0">
-          <div className="w-full lg:w-1/3">
-            <div className="relative aspect-video w-full cursor-pointer bg-gray-100">
-              <Image
-                src="https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/assets/2.webp"
-                alt="Story image"
-                width={400}
-                height={300}
-                className="h-full w-full object-cover"
-                onClick={() =>
-                  alert("This story will be released on March 20th!")
-                }
-              />
-            </div>
-            <PostActions storyKey={"1740064537760_DHykt1"} />
-            <div>
-              <ProgressBar />
-            </div>
-          </div>
-
-          <div
-            className="w-full cursor-pointer pt-2 lg:w-2/3 lg:pt-0"
-            onClick={() => alert("This story will be released on March 20th!")}
-          >
-            <div className="space-y-2">
-              <h2 className="font-lg text-xl font-[IBM_Plex_Sans] leading-tight sm:text-2xl">
-                {hardcodedStory.title}
-              </h2>
-              <p className="text-base text-gray-600 sm:text-lg">
-                {truncateContent(hardcodedStory.content, 60)}
-              </p>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article className="relative mb-4 overflow-hidden bg-white p-3">
-        <div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-100/95">
-          <h2 className="text-2xl font-bold text-black sm:text-[32px]">
-            Coming Soon
-          </h2>
-        </div>
-
-        <StoryHeader username={"Admin"} index={1} />
-
-        <div className="relative flex flex-col space-y-3 lg:flex-row lg:space-x-6 lg:space-y-0">
-          <div className="w-full lg:w-1/3">
-            <div className="relative aspect-video w-full cursor-pointer bg-gray-100">
-              <ImageSlider />
-            </div>
-            <PostActions storyKey={"1740064537760_DHykt1"} />
-            <div>
-              <ProgressBar />
-            </div>
-          </div>
-
-          <div
-            className="w-full cursor-pointer pt-2 lg:w-2/3 lg:pt-0"
-            onClick={() => alert("This story will be released on March 20th!")}
-          >
-            <div className="space-y-2">
-              <h2 className="font-lg text-lg font-[IBM_Plex_Sans] leading-tight">
-                {hardcodedStory.title}
-              </h2>
-              <p className="text-sm text-gray-600">
-                {truncateContent(hardcodedStory.content, 80)}
-              </p>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article className="relative mb-4 overflow-hidden bg-white p-3">
-        <div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-100/95">
-          <h2 className="text-2xl font-bold text-black sm:text-[32px]">
-            Coming Soon
-          </h2>
-        </div>
-
-        <StoryHeader username={"Admin"} index={1} />
-
-        <div className="relative flex flex-col space-y-3 lg:flex-row lg:space-x-6 lg:space-y-0">
-          <div className="w-full lg:w-1/3">
-            <div className="relative aspect-video w-full cursor-pointer bg-gray-100">
-              <ImageSlider />
-            </div>
-            <PostActions storyKey={"1740064537760_DHykt1"} />
-            <div>
-              <ProgressBar />
-            </div>
-          </div>
-
-          <div
-            className="w-full cursor-pointer pt-2 lg:w-2/3 lg:pt-0"
-            onClick={() => alert("This story will be released on March 20th!")}
-          >
-            <div className="space-y-2">
-              <h2 className="font-lg text-lg font-[IBM_Plex_Sans] leading-tight">
-                {hardcodedStory.title}
-              </h2>
-              <p className="text-sm text-gray-600">
-                {truncateContent(hardcodedStory.content, 80)}
-              </p>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article className="relative mb-4 overflow-hidden bg-white p-3">
-        <div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-100/95">
-          <h2 className="text-2xl font-bold text-black sm:text-[32px]">
-            Coming Soon
-          </h2>
-        </div>
-
-        <StoryHeader username={"Admin"} index={1} />
-
-        <div className="relative flex flex-col space-y-3 lg:flex-row lg:space-x-6 lg:space-y-0">
-          <div className="w-full lg:w-1/3">
-            <div className="relative aspect-video w-full cursor-pointer bg-gray-100">
-              <ImageSlider />
-            </div>
-            <PostActions storyKey={"1740064537760_DHykt1"} />
-            <div>
-              <ProgressBar />
-            </div>
-          </div>
-
-          <div
-            className="w-full cursor-pointer pt-2 lg:w-2/3 lg:pt-0"
-            onClick={() => alert("This story will be released on March 20th!")}
-          >
-            <div className="space-y-2">
-              <h2 className="font-lg text-lg font-[IBM_Plex_Sans] leading-tight">
-                {hardcodedStory.title}
-              </h2>
-              <p className="text-sm text-gray-600">
-                {truncateContent(hardcodedStory.content, 80)}
-              </p>
-            </div>
-          </div>
-        </div>
-      </article>
+      {isLoading && <Loading />} {/* Show loading spinner when fetching more stories */}
     </div>
   );
 };
