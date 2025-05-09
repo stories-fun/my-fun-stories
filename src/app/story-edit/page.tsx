@@ -248,11 +248,11 @@ export default function Home() {
               {longStory ? `${longStory.length} characters` : "No content yet"}
             </div>
             <div className="flex space-x-2">
-              <Button variant="outline" size="sm" className="flex items-center space-x-1">
+              <Button variant="outline" className="flex items-center space-x-1">
                 <Save className="h-4 w-4" />
                 <span>Save Draft</span>
               </Button>
-              <Button variant="outline" size="sm" className="flex items-center space-x-1">
+              <Button variant="outline" className="flex items-center space-x-1">
                 <Download className="h-4 w-4" />
                 <span>Export</span>
               </Button>
