@@ -15,6 +15,10 @@ interface UserCreationDialogProps {
   walletAddress: string;
 }
 
+interface UploadResponse {
+  key: string;
+}
+
 export const UserCreationDialog = ({
   isOpen,
   onClose,
@@ -62,37 +66,22 @@ export const UserCreationDialog = ({
   };
 
   const uploadImage = async (file: File): Promise<string | undefined> => {
-    const { uploadUrl, key } = (await getUploadUrl.mutateAsync({
-      walletAddress,
-      fileType: file.type,
-    })) as { uploadUrl: string | { url: string }; key: string };
-
-    console.log("Got upload URL:", uploadUrl);
-    const urlToFetch: string =
-      typeof uploadUrl === "object"
-        ? (uploadUrl as { url: string }).url
-        : uploadUrl;
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('walletAddress', walletAddress);
 
     try {
-      const response = await fetch(urlToFetch, {
-        method: "PUT",
-        body: file,
-        headers: {
-          "Content-Type": file.type,
-        },
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Upload failed:", {
-          status: response.status,
-          statusText: response.statusText,
-          error: errorText,
-        });
-        throw new Error(`Upload failed: ${response.statusText}`);
+        throw new Error('Upload failed');
       }
 
-      return key;
+      const data = await response.json() as UploadResponse;
+      return data.key;
     } catch (error) {
       console.error("Upload error:", error);
       throw error;

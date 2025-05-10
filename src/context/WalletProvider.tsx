@@ -25,15 +25,15 @@ export const WALLET_CONFIG = {
 const wallets: Adapter[] = [];
 
 export function WalletProvider() {
-  const endpoint = useMemo(() => clusterApiUrl("devnet"), []);
+  // const endpoint = useMemo(() => clusterApiUrl("devnet"), []);
 
-  return (
-    <ConnectionProvider endpoint={endpoint}>
-      <UnifiedWalletProvider wallets={wallets} config={WALLET_CONFIG}>
-        <WalletConnectHandler />
-      </UnifiedWalletProvider>
-    </ConnectionProvider>
-  );
+  // return (
+  //   <ConnectionProvider endpoint={endpoint}>
+  //     <UnifiedWalletProvider wallets={wallets} config={WALLET_CONFIG}>
+  //       <WalletConnectHandler />
+  //     </UnifiedWalletProvider>
+  //   </ConnectionProvider>
+  // );
 }
 
 export function WalletChildrenProvider({
