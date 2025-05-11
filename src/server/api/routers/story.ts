@@ -304,4 +304,29 @@ export const storyRouter = createTRPCRouter({
       }
       return story.comments;
     }),
+
+  create: publicProcedure
+    .input(
+      z.object({
+        content: z.string().min(1),
+        title: z.string().optional(),
+        walletAddress: z.string(),
+        writerName: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const key = `${Date.now()}_${input.walletAddress.slice(2, 8)}`;
+      const story = await storyStorage.saveStory(key, {
+        id: key,
+        content: input.content,
+        title: input.title,
+        walletAddress: input.walletAddress,
+        username: input.writerName,
+        createdAt: new Date(),
+        likes: [] as string[],
+        comments: [] as Comment[],
+      });
+      
+      return { success: true, key };
+    }),
 });
