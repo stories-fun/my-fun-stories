@@ -62,73 +62,42 @@ export const storyRouter = createTRPCRouter({
     )
     .query(async ({ input }) => {
       try {
-        console.log("List stories input:", input);
-        const { objects, nextToken } = (await storyStorage.listObjects(
+        const { objects, nextToken } = await storyStorage.listObjects(
           "stories/",
           input.cursor,
-        )) as ListObjectsResponse;
-
-        console.log("Found objects:", objects.length);
+        );
 
         const validStories = (
           await Promise.all(
-            objects.map(async (obj: S3Object) => {
+            objects.map(async (obj: { Key?: string }) => {
               try {
-                if (!obj.Key) {
-                  console.log("Object has no Key:", obj);
-                  return null;
-                }
-                const key = obj.Key.replace(/^stories\//, "").replace(
-                  /\.json$/,
-                  "",
-                );
-                console.log("Processing story with key:", key);
-
+                if (!obj.Key) return null;
+                const key = obj.Key.replace(/^stories\//, "").replace(/\.json$/, "");
                 const story = await storyStorage.getStory(key);
-                if (!story) {
-                  console.log("No story found for key:", key);
-                  return null;
-                }
+                if (!story) return null;
 
                 return {
                   key,
                   ...story,
-                } as StoryWithKey;
+                };
               } catch (error) {
                 console.error("Error processing story:", error);
                 return null;
               }
             }),
           )
-        ).filter((story): story is StoryWithKey => story !== null);
-
-        console.log("Valid stories found:", validStories.length);
+        ).filter(Boolean);
 
         const filteredStories = validStories
           .filter((s) =>
             input.walletAddress
-              ? s.walletAddress.toLowerCase() ===
-                input.walletAddress.toLowerCase()
+              ? s.walletAddress.toLowerCase() === input.walletAddress.toLowerCase()
               : true,
           )
           .slice(0, input.limit);
 
-        console.log("Filtered stories:", filteredStories.length);
-
-        const uniqueWallets = Array.from(
-          new Set(filteredStories.map((s) => s.walletAddress)),
-        );
-        const users: Record<string, User | null> = {};
-        await Promise.all(
-          uniqueWallets.map(async (wallet) => {
-            const user = await userStorage.getUser(wallet);
-            users[wallet] = user;
-          }),
-        );
-
         return {
           stories: filteredStories,
-          users,
           nextCursor: nextToken,
         };
       } catch (error) {
