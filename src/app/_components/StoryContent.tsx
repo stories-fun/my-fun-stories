@@ -1,9 +1,7 @@
 "use client";
 import React from "react";
-import Image from "next/image";
 import PostActions from "./PostActions";
 import { api } from "~/trpc/react";
-import Loading from "./Loading";
 import { StoryVideo } from "./StoryVideo";
 import AdhiStory from "../stories/AdhiStory";
 import DOMPurify from 'isomorphic-dompurify';
