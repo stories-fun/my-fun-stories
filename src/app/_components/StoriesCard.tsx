@@ -98,15 +98,18 @@ const StoriesCard = ({ stories, isLoading }: StoriesCardProps) => {
   const router = useRouter();
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
 
-  const handleCardClick = (id: string, username: string) => {
+  // Separate handlers for image/video and text sections
+  const handleMediaClick = (id: string, username: string) => {
     const videoUrl = getVideoUrl(username);
     if (videoUrl) {
-      // If there's a video, play it instead of navigating
       setActiveVideo(videoUrl);
     } else {
-      // Otherwise navigate to the story
       router.push(`/stories/${id}`);
     }
+  };
+
+  const handleTextClick = (id: string) => {
+    router.push(`/stories/${id}`);
   };
 
   if (isLoading) return <Loading />;
@@ -123,7 +126,8 @@ const StoriesCard = ({ stories, isLoading }: StoriesCardProps) => {
     if (!videoUrl) return null;
     
     // Extract video ID from YouTube URL
-    const videoId = videoUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/videos\/))([^"&?\/\s]{11})/)?.[1];
+    const regex = /(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/videos\/))([^"&?\/\s]{11})/;
+    const videoId = regex.exec(videoUrl)?.[1];
     if (!videoId) return null;
     
     return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
@@ -147,7 +151,8 @@ const StoriesCard = ({ stories, isLoading }: StoriesCardProps) => {
 
   const getEmbedUrl = (videoUrl: string) => {
     // Handle both youtube.com and youtu.be URLs
-    const videoId = videoUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/videos\/))([^"&?\/\s]{11})/)?.[1];
+    const regex = /(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/videos\/))([^"&?\/\s]{11})/;
+    const videoId = regex.exec(videoUrl)?.[1];
     if (!videoId) return null;
     return `https://www.youtube-nocookie.com/embed/${videoId}`;
   };
@@ -165,7 +170,7 @@ const StoriesCard = ({ stories, isLoading }: StoriesCardProps) => {
             <div className="w-full lg:w-1/3">
               <div
                 className="relative aspect-video w-full cursor-pointer bg-gray-100"
-                onClick={() => handleCardClick(story.id, story.username)}
+                onClick={() => handleMediaClick(story.id, story.username)}
               >
                 {activeVideo === videoLinks[story.username.toLowerCase() as keyof typeof videoLinks] ? (
                   <iframe
@@ -212,7 +217,7 @@ const StoriesCard = ({ stories, isLoading }: StoriesCardProps) => {
 
             <div
               className="w-full cursor-pointer pt-2 lg:w-2/3 lg:pt-0"
-              onClick={() => handleCardClick(story.id, story.username)}
+              onClick={() => handleTextClick(story.id)}
             >
               <div className="space-y-2">
                 <h2 className="font-lg text-xl font-[IBM_Plex_Sans] leading-tight sm:text-2xl">
