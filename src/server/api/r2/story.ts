@@ -3,6 +3,7 @@ import {
   PutObjectCommand,
   GetObjectCommand,
   ListObjectsV2Command,
+  DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
 import { StorySchema } from "~/server/schema/story";
 import { env } from "../../../env";
@@ -135,5 +136,14 @@ export class StoryStorage {
       objects: response.Contents ?? [],
       nextToken: response.NextContinuationToken,
     };
+  }
+
+  async deleteStory(key: string) {
+    await this.client.send(
+      new DeleteObjectCommand({
+        Bucket: this.bucket,
+        Key: `stories/${key}.json`,
+      }),
+    );
   }
 }
