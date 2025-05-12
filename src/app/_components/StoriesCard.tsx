@@ -104,10 +104,18 @@ const StoriesCard = ({ stories, isLoading }: StoriesCardProps) => {
     );
   }
 
+  const getImageUrl = (id: string) => {
+    return `/images/banner/${id}_story_banner.jpg`;
+  };
+
+
   return (
     <div className="mx-auto w-full">
       {stories.map((story, index) => (
-        <article key={story.id} className="relative mb-4 overflow-hidden bg-white p-3">
+        <article
+          key={story.id}
+          className="relative mb-4 overflow-hidden bg-white p-3"
+        >
           <StoryHeader username={story.username} index={index} />
 
           <div className="flex flex-col space-y-3 lg:flex-row lg:space-x-6 lg:space-y-0">
@@ -116,17 +124,15 @@ const StoriesCard = ({ stories, isLoading }: StoriesCardProps) => {
                 className="relative aspect-video w-full cursor-pointer bg-gray-100"
                 onClick={() => handleCardClick(story.id)}
               >
-                {index === 0 ? (
-                  <Image
-                    src="https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/assets/1.jpg"
-                    alt="Story image"
-                    width={400}
-                    height={300}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <ImageSlider />
-                )}
+
+                <Image
+                  src={getImageUrl(story.username)}
+                  fill
+                  className="object-cover"
+                  alt="story banner"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  priority={false}
+                />
               </div>
               <PostActions storyKey={story.id} />
             </div>
@@ -142,10 +148,12 @@ const StoriesCard = ({ stories, isLoading }: StoriesCardProps) => {
                 <p className="text-base text-gray-600 sm:text-lg">
                   {truncateContent(story.content, 80)}
                 </p>
-                <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
+                <div className="mt-2 flex items-center gap-4 text-sm text-gray-500">
                   <span>By {story.username}</span>
                   <span>•</span>
-                  <span>{formatDistanceToNow(new Date(story.createdAt))} ago</span>
+                  <span>
+                    {formatDistanceToNow(new Date(story.createdAt))} ago
+                  </span>
                 </div>
               </div>
             </div>
