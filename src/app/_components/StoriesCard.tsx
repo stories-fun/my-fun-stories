@@ -122,14 +122,6 @@ const StoriesCard = ({ stories, isLoading }: StoriesCardProps) => {
                     height={300}
                     className="h-full w-full object-cover"
                   />
-                ) : index === 1 ? (
-                  <Image
-                    src="https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/assets/2.webp"
-                    alt="Story image"
-                    width={400}
-                    height={300}
-                    className="h-full w-full object-cover"
-                  />
                 ) : (
                   <ImageSlider />
                 )}
