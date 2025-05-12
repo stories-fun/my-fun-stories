@@ -2,6 +2,20 @@
 import { api } from "../trpc/server";
 import type { Story } from "./schema/story";
 
+import type { Comment } from "./schema/comments";
+
+type LocalStory = {
+  id: string;
+  walletAddress: string;
+  username: string;
+  content: string;
+  createdAt: Date;
+  likes: string[];
+  comments: Comment[];
+  title?: string;
+  key: string; // Ensure the 'key' property is part of the Story type
+};
+
 type StoryResult = {
   stories: Story[];
   nextCursor?: string;
@@ -15,7 +29,7 @@ export const getStoriesFromServer = async (): Promise<StoryResult> => {
       limit: 100,
     });
     return {
-      stories: result.stories ?? [],
+      stories: (result.stories ?? []).filter((story): story is LocalStory => story !== null && 'key' in story) as Story[],
       nextCursor: result.nextCursor ?? undefined,
     };
   } catch (error) {
