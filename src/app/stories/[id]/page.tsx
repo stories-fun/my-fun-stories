@@ -1,24 +1,22 @@
 "use client";
 import React, { useEffect } from "react";
-import PostCard from "~/app/_components/PostCard";
 import { useParams } from "next/navigation";
 import RightSidebar from "~/app/_components/RightSidebar";
 import NavBar from "~/app/_components/NavBar";
 import Comments from "~/app/_components/Comments";
-import { useStoriesStore } from "~/store/useStoriesStore";
 import { useWallet } from "@jup-ag/wallet-adapter";
 import { api } from "~/trpc/react";
 import { useUIStore } from "~/store/useUIStore";
+import StoryContent from "~/app/_components/StoryContent";
 
 const Page = () => {
   const params = useParams();
   const id = params?.id;
-  const { stories, isLoading } = useStoriesStore();
   const { hasScrolled, setHasScrolled } = useUIStore();
   const wallet = useWallet();
   const walletAddress = wallet.publicKey?.toString();
 
-  const { data: user } = api.user.get.useQuery(
+  const { data: user, isLoading } = api.user.get.useQuery(
     {
       walletAddress: walletAddress!,
     },
@@ -42,8 +40,7 @@ const Page = () => {
     if (
       window.location.hash === "#comments" &&
       !hasScrolled &&
-      !isLoading &&
-      stories.length > 0
+      !isLoading
     ) {
       const scrollToComments = () => {
         const commentsSection = document.getElementById("comments");
@@ -66,7 +63,7 @@ const Page = () => {
         setTimeout(scrollToComments, delay);
       });
     }
-  }, [isLoading, stories, hasScrolled, setHasScrolled]);
+  }, [isLoading, hasScrolled, setHasScrolled]);
 
   useEffect(() => {
     setHasScrolled(false);
@@ -80,7 +77,7 @@ const Page = () => {
           <div className="flex flex-col gap-14 lg:flex-row">
             <div className="w-full lg:w-3/4">
               <div className="rounded-xl bg-white shadow-sm">
-                <PostCard storyId={id as string} />
+                <StoryContent storyId={id as string} />
                 <div id="comments" className="scroll-mt-20 scroll-smooth">
                   <Comments postId={id as string} />
                 </div>

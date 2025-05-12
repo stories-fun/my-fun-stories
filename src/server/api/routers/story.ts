@@ -24,13 +24,27 @@ interface StoryWithKey extends Story {
 const storyStorage = new StoryStorage();
 const userStorage = new UserStorage();
 
+// Add validation for the image marker format to the schema
+const contentWithImageSchema = z.string().refine(
+  (content) => {
+    // Validate that image markers follow the pattern <storyX_imageY.png>
+    const imageMarkers = content.match(/<story\d+_image\d+\.png>/g) ?? [];
+    return imageMarkers.every(marker => 
+      /^<story\d+_image\d+\.png>$/.test(marker)
+    );
+  },
+  {
+    message: "Invalid image marker format. Must be in format <storyX_imageY.png>"
+  }
+);
+
 export const storyRouter = createTRPCRouter({
   submit: publicProcedure
     .input(
       z.object({
         walletAddress: StorySchema.shape.walletAddress,
         writerName: z.string(),
-        content: StorySchema.shape.content,
+        content: contentWithImageSchema,
         title: StorySchema.shape.title.optional(),
       }),
     )
@@ -277,7 +291,7 @@ export const storyRouter = createTRPCRouter({
   create: publicProcedure
     .input(
       z.object({
-        content: z.string().min(1),
+        content: contentWithImageSchema,
         title: z.string().optional(),
         walletAddress: z.string(),
         writerName: z.string(),

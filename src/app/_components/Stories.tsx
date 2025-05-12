@@ -1,22 +1,19 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import StoriesCard from "./StoriesCard";
 import PreLoginSide from "~/app/_components/PreLoginSide";
 import { useWallet } from "@jup-ag/wallet-adapter";
-import { useStoriesStore } from "~/store/useStoriesStore";
 import HasnotInvestedSide from "~/app/_components/HasNotInvestedSide";
 import { api } from "~/trpc/react";
 
 const Stories = () => {
   const wallet = useWallet();
   const walletAddress = wallet.publicKey?.toString();
-  const { getStories, isLoading } = useStoriesStore();
 
-  useEffect(() => {
-    if (wallet.connected && walletAddress) {
-      void getStories(walletAddress);
-    }
-  }, [wallet.connected, walletAddress, getStories]);
+  // Replace useStoriesStore with TRPC query
+  const { data: storiesData, isLoading } = api.story.list.useQuery({
+    limit: 10
+  });
 
   const { data: user } = api.user.get.useQuery(
     {
@@ -44,7 +41,10 @@ const Stories = () => {
         <div className="flex flex-col gap-6 lg:flex-row">
           <div className="w-full lg:w-3/4">
             <div className="rounded-xl bg-white shadow-sm">
-              <StoriesCard />
+              <StoriesCard 
+                stories={storiesData?.stories?.filter((story): story is NonNullable<typeof story> => story !== null)} 
+                isLoading={isLoading} 
+              />
             </div>
           </div>
           <div className="lg:hidden">
