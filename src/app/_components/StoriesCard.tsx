@@ -4,7 +4,6 @@ import Image from "next/image";
 import PostActions from "~/app/_components/PostActions";
 import { useRouter } from "next/navigation";
 import Loading from "./Loading";
-import { ImageSlider } from "./ImageSlider";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 import type { Story } from "~/server/schema/story";
 
@@ -23,6 +22,7 @@ const videoLinks = {
   shubham: "https://youtu.be/RfDRtTqS2jo",
   paarug: "https://www.youtube.com/watch?v=zIeT-_QvkAs",
   rahim: "https://www.youtube.com/watch?v=UT1G0BAjqo8",
+  adhi: "https://www.youtube.com/shorts/lAKfprEfILc",
 };
 
 const StoryHeader = ({
@@ -156,7 +156,7 @@ const StoriesCard = ({ stories, isLoading }: StoriesCardProps) => {
     if (!videoId) return null;
     return `https://www.youtube-nocookie.com/embed/${videoId}`;
   };
-
+  
   return (
     <div className="mx-auto w-full">
       {stories.map((story, index) => (
