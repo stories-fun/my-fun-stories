@@ -46,11 +46,13 @@ const StoryHeader = ({
 );
 
 const truncateContent = (content: string, wordLimit: number) => {
-  const words = content.split(" ");
+  // Strip HTML tags
+  const strippedContent = content.replace(/<[^>]+>/g, '');
+  const words = strippedContent.split(" ");
   if (words.length > wordLimit) {
     return words.slice(0, wordLimit).join(" ") + "...";
   }
-  return content;
+  return strippedContent;
 };
 
 const ProfileImage = ({ src, alt }: { src: string; alt: string }) => {
