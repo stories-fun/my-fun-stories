@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import PostActions from "~/app/_components/PostActions";
 import { useRouter } from "next/navigation";
@@ -19,6 +19,12 @@ const LiveIndicator = ({ index }: { index: number }) => (
   </div>
 );
 
+const videoLinks = {
+  shubham: "https://youtu.be/RfDRtTqS2jo",
+  paarug: "https://www.youtube.com/watch?v=zIeT-_QvkAs",
+  rahim: "https://www.youtube.com/watch?v=UT1G0BAjqo8",
+};
+
 const StoryHeader = ({
   username,
   index,
@@ -27,7 +33,7 @@ const StoryHeader = ({
   index: number;
 }) => (
   <div className="mb-3 flex items-center space-x-2">
-    <ProfileImage src="/images/profile.png" alt={`${username}'s profile`} />
+    <ProfileImage src={`/images/pfp/${username}_story_pfp.jpg`} alt={`${username}'s profile`} />
     <div className="flex flex-col">
       <div className="flex items-center space-x-1">
         <span className="text-sm font-medium">{username}</span>
@@ -90,8 +96,19 @@ interface StoriesCardProps {
 
 const StoriesCard = ({ stories, isLoading }: StoriesCardProps) => {
   const router = useRouter();
+  const [activeVideo, setActiveVideo] = useState<string | null>(null);
 
-  const handleCardClick = (id: string) => {
+  // Separate handlers for image/video and text sections
+  const handleMediaClick = (id: string, username: string) => {
+    const videoUrl = getVideoUrl(username);
+    if (videoUrl) {
+      setActiveVideo(videoUrl);
+    } else {
+      router.push(`/stories/${id}`);
+    }
+  };
+
+  const handleTextClick = (id: string) => {
     router.push(`/stories/${id}`);
   };
 
@@ -104,10 +121,41 @@ const StoriesCard = ({ stories, isLoading }: StoriesCardProps) => {
     );
   }
 
-  const getImageUrl = (id: string) => {
-    return `/images/banner/${id}_story_banner.jpg`;
+  const getVideoThumbnail = (username: string) => {
+    const videoUrl = videoLinks[username.toLowerCase() as keyof typeof videoLinks];
+    if (!videoUrl) return null;
+    
+    // Extract video ID from YouTube URL
+    const regex = /(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/videos\/))([^"&?\/\s]{11})/;
+    const videoId = regex.exec(videoUrl)?.[1];
+    if (!videoId) return null;
+    
+    return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
   };
 
+  const getImageUrl = (username: string) => {
+    // Check if there's a video first (since we know if it exists)
+    const videoUrl = videoLinks[username.toLowerCase() as keyof typeof videoLinks];
+    if (videoUrl) {
+      const videoThumbnail = getVideoThumbnail(username);
+      if (videoThumbnail) return videoThumbnail;
+    }
+    
+    // If no video or thumbnail failed, use story banner
+    return `/images/banner/${username}_story_banner.jpg`;
+  };
+
+  const getVideoUrl = (username: string) => {
+    return videoLinks[username.toLowerCase() as keyof typeof videoLinks] ?? null;
+  };
+
+  const getEmbedUrl = (videoUrl: string) => {
+    // Handle both youtube.com and youtu.be URLs
+    const regex = /(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/videos\/))([^"&?\/\s]{11})/;
+    const videoId = regex.exec(videoUrl)?.[1];
+    if (!videoId) return null;
+    return `https://www.youtube-nocookie.com/embed/${videoId}`;
+  };
 
   return (
     <div className="mx-auto w-full">
@@ -122,24 +170,54 @@ const StoriesCard = ({ stories, isLoading }: StoriesCardProps) => {
             <div className="w-full lg:w-1/3">
               <div
                 className="relative aspect-video w-full cursor-pointer bg-gray-100"
-                onClick={() => handleCardClick(story.id)}
+                onClick={() => handleMediaClick(story.id, story.username)}
               >
-
-                <Image
-                  src={getImageUrl(story.username)}
-                  fill
-                  className="object-cover"
-                  alt="story banner"
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  priority={false}
-                />
+                {activeVideo === videoLinks[story.username.toLowerCase() as keyof typeof videoLinks] ? (
+                  <iframe
+                    src={`${getEmbedUrl(activeVideo)}?autoplay=1&rel=0`}
+                    className="absolute inset-0 h-full w-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    title={`${story.username}'s video`}
+                  />
+                ) : (
+                  <Image
+                    src={getImageUrl(story.username)}
+                    fill
+                    className="object-cover"
+                    alt="story banner"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    priority={false}
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      if (!target.src.includes('default-banner.jpg')) {
+                        target.src = '/images/default-banner.jpg';
+                      }
+                    }}
+                  />
+                )}
+                {/* Show play button overlay if video exists */}
+                {getVideoUrl(story.username) && !activeVideo && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="rounded-full bg-black/50 p-4">
+                      <svg 
+                        className="h-8 w-8 text-white" 
+                        fill="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
+                  </div>
+                )}
               </div>
               <PostActions storyKey={story.id} />
             </div>
 
             <div
               className="w-full cursor-pointer pt-2 lg:w-2/3 lg:pt-0"
-              onClick={() => handleCardClick(story.id)}
+              onClick={() => handleTextClick(story.id)}
             >
               <div className="space-y-2">
                 <h2 className="font-lg text-xl font-[IBM_Plex_Sans] leading-tight sm:text-2xl">
