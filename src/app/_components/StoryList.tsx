@@ -10,7 +10,7 @@ export function StoryList() {
 
   const { mutate: deleteStory } = api.story.delete.useMutation({
     onSuccess: () => {
-      utils.story.list.invalidate();
+      void utils.story.list.invalidate();
     },
   });
 
@@ -45,7 +45,7 @@ export function StoryList() {
 
   return (
     <div className="space-y-6">
-      {storiesData.stories.map((story) => (
+      {storiesData.stories.map((story: any) => (
         <div key={story.key} className="block hover:bg-gray-50 p-4 rounded-lg transition-colors">
           <div className="flex justify-between items-start">
             <Link href={`/stories/${story.key}`} className="flex-1">
