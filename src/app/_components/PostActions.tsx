@@ -7,6 +7,10 @@ import { BuyTokensDialog } from "./BuyToken";
 import { useWallet } from "@jup-ag/wallet-adapter";
 import { useUIStore } from "~/store/useUIStore";
 import { usePostActionsStore } from "~/store/usePostActionsStore";
+import flower from "../../../public/images/Flower.png";
+import share from "../../../public/images/Share.png";
+import comment from "../../../public/images/comment.png";
+import investIcon from "../../../public/images/Advertise.png"
 
 interface PostActionsProps {
   storyKey: string;
@@ -111,20 +115,20 @@ const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
           onClick={handleLikeClick}
         >
           <Image
-            src={"/images/flower.png"}
+            src={flower}
             width={20}
             height={20}
             alt=""
             style={{ width: "auto", height: "auto" }}
           />
-          <span>{count}</span>
+          <span>{count} Likes</span>
         </button>
         <div
           className="flex cursor-pointer items-center space-x-2 rounded-full text-sm font-bold"
           onClick={() => setShowBuyDialog(storyKey, true)}
         >
           <Image
-            src={"/images/advertise.png"}
+            src={investIcon}
             width={20}
             height={20}
             alt=""
@@ -144,18 +148,18 @@ const PostActions: React.FC<PostActionsProps> = ({ storyKey }) => {
           onClick={handleCommentClick}
         >
           <Image
-            src={"/images/comment.png"}
+            src={comment}
             width={25}
             height={25}
             alt="comment"
             style={{ width: "auto", height: "auto" }}
           />
-          <span>Comment</span>
+          <span>Comments</span>
         </button>
         <button onClick={() => setShowShareModal(storyKey, true)}>
           <div className="flex items-center space-x-2 rounded-full text-sm font-bold">
             <Image
-              src={"/images/share.png"}
+              src={share}
               width={25}
               height={25}
               alt=""
