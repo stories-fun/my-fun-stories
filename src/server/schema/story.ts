@@ -3,6 +3,7 @@ import { commentSchema } from "./comments";
 
 export const StorySchema = z.object({
   id: z.string(),
+  manualId: z.string().optional(),
   walletAddress: z.string(),
   username: z.string(),
   content: z.string().min(1),

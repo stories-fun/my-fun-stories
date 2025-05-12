@@ -105,7 +105,11 @@ export const storyRouter = createTRPCRouter({
         const filteredStories = validStories
           .filter((s) =>
             input.walletAddress
+<<<<<<< HEAD
               ? s && s.walletAddress.toLowerCase() === input.walletAddress.toLowerCase()
+=======
+              ? s?.walletAddress.toLowerCase() === input.walletAddress.toLowerCase()
+>>>>>>> feat/API-integration
               : true,
           )
           .slice(0, input.limit);

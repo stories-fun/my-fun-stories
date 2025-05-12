@@ -7,8 +7,22 @@ const config = {
 
   overrides: [
     {
+      files: ["confetti.js"],
+      parser: "espree",
+      parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: "module",
+        project: null,
+      },
+      rules: {
+        "@typescript-eslint/no-misused-promises": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-unsafe-member-access": "off",
+        "@typescript-eslint/no-unsafe-assignment": "off",
+      },
+    },
+    {
       files: [
-        "confetti.js",
         "src/app/voice-llm/page.tsx",
         "src/components/VoiceRecorder.tsx",
       ],
