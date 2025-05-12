@@ -20,8 +20,8 @@ export async function POST(req: Request) {
       fileType: file.type,
     });
 
-    const { uploadUrl, key } = uploadData;
-    const urlToFetch = typeof uploadUrl === "object" ? uploadUrl.url : uploadUrl;
+    const { uploadUrl, key } = uploadData as { uploadUrl: { url: string } | string; key: string };
+    const urlToFetch = typeof uploadUrl === "object" && "url" in uploadUrl ? uploadUrl.url : uploadUrl;
 
     // Upload to R2 from the server
     const upload = await fetch(urlToFetch, {
