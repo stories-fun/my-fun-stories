@@ -33,7 +33,7 @@ const StoryHeader = ({
   index: number;
 }) => (
   <div className="mb-3 flex items-center space-x-2">
-    <ProfileImage src="/images/profile.png" alt={`${username}'s profile`} />
+    <ProfileImage src={`/images/pfp/${username}_story_pfp.jpg`} alt={`${username}'s profile`} />
     <div className="flex flex-col">
       <div className="flex items-center space-x-1">
         <span className="text-sm font-medium">{username}</span>
