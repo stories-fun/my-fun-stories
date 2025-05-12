@@ -99,7 +99,7 @@ export class UserStorage {
         }),
       );
 
-      const users = [];
+      const users: Array<{ walletAddress: string; username: string; createdAt: Date; description?: string; pfp?: string }> = [];
       for (const item of response.Contents ?? []) {
         if (!item.Key?.endsWith(".json")) continue;
 

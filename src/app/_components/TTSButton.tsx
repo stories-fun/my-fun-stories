@@ -13,7 +13,7 @@ function base64ToUint8Array(base64: string) {
 }
 
 const splitTextIntoChunks = (text: string, chunkSize = 3000) => {
-  const chunks = [];
+  const chunks: string[] = [];
   let currentChunk = "";
 
   const sentenceRegex = /(?<!\w\.\w\.)(?<=\.|\?|\!|\。|\n)\s+(?=[A-Z])/g;
