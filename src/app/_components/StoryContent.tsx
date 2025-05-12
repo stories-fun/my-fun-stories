@@ -4,11 +4,13 @@ import PostActions from "./PostActions";
 import { api } from "~/trpc/react";
 import Image from "next/image";
 import DOMPurify from 'isomorphic-dompurify';
+import AdhiStory from "../stories/AdhiStory";
 
 const videoLinks = {
   shubham: "https://youtu.be/RfDRtTqS2jo",
   paarug: "https://www.youtube.com/watch?v=zIeT-_QvkAs",
   rahim: "https://www.youtube.com/watch?v=UT1G0BAjqo8",
+  admin: "https://www.youtube.com/shorts/lAKfprEfILc",
 };
 
 const StoryContent = ({ storyId }: { storyId: string }) => {
@@ -121,13 +123,17 @@ const StoryContent = ({ storyId }: { storyId: string }) => {
 
       <div className="mt-4 font-[IBM_Plex_Sans]" data-tts-content="true">
         <div className="prose max-w-none">
-          <div 
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(story.content) }}
-            className="
-              [&>h1]:text-lg [&>h1]:font-[IBM_Plex_Sans] [&>h1]:font-bold [&>h1]:md:text-2xl [&>h1]:lg:text-3xl [&>h1]:mt-8 [&>h1]:mb-4
-              [&>h2]:text-base [&>h2]:font-[IBM_Plex_Sans] [&>h2]:font-bold [&>h2]:md:text-xl [&>h2]:lg:text-2xl [&>h2]:mt-6 [&>h2]:mb-3
-            "
-          />
+          {storyId === "1740725593742_pDHykt" ? (
+            <AdhiStory />
+          ) : (
+            <div 
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(story.content) }}
+              className="
+                [&>h1]:text-lg [&>h1]:font-[IBM_Plex_Sans] [&>h1]:font-bold [&>h1]:md:text-2xl [&>h1]:lg:text-3xl [&>h1]:mt-8 [&>h1]:mb-4
+                [&>h2]:text-base [&>h2]:font-[IBM_Plex_Sans] [&>h2]:font-bold [&>h2]:md:text-xl [&>h2]:lg:text-2xl [&>h2]:mt-6 [&>h2]:mb-3
+              "
+            />
+          )}
         </div>
       </div>
     </div>

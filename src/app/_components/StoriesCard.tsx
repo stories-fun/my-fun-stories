@@ -22,7 +22,7 @@ const videoLinks = {
   shubham: "https://youtu.be/RfDRtTqS2jo",
   paarug: "https://www.youtube.com/watch?v=zIeT-_QvkAs",
   rahim: "https://www.youtube.com/watch?v=UT1G0BAjqo8",
-  adhi: "https://www.youtube.com/shorts/lAKfprEfILc",
+  admin: "https://www.youtube.com/shorts/lAKfprEfILc",
 };
 
 const StoryHeader = ({
