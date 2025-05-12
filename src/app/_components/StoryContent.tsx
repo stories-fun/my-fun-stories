@@ -10,7 +10,7 @@ const videoLinks = {
   shubham: "https://youtu.be/RfDRtTqS2jo",
   paarug: "https://www.youtube.com/watch?v=zIeT-_QvkAs",
   rahim: "https://www.youtube.com/watch?v=UT1G0BAjqo8",
-  admin: "https://www.youtube.com/shorts/lAKfprEfILc",
+  admin: "https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/assets/adhi_sample_video.MP4",
 };
 
 const StoryContent = ({ storyId }: { storyId: string }) => {
@@ -19,15 +19,25 @@ const StoryContent = ({ storyId }: { storyId: string }) => {
     storyKey: storyId,
   });
 
+  React.useEffect(() => {
+    if (storyData?.story) {
+      const videoUrl = getVideoUrl(storyData.story.username);
+      setActiveVideo(videoUrl);
+    }
+  }, [storyData]);
+
   const getVideoThumbnail = (username: string) => {
     const videoUrl = videoLinks[username.toLowerCase() as keyof typeof videoLinks];
     if (!videoUrl) return null;
     
-    const regex = /(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/videos\/))([^"&?\/\s]{11})/;
-    const videoId = regex.exec(videoUrl)?.[1];
-    if (!videoId) return null;
+    if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) {
+      const regex = /(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/videos\/))([^"&?\/\s]{11})/;
+      const videoId = regex.exec(videoUrl)?.[1];
+      if (!videoId) return null;
+      return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+    }
     
-    return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+    return null;
   };
 
   const getImageUrl = (username: string) => {
@@ -45,10 +55,13 @@ const StoryContent = ({ storyId }: { storyId: string }) => {
   };
 
   const getEmbedUrl = (videoUrl: string) => {
-    const regex = /(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/videos\/))([^"&?\/\s]{11})/;
-    const videoId = regex.exec(videoUrl)?.[1];
-    if (!videoId) return null;
-    return `https://www.youtube-nocookie.com/embed/${videoId}`;
+    if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) {
+      const regex = /(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/videos\/))([^"&?\/\s]{11})/;
+      const videoId = regex.exec(videoUrl)?.[1];
+      if (!videoId) return null;
+      return `https://www.youtube-nocookie.com/embed/${videoId}`;
+    }
+    return videoUrl; // Return the direct video URL as is
   };
 
   if (isLoading) {
@@ -72,48 +85,25 @@ const StoryContent = ({ storyId }: { storyId: string }) => {
       </h1>
 
       <div className="relative aspect-video w-full bg-[#F6F7F8]">
-        {activeVideo ? (
-          <iframe
-            src={`${getEmbedUrl(activeVideo)}?autoplay=1&rel=0`}
-            className="absolute inset-0 h-full w-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            referrerPolicy="strict-origin-when-cross-origin"
-            title={`${story.username}'s video`}
-          />
-        ) : (
-          <div 
-            className="relative h-full w-full cursor-pointer"
-            onClick={() => videoUrl && setActiveVideo(videoUrl)}
-          >
-            <Image
-              src={getImageUrl(story.username)}
-              fill
-              className="object-cover"
-              alt="story banner"
-              sizes="100vw"
-              priority={true}
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                if (!target.src.includes('default-banner.jpg')) {
-                  target.src = '/images/default-banner.jpg';
-                }
-              }}
+        {activeVideo && (
+          videoUrl?.includes('youtube.com') || videoUrl?.includes('youtu.be') ? (
+            <iframe
+              src={`${getEmbedUrl(activeVideo)}?autoplay=1&rel=0`}
+              className="absolute inset-0 h-full w-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              referrerPolicy="strict-origin-when-cross-origin"
+              title={`${story.username}'s video`}
             />
-            {videoUrl && !activeVideo && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="rounded-full bg-black/50 p-4">
-                  <svg 
-                    className="h-8 w-8 text-white" 
-                    fill="currentColor" 
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </div>
-              </div>
-            )}
-          </div>
+          ) : (
+            <video
+              src={activeVideo}
+              className="absolute inset-0 h-full w-full"
+              controls
+              autoPlay
+              title={`${story.username}'s video`}
+            />
+          )
         )}
       </div>
 

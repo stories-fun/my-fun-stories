@@ -22,7 +22,7 @@ const videoLinks = {
   shubham: "https://youtu.be/RfDRtTqS2jo",
   paarug: "https://www.youtube.com/watch?v=zIeT-_QvkAs",
   rahim: "https://www.youtube.com/watch?v=UT1G0BAjqo8",
-  admin: "https://www.youtube.com/shorts/lAKfprEfILc",
+  admin: "https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/assets/adhi_sample_video.MP4",
 };
 
 const StoryHeader = ({
@@ -125,15 +125,22 @@ const StoriesCard = ({ stories, isLoading }: StoriesCardProps) => {
     const videoUrl = videoLinks[username.toLowerCase() as keyof typeof videoLinks];
     if (!videoUrl) return null;
     
-    // Extract video ID from YouTube URL
-    const regex = /(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/videos\/))([^"&?\/\s]{11})/;
-    const videoId = regex.exec(videoUrl)?.[1];
-    if (!videoId) return null;
+    if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) {
+      const regex = /(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/videos\/))([^"&?\/\s]{11})/;
+      const videoId = regex.exec(videoUrl)?.[1];
+      if (!videoId) return null;
+      return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+    }
     
-    return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+    return null;
   };
 
   const getImageUrl = (username: string) => {
+    // Special case for admin - use a specific thumbnail or banner
+    if (username.toLowerCase() === 'admin') {
+      return '/images/banner/admin_story_banner.jpg';  // Make sure this image exists
+    }
+    
     // Check if there's a video first (since we know if it exists)
     const videoUrl = videoLinks[username.toLowerCase() as keyof typeof videoLinks];
     if (videoUrl) {
@@ -150,11 +157,13 @@ const StoriesCard = ({ stories, isLoading }: StoriesCardProps) => {
   };
 
   const getEmbedUrl = (videoUrl: string) => {
-    // Handle both youtube.com and youtu.be URLs
-    const regex = /(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/videos\/))([^"&?\/\s]{11})/;
-    const videoId = regex.exec(videoUrl)?.[1];
-    if (!videoId) return null;
-    return `https://www.youtube-nocookie.com/embed/${videoId}`;
+    if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) {
+      const regex = /(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/videos\/))([^"&?\/\s]{11})/;
+      const videoId = regex.exec(videoUrl)?.[1];
+      if (!videoId) return null;
+      return `https://www.youtube-nocookie.com/embed/${videoId}`;
+    }
+    return videoUrl; // Return the direct video URL as is
   };
   
   return (
@@ -173,14 +182,25 @@ const StoriesCard = ({ stories, isLoading }: StoriesCardProps) => {
                 onClick={() => handleMediaClick(story.id, story.username)}
               >
                 {activeVideo === videoLinks[story.username.toLowerCase() as keyof typeof videoLinks] ? (
-                  <iframe
-                    src={`${getEmbedUrl(activeVideo)}?autoplay=1&rel=0`}
-                    className="absolute inset-0 h-full w-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    referrerPolicy="strict-origin-when-cross-origin"
-                    title={`${story.username}'s video`}
-                  />
+                  videoLinks[story.username.toLowerCase() as keyof typeof videoLinks]?.includes('youtube.com') || 
+                  videoLinks[story.username.toLowerCase() as keyof typeof videoLinks]?.includes('youtu.be') ? (
+                    <iframe
+                      src={`${getEmbedUrl(activeVideo)}?autoplay=1&rel=0`}
+                      className="absolute inset-0 h-full w-full"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      title={`${story.username}'s video`}
+                    />
+                  ) : (
+                    <video
+                      src={activeVideo}
+                      className="absolute inset-0 h-full w-full"
+                      controls
+                      autoPlay
+                      title={`${story.username}'s video`}
+                    />
+                  )
                 ) : (
                   <Image
                     src={getImageUrl(story.username)}
