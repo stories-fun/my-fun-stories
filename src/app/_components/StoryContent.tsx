@@ -6,6 +6,7 @@ import { api } from "~/trpc/react";
 import Loading from "./Loading";
 import { StoryVideo } from "./StoryVideo";
 import AdhiStory from "../stories/AdhiStory";
+import DOMPurify from 'isomorphic-dompurify';
 
 const StoryContent = ({ storyId }: { storyId: string }) => {
   const { data: storyData, isLoading } = api.story.getById.useQuery({
@@ -44,9 +45,13 @@ const StoryContent = ({ storyId }: { storyId: string }) => {
           <AdhiStory />
         ) : (
           <div className="prose max-w-none">
-            {story.content.split('\n').map((paragraph, idx) => (
-              <p key={idx}>{paragraph}</p>
-            ))}
+            <div 
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(story.content) }}
+              className="
+                [&>h1]:text-lg [&>h1]:font-[IBM_Plex_Sans] [&>h1]:font-bold [&>h1]:md:text-2xl [&>h1]:lg:text-3xl [&>h1]:mt-8 [&>h1]:mb-4
+                [&>h2]:text-base [&>h2]:font-[IBM_Plex_Sans] [&>h2]:font-bold [&>h2]:md:text-xl [&>h2]:lg:text-2xl [&>h2]:mt-6 [&>h2]:mb-3
+              "
+            />
           </div>
         )}
       </div>
