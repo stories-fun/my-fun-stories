@@ -24,13 +24,27 @@ interface StoryWithKey extends Story {
 const storyStorage = new StoryStorage();
 const userStorage = new UserStorage();
 
+// Add validation for the image marker format to the schema
+const contentWithImageSchema = z.string().refine(
+  (content) => {
+    // Validate that image markers follow the pattern <storyX_imageY.png>
+    const imageMarkers = content.match(/<story\d+_image\d+\.png>/g) ?? [];
+    return imageMarkers.every(marker => 
+      /^<story\d+_image\d+\.png>$/.test(marker)
+    );
+  },
+  {
+    message: "Invalid image marker format. Must be in format <storyX_imageY.png>"
+  }
+);
+
 export const storyRouter = createTRPCRouter({
   submit: publicProcedure
     .input(
       z.object({
         walletAddress: StorySchema.shape.walletAddress,
         writerName: z.string(),
-        content: StorySchema.shape.content,
+        content: contentWithImageSchema,
         title: StorySchema.shape.title.optional(),
       }),
     )
@@ -62,73 +76,42 @@ export const storyRouter = createTRPCRouter({
     )
     .query(async ({ input }) => {
       try {
-        console.log("List stories input:", input);
-        const { objects, nextToken } = (await storyStorage.listObjects(
+        const { objects, nextToken } = await storyStorage.listObjects(
           "stories/",
           input.cursor,
-        )) as ListObjectsResponse;
-
-        console.log("Found objects:", objects.length);
+        );
 
         const validStories = (
           await Promise.all(
-            objects.map(async (obj: S3Object) => {
+            objects.map(async (obj: { Key?: string }) => {
               try {
-                if (!obj.Key) {
-                  console.log("Object has no Key:", obj);
-                  return null;
-                }
-                const key = obj.Key.replace(/^stories\//, "").replace(
-                  /\.json$/,
-                  "",
-                );
-                console.log("Processing story with key:", key);
-
+                if (!obj.Key) return null;
+                const key = obj.Key.replace(/^stories\//, "").replace(/\.json$/, "");
                 const story = await storyStorage.getStory(key);
-                if (!story) {
-                  console.log("No story found for key:", key);
-                  return null;
-                }
+                if (!story) return null;
 
                 return {
                   key,
                   ...story,
-                } as StoryWithKey;
+                };
               } catch (error) {
                 console.error("Error processing story:", error);
                 return null;
               }
             }),
           )
-        ).filter((story): story is StoryWithKey => story !== null);
-
-        console.log("Valid stories found:", validStories.length);
+        ).filter(Boolean);
 
         const filteredStories = validStories
           .filter((s) =>
             input.walletAddress
-              ? s.walletAddress.toLowerCase() ===
-                input.walletAddress.toLowerCase()
+              ? s.walletAddress.toLowerCase() === input.walletAddress.toLowerCase()
               : true,
           )
           .slice(0, input.limit);
 
-        console.log("Filtered stories:", filteredStories.length);
-
-        const uniqueWallets = Array.from(
-          new Set(filteredStories.map((s) => s.walletAddress)),
-        );
-        const users: Record<string, User | null> = {};
-        await Promise.all(
-          uniqueWallets.map(async (wallet) => {
-            const user = await userStorage.getUser(wallet);
-            users[wallet] = user;
-          }),
-        );
-
         return {
           stories: filteredStories,
-          users,
           nextCursor: nextToken,
         };
       } catch (error) {
@@ -303,5 +286,49 @@ export const storyRouter = createTRPCRouter({
         });
       }
       return story.comments;
+    }),
+
+  create: publicProcedure
+    .input(
+      z.object({
+        content: contentWithImageSchema,
+        title: z.string().optional(),
+        walletAddress: z.string(),
+        writerName: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const key = `${Date.now()}_${input.walletAddress.slice(2, 8)}`;
+      const story = await storyStorage.saveStory(key, {
+        id: key,
+        content: input.content,
+        title: input.title,
+        walletAddress: input.walletAddress,
+        username: input.writerName,
+        createdAt: new Date(),
+        likes: [] as string[],
+        comments: [] as Comment[],
+      });
+      
+      return { success: true, key };
+    }),
+
+  delete: publicProcedure
+    .input(
+      z.object({
+        storyKey: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const story = await storyStorage.getStory(input.storyKey);
+      if (!story) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Story not found",
+        });
+      }
+
+      await storyStorage.deleteStory(input.storyKey);
+      return { success: true };
     }),
 });

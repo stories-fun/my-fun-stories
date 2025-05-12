@@ -1,12 +1,12 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import React from "react";
 import Image from "next/image";
 import PostActions from "~/app/_components/PostActions";
-import { useStoriesStore } from "~/store/useStoriesStore";
 import { useRouter } from "next/navigation";
 import Loading from "./Loading";
 import { ImageSlider } from "./ImageSlider";
-import { useStoryVideoStore } from "~/store/useStoryVideoStore";
+import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
+import type { Story } from "~/server/schema/story";
 
 const LiveIndicator = ({ index }: { index: number }) => (
   <div className="flex items-center space-x-1">
@@ -54,18 +54,13 @@ const truncateContent = (content: string, wordLimit: number) => {
 };
 
 const ProfileImage = ({ src, alt }: { src: string; alt: string }) => {
-  const { isLoading, setIsLoading } = useStoryVideoStore();
-
   return (
     <div className="relative h-10 w-10 overflow-hidden rounded-full bg-gray-100">
       <Image
         src={src}
         fill
-        className={`object-cover transition-opacity duration-300 ${
-          isLoading ? "opacity-0" : "opacity-100"
-        }`}
+        className="object-cover"
         alt={alt}
-        onLoad={() => setIsLoading(false)}
         priority={true}
         sizes="40px"
       />
@@ -86,42 +81,30 @@ const VerificationBadge = () => (
   </div>
 );
 
-const StoriesCard = () => {
+interface StoriesCardProps {
+  stories?: Story[];
+  isLoading: boolean;
+}
+
+const StoriesCard = ({ stories, isLoading }: StoriesCardProps) => {
   const router = useRouter();
-  const { stories, error, isLoading, getStories } = useStoriesStore();
-
-  const hardcodedStory = {
-    title:
-      "Committed Visa Fraud. Had a Strange Awakening. Confessed to Immigration and then...",
-    content:
-      "My name is Ninh and I grew up in a modest household in Vietnam. I moved from Vietnam to realize my American Dream -at any cost & I did. I fraudulently Acquired my AmericanCitizenship with a fake marriage. One Day, I had a Strange Christ Experience and Confessed my Crimes to the Authorities...This is what happened next...\nThis Is My Story…",
-  };
-
-  useEffect(() => {
-    void getStories();
-  }, [getStories]);
 
   const handleCardClick = (id: string) => {
     router.push(`/stories/${id}`);
   };
 
   if (isLoading) return <Loading />;
-  if (error)
-    return (
-      <div className="rounded-lg bg-red-50 p-4 text-center text-red-500">
-        Error Loading Stories: {error}
-      </div>
-    );
-  if (!stories?.length)
+  if (!stories?.length) {
     return (
       <div className="rounded-lg bg-gray-50 p-4 text-center text-gray-500">
         No stories found
       </div>
     );
+  }
 
   return (
     <div className="mx-auto w-full">
-      {stories.slice(0, 2).map((story, index) => (
+      {stories.map((story, index) => (
         <article key={story.id} className="relative mb-4 overflow-hidden bg-white p-3">
           <StoryHeader username={story.username} index={index} />
 
@@ -160,24 +143,21 @@ const StoriesCard = () => {
             >
               <div className="space-y-2">
                 <h2 className="font-lg text-xl font-[IBM_Plex_Sans] leading-tight sm:text-2xl">
-                  Wrote a Bestseller, TEDx went viral, Disappeared from the
-                  public sphere Lived in a Monastery, Met God & Got Into Crypto
+                  {story.title ?? "Untitled Story"}
                 </h2>
                 <p className="text-base text-gray-600 sm:text-lg">
-                  Nine years ago, I sold chai on the streets of Bengaluru,
-                  launched a record-breaking Kickstarter campaign, wrote a book
-                  that became a bestseller. Then, I disappeared from the face of
-                  the earth for over 4 years. What happened in these years? I
-                  met a mysterious man, somehow ended up in a monastery where I
-                  spent years—questioning everything I thought I knew about
-                  life. And then I Met God & Got Into Crypto…
+                  {truncateContent(story.content, 80)}
                 </p>
+                <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
+                  <span>By {story.username}</span>
+                  <span>•</span>
+                  <span>{formatDistanceToNow(new Date(story.createdAt))} ago</span>
+                </div>
               </div>
             </div>
           </div>
         </article>
       ))}
-      {isLoading && <Loading />} {/* Show loading spinner when fetching more stories */}
     </div>
   );
 };

@@ -21,6 +21,7 @@ import { useChatStore } from "~/store/useChatStore";
 import ExpandableSearch from "~/components/ExpandableSearch";
 
 import { UnifiedWalletButton } from "@jup-ag/wallet-adapter";
+import WalletConnectHandler from "./WalletConnectHandler";
 
 interface MobileMenuItemProps {
   icon: React.ElementType;
@@ -181,7 +182,7 @@ const NavBar = () => {
 
             <div className="flex items-center gap-1.5 sm:gap-2">
               <div className="hidden sm:block">
-                <CustomWalletButton />
+                <WalletConnectHandler />
               </div>
 
               {/* In the second version the navbar design is changed. */}
