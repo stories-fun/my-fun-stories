@@ -31,7 +31,7 @@ const Stories = () => {
     rightSidebarContent = <PreLoginSide />;
   } else {
     rightSidebarContent = (
-      <HasnotInvestedSide username={user?.username ?? "Unknown User"} />
+      <HasnotInvestedSide/>
     );
   }
 
