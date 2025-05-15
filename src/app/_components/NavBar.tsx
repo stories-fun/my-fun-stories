@@ -157,7 +157,7 @@ const NavBar = () => {
           <div className="flex items-center gap-1.5 sm:gap-3">
             <div className="hidden sm:block bg-[#FFE700] px-2.5 py-1 rounded-full">
               <Link
-                href="/"
+                href="/voice-llm"
                 className="font-mont whitespace-nowrap text-xs font-semibold text-black decoration-2 transition-colors hover:text-gray-700 sm:text-sm"
               >
                 what&apos;s your story?
