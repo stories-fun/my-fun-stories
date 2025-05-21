@@ -11,6 +11,7 @@ const videoLinks = {
   paarug: "https://www.youtube.com/watch?v=zIeT-_QvkAs",
   rahim: "https://www.youtube.com/watch?v=UT1G0BAjqo8",
   admin: "https://pub-61076b0159ee4fdab7efe9dadc68458d.r2.dev/assets/adhi_sample_video.MP4",
+  Dean: "https://www.youtube.com/watch?v=wM_M_4zns4A",
 };
 
 const StoryContent = ({ storyId }: { storyId: string }) => {
